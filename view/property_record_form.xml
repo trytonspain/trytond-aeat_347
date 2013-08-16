@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="AEAT 347 Property Record">
+	<label name="report"/>
+	<field name="report"/>
+    <newline/>
+	<label name="party_name"/>
+	<field name="party_name"/>
+	<label name="party_vat"/>
+	<field name="party_vat"/>
+	<label name="representative_vat"/>
+	<field name="representative_vat"/>
+	<label name="amount"/>
+	<field name="amount"/>
+	<label name="situation"/>
+	<field name="situation"/>
+    <label name="cadaster_number"/>
+    <field name="cadaster_number"/>
+    <separator string="Address" id="address" colspan="4"/>
+	<label name="road_type"/>
+	<field name="road_type"/>
+	<label name="street"/>
+	<field name="street"/>
+	<label name="number_type"/>
+	<field name="number_type"/>
+	<label name="number"/>
+	<field name="number"/>
+	<label name="number_qualifier"/>
+	<field name="number_qualifier"/>
+	<label name="block"/>
+	<field name="block"/>
+	<label name="doorway"/>
+	<field name="doorway"/>
+	<label name="stair"/>
+	<field name="stair"/>
+	<label name="floor"/>
+	<field name="floor"/>
+	<label name="door"/>
+	<field name="door"/>
+    <label name="complement"/>
+    <field name="complement"/>
+	<label name="city"/>
+	<field name="city"/>
+	<label name="municipality"/>
+	<field name="municipality"/>
+	<label name="municipality_code"/>
+	<field name="municipality_code"/>
+	<label name="province_code"/>
+	<field name="province_code"/>
+	<label name="zip"/>
+	<field name="zip"/>
+</form>

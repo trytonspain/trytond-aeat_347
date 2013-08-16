@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="AEAT 347 Report">
+    <label name="company"/>
+    <field name="company"/>
+    <newline/>
+    <label name="fiscalyear"/>
+    <field name="fiscalyear"/>
+    <label name="fiscalyear_code"/>
+    <field name="fiscalyear_code"/>
+    <label name="company_vat"/>
+    <field name="company_vat"/>
+    <label name="previous_number"/>
+    <field name="previous_number"/>
+    <notebook colspan="4">
+        <page string="General" id="general">
+            <label name="contact_name"/>
+            <field name="contact_name"/>
+            <label name="contact_phone"/>
+            <field name="contact_phone"/>
+            <label name="group_by_vat"/>
+            <field name="group_by_vat"/>
+            <label name="representative_vat"/>
+            <field name="representative_vat"/>
+            <label name="support_type"/>
+            <field name="support_type"/>
+            <label name="type"/>
+            <field name="type"/>
+            <newline/>
+            <separator string="Limits" id="limits" colspan="4"/>
+            <label name="operation_limit"/>
+            <field name="operation_limit"/>
+            <label name="received_cash_limit"/>
+            <field name="received_cash_limit"/>
+            <label name="on_behalf_third_party_limit"/>
+            <field name="on_behalf_third_party_limit"/>
+            <newline/>
+            <separator string="Totals" id="totals" colspan="4"/>
+            <label name="party_amount"/>
+            <field name="party_amount"/>
+            <label name="party_count"/>
+            <field name="party_count"/>
+            <label name="cash_amount"/>
+            <field name="cash_amount"/>
+            <newline/>
+            <label name="property_amount"/>
+            <field name="property_amount"/>
+            <label name="property_count"/>
+            <field name="property_count"/>
+            <newline/>
+        </page>
+        <page string="Party Records" id="parties">
+	        <field name="parties" colspan="4"/>
+        </page>
+        <page string="Property Records" id="properties">
+            <field name="properties" colspan="4"/>
+        </page>
+    </notebook>
+    <group id="state" colspan="2" col="6">
+        <label name="state"/>
+        <field name="state"/>
+        <label name="calculation_date"/>
+        <field name="calculation_date"/>
+        <label name="file_"/>
+        <field name="file_"/>
+    </group>
+    <group id="buttons" colspan="2">
+        <button name="draft" string="Draft"/>
+        <button name="calculate" string="Calculate"/>
+        <button name="process" string="Process"/>
+        <button name="cancel" string="Cancel"/>
+    </group>
+</form>

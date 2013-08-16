@@ -1,0 +1,6 @@
+<tree string="AEAT 347 Report">
+    <field name="company"/>
+    <field name="fiscalyear"/>
+    <field name="state"/>
+    <field name="calculation_date"/>
+</tree>

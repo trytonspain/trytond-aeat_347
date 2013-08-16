@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+
+        <record model="res.group" id="group_aeat_347_admin">
+            <field name="name">Aeat_347 Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_aeat_347_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_aeat_347_admin">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+        </record>
+        <record model="res.group" id="group_aeat_347">
+            <field name="name">Aeat_347</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_aeat_347">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_aeat_347"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_aeat_347">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_aeat_347"/>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_party_record_form_view">
+            <field name="model">aeat.347.report.party</field>
+            <field name="type">form</field>
+            <field name="name">party_record_form</field>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_party_record_tree_view">
+            <field name="model">aeat.347.report.party</field>
+            <field name="type">tree</field>
+            <field name="name">party_record_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_aeat_347_party_record">
+            <field name="name">AEAT 347 Party Record</field>
+            <field name="res_model">aeat.347.report.party</field>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_party_record_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="aeat_347_party_record_tree_view"/>
+            <field name="act_window" ref="act_aeat_347_party_record"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_party_record_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="aeat_347_party_record_form_view"/>
+            <field name="act_window" ref="act_aeat_347_party_record"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_party_record">
+            <field name="model" search="[('model', '=', 'aeat.347.report.party')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_party_record_admin">
+            <field name="model" search="[('model', '=', 'aeat.347.report.party')]"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_property_record_form_view">
+            <field name="model">aeat.347.report.property</field>
+            <field name="type">form</field>
+            <field name="name">property_record_form</field>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_property_record_tree_view">
+            <field name="model">aeat.347.report.property</field>
+            <field name="type">tree</field>
+            <field name="name">property_record_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_aeat_347_property_record">
+            <field name="name">AEAT 347 Property Record</field>
+            <field name="res_model">aeat.347.report.property</field>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_property_record_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="aeat_347_property_record_tree_view"/>
+            <field name="act_window" ref="act_aeat_347_property_record"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_property_record_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="aeat_347_property_record_form_view"/>
+            <field name="act_window" ref="act_aeat_347_property_record"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_property_record">
+            <field name="model" search="[('model', '=', 'aeat.347.report.property')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_property_record_admin">
+            <field name="model" search="[('model', '=', 'aeat.347.report.property')]"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_report_form_view">
+            <field name="model">aeat.347.report</field>
+            <field name="type">form</field>
+            <field name="name">report_form</field>
+        </record>
+        <record model="ir.ui.view" id="aeat_347_report_tree_view">
+            <field name="model">aeat.347.report</field>
+            <field name="type">tree</field>
+            <field name="name">report_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_aeat_347_report">
+            <field name="name">AEAT 347 Report</field>
+            <field name="res_model">aeat.347.report</field>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_report_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="aeat_347_report_tree_view"/>
+            <field name="act_window" ref="act_aeat_347_report"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_aeat_347_report_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="aeat_347_report_form_view"/>
+            <field name="act_window" ref="act_aeat_347_report"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_report">
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_aeat_347_report_admin">
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Menus -->
+        <menuitem action="act_aeat_347_report" id="menu_aeat_347_report"
+            parent="account.menu_reporting" sequence="347"
+            name="AEAT 347 Report"/>
+        <menuitem action="act_aeat_347_report" id="menu_aeat_347_report_party"
+            parent="menu_aeat_347_report" sequence="10"
+            name="AEAT 347 Party Records"/>
+        <menuitem action="act_aeat_347_report"
+            id="menu_aeat_347_report_property"
+            parent="menu_aeat_347_report" sequence="20"
+            name="AEAT 347 Property Records"/>
+    </data>
+</tryton>
