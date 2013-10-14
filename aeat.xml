@@ -148,10 +148,11 @@
         <menuitem action="act_aeat_347_report" id="menu_aeat_347_report"
             parent="account.menu_reporting" sequence="347"
             name="AEAT 347 Report"/>
-        <menuitem action="act_aeat_347_report" id="menu_aeat_347_report_party"
+        <menuitem action="act_aeat_347_party_record"
+            id="menu_aeat_347_report_party"
             parent="menu_aeat_347_report" sequence="10"
             name="AEAT 347 Party Records"/>
-        <menuitem action="act_aeat_347_report"
+        <menuitem action="act_aeat_347_property_record"
             id="menu_aeat_347_report_property"
             parent="menu_aeat_347_report" sequence="20"
             name="AEAT 347 Property Records"/>

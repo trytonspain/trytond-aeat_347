@@ -1,0 +1,8 @@
+<tree string="AEAT 347 Record">
+    <field name="fiscalyear"/>
+    <field name="month"/>
+    <field name="party"/>
+    <field name="operation_key"/>
+    <field name="amount"/>
+    <field name="invoice"/>
+</tree>

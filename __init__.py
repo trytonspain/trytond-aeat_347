@@ -2,6 +2,7 @@
 #copyright notices and license terms.
 from trytond.pool import Pool
 from .aeat import *
+from .invoice import *
 
 
 def register():
@@ -9,4 +10,15 @@ def register():
         Report,
         PartyRecord,
         PropertyRecord,
+        Record,
+        Invoice,
+        InvoiceLine,
+        Recalculate347RecordStart,
+        Recalculate347RecordEnd,
+        Reasign347RecordStart,
+        Reasign347RecordEnd,
         module='aeat_347', type_='model')
+    Pool.register(
+        Recalculate347Record,
+        Reasign347Record,
+        module='aeat_347', type_='wizard')

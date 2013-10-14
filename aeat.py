@@ -5,11 +5,26 @@ from retrofix import aeat347
 import retrofix
 
 from trytond.model import Workflow, ModelSQL, ModelView, fields
+from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 
 _ZERO = Decimal('0.0')
+
+OPERATION_KEY = [
+    ('A', 'A - Good and service adquisitions above limit (1)'),
+    ('B', 'B - Good and service deliveries above limit (1)'),
+    ('C', 'C - Money collection on behavlf of third parties above '
+        'limit (3)'),
+    ('D', 'D - Adquisitions by Public Institutions (...) above '
+        'limit (1)'),
+    ('E', 'E - Grants and help made by public institutions above limit '
+        '(1)'),
+    ('F', 'F - Travel Agency Sales'),
+    ('G', 'G - Travel Agency Purchases'),
+    ]
 
 
 class Report(Workflow, ModelSQL, ModelView):
@@ -43,17 +58,17 @@ class Report(Workflow, ModelSQL, ModelView):
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     type = fields.Selection([
-            ('N','Normal'),
-            ('C','Complementary'),
-            ('S','Substitutive')
+            ('N', 'Normal'),
+            ('C', 'Complementary'),
+            ('S', 'Substitutive')
             ], 'Statement Type', required=True, states={
-            'readonly': Eval('state') == 'done',
+                'readonly': Eval('state') == 'done',
             }, depends=['state'])
     support_type = fields.Selection([
-            ('C','DVD'),
-            ('T','Telematics'),
+            ('C', 'DVD'),
+            ('T', 'Telematics'),
             ], 'Support Type', required=True, states={
-            'readonly': Eval('state') == 'done',
+                'readonly': Eval('state') == 'done',
             }, depends=['state'])
     calculation_date = fields.DateTime('Calculation Date')
     state = fields.Selection([
@@ -67,15 +82,15 @@ class Report(Workflow, ModelSQL, ModelView):
     group_by_vat = fields.Boolean('Group by VAT', states={
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
-    operation_limit = fields.Numeric('Invoiced Limit (1)', digits=(16,2),
+    operation_limit = fields.Numeric('Invoiced Limit (1)', digits=(16, 2),
         required=True, help='The declaration will include parties with the '
         'total of operations over this limit')
     received_cash_limit = fields.Numeric('Received Cash Limit (2)',
-        digits=(16,2), required=True, help='The declaration will show the '
+        digits=(16, 2), required=True, help='The declaration will show the '
         'total of cash operations over this limit')
     on_behalf_third_party_limit = fields.Numeric('On Behalf of Third '
-        'Party Limit (3)', digits=(16,2), required=True, help='The declaration '
-        'will include parties from which we received payments, on behalf of '
+        'Party Limit (3)', digits=(16, 2), required=True, help='The declaration'
+        ' will include parties from which we received payments, on behalf of '
         'third parties, over this limit')
     amount = fields.Function(fields.Numeric('Amount', digits=(16, 2)),
         'get_totals')
@@ -157,6 +172,24 @@ class Report(Workflow, ModelSQL, ModelView):
     def default_state():
         return 'draft'
 
+    @staticmethod
+    def default_group_by_vat():
+        return True
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
+    @staticmethod
+    def default_fiscalyear():
+        FiscalYear = Pool().get('account.fiscalyear')
+        return FiscalYear.find(
+            Transaction().context.get('company'), exception=False)
+
+    def get_rec_name(self, name):
+        return '%s - %s' % (self.company.rec_name,
+            self.fiscalyear.name)
+
     def get_currency(self, name):
         return self.company.currency.id
 
@@ -203,6 +236,66 @@ class Report(Workflow, ModelSQL, ModelView):
     @ModelView.button
     @Workflow.transition('calculated')
     def calculate(cls, reports):
+        pool = Pool()
+        Data = pool.get('aeat.347.record')
+        Operation = pool.get('aeat.347.report.party')
+
+        quarter_mapping = [(3, 'first'), (6, 'second'), (9, 'third'),
+            (12, 'fourth')]
+
+        with Transaction().set_user(0):
+            Operation.delete(Operation.search([
+                ('report', 'in', [r.id for r in reports])]))
+
+        for report in reports:
+            fiscalyear = report.fiscalyear
+
+            to_create = {}
+            for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
+
+                key = '%s-%s-%s' % (report.id, record.party.id,
+                    record.operation_key)
+
+                if key in to_create:
+                    for month, quarter in quarter_mapping:
+                        if month >= record.month:
+                            break
+                    qkey = "%s_quarter_amount" % quarter
+                    to_create[key]['amount'] += record.amount
+                    to_create[key][qkey] = record.amount
+                    to_create[key]['records'][0][1].append(record.id)
+                else:
+                    to_create[key] = {
+                        'amount': record.amount,
+#TODO: Calculate cash amount
+                        'cash_amount': _ZERO,
+                        'party_vat': record.party_vat,
+                        'party_name': record.party_name,
+                        'country_code': record.country_code,
+                        'province_code': record.province_code,
+                        'operation_key': record.operation_key,
+                        'report': report.id,
+                        'records': [('set', [record.id])],
+                    }
+                    saved = False
+                    for month, quarter in quarter_mapping:
+                        qkey = "%s_quarter_amount" % quarter
+                        if month >= record.month and not saved:
+                            to_create[key][qkey] = record.amount
+                            saved = True
+                        else:
+                            to_create[key][qkey] = _ZERO
+                        qkey = "%s_quarter_property_amount" % quarter
+                        to_create[key][qkey] = _ZERO
+
+            for key, record in to_create.copy().iteritems():
+                amount = record['amount']
+                cash_amount = record['cash_amount']
+                if not (amount > report.operation_limit or
+                        cash_amount > report.received_cash_limit):
+                    del to_create[key]
+        with Transaction().set_user(0, set_context=True):
+            Operation.create(to_create.values())
         cls.write(reports, {
                 'calculation_date': datetime.datetime.now(),
                 })
@@ -231,19 +324,19 @@ class Report(Workflow, ModelSQL, ModelView):
         record = retrofix.Record(aeat347.PRESENTER_HEADER_RECORD)
         record.fiscalyear = str(self.fiscalyear_code)
         record.nif = self.company_vat
-        #record.presenter_name = 
+        #record.presenter_name =
         record.support_type = self.support_type
         record.contact_phone = self.contact_phone
         record.contact_name = self.contact_name
-        #record.declaration_number = 
-        #record.complementary = 
-        #record.replacement = 
+        #record.declaration_number =
+        #record.complementary =
+        #record.replacement =
         record.previous_declaration_number = self.previous_number
         record.party_count = len(self.parties)
         record.party_amount = self.party_amount
         record.property_count = len(self.properties)
         record.property_amount = self.property_amount
-        #record.representative_nif = 
+        #record.representative_nif =
         records.append(record)
         for line in itertools.chain(self.parties, self.properties):
             record = line.get_record()
@@ -271,18 +364,7 @@ class PartyRecord(ModelSQL, ModelView):
         help='Legal Representative VAT number')
     province_code = fields.Char('Province Code', size=2)
     country_code = fields.Char('Country Code', size=2)
-    operation_key = fields.Selection([
-            ('A', 'A - Good and service adquisitions above limit (1)'),
-            ('B', 'B - Good and service deliveries above limit (1)'),
-            ('C', 'C - Money collection on behavlf of third parties above '
-                'limit (3)'),
-            ('D', 'D - Adquisitions by Public Institutions (...) above '
-                'limit (1)'),
-            ('E', 'E - Grants and help made by public institutions above limit '
-                '(1)'),
-            ('F', 'F - Travel Agency Sales'),
-            ('G', 'G - Travel Agency Purchases'),
-            ], 'Operation Key')
+    operation_key = fields.Selection(OPERATION_KEY, 'Operation Key')
     amount = fields.Numeric('Operations Amount', digits=(16, 2))
     insurance = fields.Boolean('Insurance Operation', help='Only for '
         'insurance companies. Set to identify insurance operations aside from '
@@ -312,11 +394,13 @@ class PartyRecord(ModelSQL, ModelView):
         digits=(16, 2))
     fourth_quarter_property_amount = fields.Numeric('Fourth '
         'Quarter Property Amount', digits=(16, 2))
+    records = fields.One2Many('aeat.347.record', 'party_record',
+        'AEAT 347 Records', readonly=True)
 
     def get_record(self):
         record = retrofix.Record(aeat347.PARTY_RECORD)
         record.party_nif = self.party_vat
-        record.representative_nif = self.representative_vat
+        record.representative_nif = self.representative_vat or ''
         record.party_name = self.party_name
         record.province_code = self.province_code
         record.country_code = self.country_code
@@ -325,9 +409,10 @@ class PartyRecord(ModelSQL, ModelView):
         record.insurance = self.insurance
         record.business_premises_rent = self.business_premises_rent
         record.cash_amount = self.cash_amount
-        record.vat_liable_property_amount = self.property_amount
+        record.vat_liable_property_amount = self.property_amount \
+            or Decimal('0.0')
         record.fiscalyear_cash_operation = str(
-            self.fiscalyear_code_cash_operation)
+            self.fiscalyear_code_cash_operation or '')
         record.first_quarter_amount = self.first_quarter_amount
         record.first_quarter_property_amount = (
             self.first_quarter_property_amount)

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="AEAT 347 Record">
+    <label name="fiscalyear"/>
+    <field name="fiscalyear"/>
+    <label name="month"/>
+    <field name="month"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="operation_key"/>
+    <field name="operation_key" colspan="3"/>
+    <label name="invoice"/>
+    <field name="invoice"/>
+    <label name="party_record"/>
+    <field name="party_record"/>
+</form>
