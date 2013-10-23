@@ -356,6 +356,7 @@ class PartyRecord(ModelSQL, ModelView):
     __name__ = 'aeat.347.report.party'
     _rec_name = "party_vat"
 
+    company = fields.Many2One('company.company', 'Company', required=True)
     report = fields.Many2One('aeat.347.report', 'AEAT 347 Report',
         ondelete='CASCADE', select=1)
     party_name = fields.Char('Party Name', size=40)
@@ -397,6 +398,10 @@ class PartyRecord(ModelSQL, ModelView):
     records = fields.One2Many('aeat.347.record', 'party_record',
         'AEAT 347 Records', readonly=True)
 
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
     def get_record(self):
         record = retrofix.Record(aeat347.PARTY_RECORD)
         record.party_nif = self.party_vat
@@ -435,6 +440,7 @@ class PropertyRecord(ModelSQL, ModelView):
     __name__ = 'aeat.347.report.property'
     _rec_name = "cadaster_number"
 
+    company = fields.Many2One('company.company', 'Company', required=True)
     report = fields.Many2One('aeat.347.report', 'AEAT 347 Report',
         ondelete='CASCADE', select=1)
     party_vat = fields.Char('VAT number', size=9)
@@ -475,6 +481,10 @@ class PropertyRecord(ModelSQL, ModelView):
     municipality_code = fields.Char('Municipality Code', size=5)
     province_code = fields.Char('Province Code', size=2)
     zip = fields.Char('Zip', size=5)
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
 
     def get_record(self):
         record = retrofix.Record(aeat347.PROPERTY_RECORD)

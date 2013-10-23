@@ -312,7 +312,7 @@ msgstr "Registres AEAT 347"
 
 msgctxt "field:aeat.347.report.party,report:"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "field:aeat.347.report.party,representative_vat:"
 msgid "L.R. VAT number"
@@ -424,7 +424,7 @@ msgstr "Nom"
 
 msgctxt "field:aeat.347.report.property,report:"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "field:aeat.347.report.property,representative_vat:"
 msgid "L.R. VAT number"
@@ -535,7 +535,7 @@ msgstr "Registre AEAT 347"
 
 msgctxt "model:aeat.347.report,name:"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "model:aeat.347.report.party,name:"
 msgid "AEAT 347 Party Record"
@@ -567,7 +567,7 @@ msgstr "Registre AEAT 347"
 
 msgctxt "model:ir.action,name:act_aeat_347_report"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "model:ir.action.act_window,name:act_aeat_347_party_record"
 msgid "AEAT 347 Party Record"
@@ -583,7 +583,7 @@ msgstr "Registre AEAT 347"
 
 msgctxt "model:ir.action.act_window,name:act_aeat_347_report"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "model:ir.action.wizard,name:act_aeat_347_reasign"
 msgid "Reasign AEAT 347 Records"
@@ -599,7 +599,7 @@ msgstr "Registre AEAT 347"
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_report"
 msgid "AEAT 347 Report"
-msgstr "Registre AEAT 347"
+msgstr "Informe AEAT 347"
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_report_party"
 msgid "AEAT 347 Party Records"
@@ -632,7 +632,7 @@ msgstr "C - Cobraments per compte de tercer superiors al limit (3)"
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
-"A - Adquisicions de institucions públiques (...) superiors al limit (1)"
+"D - Adquisicions de institucions públiques (...) superiors al limit (1)"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
@@ -662,7 +662,7 @@ msgstr "C - Cobraments per compte de tercer superiors al limit (3)"
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
-"A - Adquisicions de institucions públiques (...) superiors al limit (1)"
+"D - Adquisicions de institucions públiques (...) superiors al limit (1)"
 
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
@@ -692,7 +692,7 @@ msgstr "C - Cobraments per compte de tercer superiors al limit (3)"
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
-"A - Adquisicions de institucions públiques (...) superiors al limit (1)"
+"D - Adquisicions de institucions públiques (...) superiors al limit (1)"
 
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
@@ -758,7 +758,7 @@ msgstr "C - Cobraments per compte de tercer superiors al limit (3)"
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
-"A - Adquisicions de institucions públiques (...) superiors al limit (1)"
+"D - Adquisicions de institucions públiques (...) superiors al limit (1)"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
@@ -816,6 +816,100 @@ msgstr "3 - España sense referència cadastral"
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "4 - Foreign"
 msgstr "4 - Extranger"
+
+msgctxt "view:aeat.347.reasign.records.end:"
+msgid "AEAT 347 Data Reassigment Done"
+msgstr "Reasignació registres AEAT 347 feta"
+
+msgctxt "view:aeat.347.reasign.records.end:"
+msgid "The AEAT 347 records have been reasigned."
+msgstr "El registres del model AEAT 347 han estat reassignats."
+
+msgctxt "view:aeat.347.reasign.records.start:"
+msgid "AEAT 347 Data Reasignation"
+msgstr "Reasignació registres AEAT 347"
+
+msgctxt "view:aeat.347.reasign.records.start:"
+msgid "Select Operation Key to reasign invoices:"
+msgstr "Seleccioneu la clau d'operació per reasignar les factures:"
+
+msgctxt "view:aeat.347.recalculate.records.end:"
+msgid "AEAT 347 Data Recalculation Done"
+msgstr "Recálcul registres AEAT 347 fet"
+
+msgctxt "view:aeat.347.recalculate.records.end:"
+msgid "The AEAT 347 records have been recalculated."
+msgstr "El registres del model AEAT 347 han estat recalculats."
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "AEAT 347 Data Recalculation"
+msgstr "Recálcul registres AEAT 347"
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "Note that this operation may take a few minutes."
+msgstr "Tingueu en compte que aquesta operació pot trigar uns minuts."
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "The AEAT 347 Data for selected invoices will be recalculated."
+msgstr ""
+"La informació del model AEAT 347 dels registres seleccionats serà "
+"recalculada."
+
+msgctxt "view:aeat.347.record:"
+msgid "AEAT 347 Record"
+msgstr "Registre AEAT 347"
+
+msgctxt "view:aeat.347.report.party:"
+msgid "AEAT 347 Party Record"
+msgstr "Registre tercer AEAT 347"
+
+msgctxt "view:aeat.347.report.property:"
+msgid "AEAT 347 Property Record"
+msgstr "Registre propietat AEAT 347"
+
+msgctxt "view:aeat.347.report.property:"
+msgid "Address"
+msgstr "Adreça"
+
+msgctxt "view:aeat.347.report:"
+msgid "AEAT 347 Report"
+msgstr "Informe AEAT 347"
+
+msgctxt "view:aeat.347.report:"
+msgid "Calculate"
+msgstr "Calcula"
+
+msgctxt "view:aeat.347.report:"
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgctxt "view:aeat.347.report:"
+msgid "Draft"
+msgstr "Esborrany"
+
+msgctxt "view:aeat.347.report:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:aeat.347.report:"
+msgid "Limits"
+msgstr "Límits"
+
+msgctxt "view:aeat.347.report:"
+msgid "Party Records"
+msgstr "Registres de tercer"
+
+msgctxt "view:aeat.347.report:"
+msgid "Process"
+msgstr "Processa"
+
+msgctxt "view:aeat.347.report:"
+msgid "Property Records"
+msgstr "Registres de propietat"
+
+msgctxt "view:aeat.347.report:"
+msgid "Totals"
+msgstr "Totals"
 
 msgctxt "wizard_button:aeat.347.reasign.records,done,end:"
 msgid "Ok"

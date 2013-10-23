@@ -815,6 +815,100 @@ msgctxt "selection:aeat.347.report.property,situation:"
 msgid "4 - Foreign"
 msgstr "4 - Extranjero"
 
+msgctxt "view:aeat.347.reasign.records.end:"
+msgid "AEAT 347 Data Reassigment Done"
+msgstr "Reasignación registros AEAT 347 hecha"
+
+msgctxt "view:aeat.347.reasign.records.end:"
+msgid "The AEAT 347 records have been reasigned."
+msgstr "Los registros del model AEAT 347 han sido reasignados."
+
+msgctxt "view:aeat.347.reasign.records.start:"
+msgid "AEAT 347 Data Reasignation"
+msgstr "Reasignación registros AEAT 347"
+
+msgctxt "view:aeat.347.reasign.records.start:"
+msgid "Select Operation Key to reasign invoices:"
+msgstr "Selecciona la clave de operacion para reassingar las facturas"
+
+msgctxt "view:aeat.347.recalculate.records.end:"
+msgid "AEAT 347 Data Recalculation Done"
+msgstr "Recalculo registros AEAT 347 hecha"
+
+msgctxt "view:aeat.347.recalculate.records.end:"
+msgid "The AEAT 347 records have been recalculated."
+msgstr "Los registros del model AEAT 347 han sido recalculados."
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "AEAT 347 Data Recalculation"
+msgstr "Recalculo registros AEAT 347"
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "Note that this operation may take a few minutes."
+msgstr "Tenga en cuenta que esta operación puede tardar unos minutos."
+
+msgctxt "view:aeat.347.recalculate.records.start:"
+msgid "The AEAT 347 Data for selected invoices will be recalculated."
+msgstr ""
+"La información del modelo AEAT 347 será recalculada para las facturas "
+"seleccionadas."
+
+msgctxt "view:aeat.347.record:"
+msgid "AEAT 347 Record"
+msgstr "Registro AEAT 347"
+
+msgctxt "view:aeat.347.report.party:"
+msgid "AEAT 347 Party Record"
+msgstr "Registro de tercero AEAT 347"
+
+msgctxt "view:aeat.347.report.property:"
+msgid "AEAT 347 Property Record"
+msgstr "Registro de propiedad AEAT 347"
+
+msgctxt "view:aeat.347.report.property:"
+msgid "Address"
+msgstr "Direcciones"
+
+msgctxt "view:aeat.347.report:"
+msgid "AEAT 347 Report"
+msgstr "Informe AEAT 347"
+
+msgctxt "view:aeat.347.report:"
+msgid "Calculate"
+msgstr "Calcular"
+
+msgctxt "view:aeat.347.report:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "view:aeat.347.report:"
+msgid "Draft"
+msgstr "Borrador"
+
+msgctxt "view:aeat.347.report:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:aeat.347.report:"
+msgid "Limits"
+msgstr "Limites"
+
+msgctxt "view:aeat.347.report:"
+msgid "Party Records"
+msgstr "Registros de tercero"
+
+msgctxt "view:aeat.347.report:"
+msgid "Process"
+msgstr "Procesar"
+
+msgctxt "view:aeat.347.report:"
+msgid "Property Records"
+msgstr "Registros de propiedad"
+
+msgctxt "view:aeat.347.report:"
+msgid "Totals"
+msgstr "Totales"
+
 msgctxt "wizard_button:aeat.347.reasign.records,done,end:"
 msgid "Ok"
 msgstr "Aceptar"

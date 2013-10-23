@@ -144,6 +144,44 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+
+        <record model="ir.rule.group" id="rule_group_aeat347">
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_aeat_347_1">
+            <field name="domain">[('company', '=', user.company.id if user.company else None)]</field>
+            <field name="rule_group" ref="rule_group_aeat347"/>
+        </record>
+
+        <record model="ir.rule.group" id="rule_group_aeat347_party">
+            <field name="model" search="[('model', '=', 'aeat.347.report.party')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_aeat_347_party_1">
+            <field name="domain">[('company', '=', user.company.id if user.company else None)]</field>
+            <field name="rule_group" ref="rule_group_aeat347_party"/>
+        </record>
+
+
+        <record model="ir.rule.group" id="rule_group_aeat347_property">
+            <field name="model"
+                search="[('model', '=', 'aeat.347.report.property')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_aeat_347_property_1">
+            <field name="domain">[('company', '=', user.company.id if user.company else None)]</field>
+            <field name="rule_group" ref="rule_group_aeat347_property"/>
+        </record>
+        <record model="ir.rule.group" id="rule_group_aeat347_record">
+            <field name="model" search="[('model', '=', 'aeat.347.record')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_aeat_347_record_1">
+            <field name="domain">[('company', '=', user.company.id if user.company else None)]</field>
+            <field name="rule_group" ref="rule_group_aeat347_record"/>
+        </record>
+
         <!-- Menus -->
         <menuitem action="act_aeat_347_report" id="menu_aeat_347_report"
             parent="account.menu_reporting" sequence="347"
