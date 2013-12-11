@@ -144,13 +144,14 @@ class Invoice:
         for invoice in invoices:
             if not invoice.move:
                 continue
+            key = None
             for line in invoice.lines:
                 if line.aeat347_operation_key:
                     operation_key = line.aeat347_operation_key
                     key = "%d-%s" % (invoice.id, operation_key)
                     amount = invoice._compute_total_amount(line)
 
-                    if invoice.type in ('out_credit_note', 'in_credit_not'):
+                    if invoice.type in ('out_credit_note', 'in_credit_note'):
                         amount *=-1
 
                     if key in to_create:
@@ -165,8 +166,10 @@ class Invoice:
                                 'operation_key': operation_key,
                                 'invoice': invoice.id,
                         }
-            to_create[key]['amount'] = invoice.currency.round(
-                to_create[key]['amount'])
+
+            if key and key in to_create:
+                to_create[key]['amount'] = invoice.currency.round(
+                    to_create[key]['amount'])
 
         with Transaction().set_user(0, set_context=True):
             Record.delete(Record.search([('invoice', 'in',

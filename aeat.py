@@ -94,8 +94,8 @@ class Report(Workflow, ModelSQL, ModelView):
         'third parties, over this limit')
     amount = fields.Function(fields.Numeric('Amount', digits=(16, 2)),
         'get_totals')
-    cash_amount = fields.Function(fields.Numeric('Cash Amount', digits=(16, 2)),
-        'get_totals')
+    cash_amount = fields.Function(fields.Numeric('Cash Amount (Manual)',
+            digits=(16, 2)), 'get_totals')
     party_amount = fields.Function(fields.Numeric(
             'Party Amount', digits=(16, 2)), 'get_totals')
     party_count = fields.Function(fields.Integer('Party Record Count'),
@@ -262,12 +262,11 @@ class Report(Workflow, ModelSQL, ModelView):
                             break
                     qkey = "%s_quarter_amount" % quarter
                     to_create[key]['amount'] += record.amount
-                    to_create[key][qkey] = record.amount
+                    to_create[key][qkey] += record.amount
                     to_create[key]['records'][0][1].append(record.id)
                 else:
                     to_create[key] = {
                         'amount': record.amount,
-#TODO: Calculate cash amount
                         'cash_amount': _ZERO,
                         'party_vat': record.party_vat,
                         'party_name': record.party_name,
@@ -280,11 +279,12 @@ class Report(Workflow, ModelSQL, ModelView):
                     saved = False
                     for month, quarter in quarter_mapping:
                         qkey = "%s_quarter_amount" % quarter
-                        if month >= record.month and not saved:
-                            to_create[key][qkey] = record.amount
-                            saved = True
-                        else:
+                        if not qkey in to_create[key]:
                             to_create[key][qkey] = _ZERO
+
+                        if month >= record.month and not saved:
+                            to_create[key][qkey] += record.amount
+                            saved = True
                         qkey = "%s_quarter_property_amount" % quarter
                         to_create[key][qkey] = _ZERO
 
