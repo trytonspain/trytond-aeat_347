@@ -51,8 +51,8 @@ class Record(ModelSQL, ModelView):
             res[name] = dict.fromkeys([x.id for x in records], '')
         for record in records:
             party = record.party
-            res['party_name'][record.id] = party.rec_name
-            res['party_vat'][record.id] = party.vat_code
+            res['party_name'][record.id] = party.rec_name[:39]
+            res['party_vat'][record.id] = party.vat_number
             if len(party.addresses) > 0:
                 address = party.addresses[0]
                 country = None
@@ -235,19 +235,18 @@ class Reasign347Record(Wizard):
         cursor = Transaction().cursor
         invoices = Invoice.browse(Transaction().context['active_ids'])
 
-        value = self.start.aeat_347_type
+        value = self.start.aeat_347_operation_key
         lines = []
         invoice_ids = set()
         for invoice in invoices:
             for line in invoice.lines:
-                if value in line.aeat347_available_keys:
-                    lines.append(line.id)
-                    invoice_ids.add(invoice.id)
+                lines.append(line.id)
+                invoice_ids.add(invoice.id)
 
         line = Line.__table__()
         #Update to allow to modify key for posted invoices
         cursor.execute(*line.update(columns=[line.aeat347_operation_key],
-                values=[value.id], where=In(line.id, lines)))
+                values=[value], where=In(line.id, lines)))
 
         invoices = Invoice.browse(list(invoices))
         Invoice.create_aeat347_records(invoices)
