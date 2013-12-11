@@ -210,7 +210,7 @@ Create out invoice over limit::
     True
     >>> rec1.operation_key == 'B'
     True
-    >>> rec1.amount == Decimal(3200)
+    >>> rec1.amount == Decimal(3520)
     True
 
 Create out invoice not over limit::
@@ -243,7 +243,7 @@ Create out invoice not over limit::
     True
     >>> rec1.operation_key == 'B'
     True
-    >>> rec1.amount == Decimal(200)
+    >>> rec1.amount == Decimal(220)
     True
 
 Create in invoice::
@@ -274,7 +274,7 @@ Create in invoice::
     True
     >>> rec1.operation_key == 'A'
     True
-    >>> rec1.amount == Decimal(125)
+    >>> rec1.amount == Decimal(137.50)
     True
 
 Generate 347 Report::
@@ -294,7 +294,7 @@ Generate 347 Report::
     True
     >>> report.party_count == 1
     True
-    >>> report.party_amount == Decimal(3200)
+    >>> report.party_amount == Decimal(3520)
     True
     >>> report.cash_amount == Decimal(0)
     True

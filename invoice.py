@@ -124,10 +124,23 @@ class InvoiceLine:
 class Invoice:
     __name__ = 'account.invoice'
 
+    def _compute_total_amount(self, line):
+        Tax = Pool().get('account.tax')
+        context = self.get_tax_context()
+
+        with Transaction().set_context(**context):
+            taxes = Tax.compute(line.taxes, line.unit_price, line.quantity)
+            tax_amount = 0
+            for tax in taxes:
+                key, val = self._compute_tax(tax, self.type)
+                tax_amount += val['base'] + val['amount']
+        return tax_amount
+
     @classmethod
     def create_aeat347_records(cls, invoices):
         Record = Pool().get('aeat.347.record')
         to_create = {}
+        taxes = {}
         for invoice in invoices:
             if not invoice.move:
                 continue
@@ -135,18 +148,25 @@ class Invoice:
                 if line.aeat347_operation_key:
                     operation_key = line.aeat347_operation_key
                     key = "%d-%s" % (invoice.id, operation_key)
+                    amount = invoice._compute_total_amount(line)
+
+                    if invoice.type in ('out_credit_note', 'in_credit_not'):
+                        amount *=-1
+
                     if key in to_create:
-                        to_create[key]['amount'] += line.amount
+                        to_create[key]['amount'] += amount
                     else:
                         to_create[key] = {
                                 'company': invoice.company.id,
                                 'fiscalyear': invoice.move.period.fiscalyear,
                                 'month': invoice.invoice_date.month,
                                 'party': invoice.party.id,
-                                'amount': line.amount,
+                                'amount': amount,
                                 'operation_key': operation_key,
                                 'invoice': invoice.id,
                         }
+            to_create[key]['amount'] = invoice.currency.round(
+                to_create[key]['amount'])
 
         with Transaction().set_user(0, set_context=True):
             Record.delete(Record.search([('invoice', 'in',
