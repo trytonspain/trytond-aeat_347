@@ -74,7 +74,7 @@ class Record(ModelSQL, ModelView):
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
-    aeat347_operation_key = fields.Selection(OPERATION_KEY,
+    aeat347_operation_key = fields.Selection([(None, ''),] + OPERATION_KEY,
         'AEAT 347 Operation Key', on_change_with=['product', 'account',
             '_parent_invoice.type', 'aeat347_operation_key'])
 
