@@ -75,33 +75,23 @@ class Record(ModelSQL, ModelView):
 class InvoiceLine:
     __name__ = 'account.invoice.line'
     aeat347_operation_key = fields.Selection(OPERATION_KEY,
-        'AEAT 347 Operation Key')
+        'AEAT 347 Operation Key', on_change_with=['product', 'account',
+            '_parent_invoice.type', 'aeat347_operation_key'])
 
     @classmethod
     def __setup__(cls):
         super(InvoiceLine, cls).__setup__()
 
-    def on_change_product(self):
-        res = super(InvoiceLine, self).on_change_product()
-        if self.invoice and self.invoice.type:
-            type_ = self.invoice.type
-        elif self.invoice_type:
-            type_ = self.invoice_type
-        res['aeat347_operation_key'] = self.get_aeat347_operation_key(type_)
-        return res
-
     def on_change_with_aeat347_operation_key(self):
         if self.aeat347_operation_key:
             return self.aeat347_operation_key
-
         if self.invoice and self.invoice.type:
             type_ = self.invoice.type
         elif self.invoice_type:
             type_ = self.invoice_type
         if not type_:
             return
-
-        return self.get_aeat347_operation_key(type_,)
+        return self.get_aeat347_operation_key(type_)
 
     @classmethod
     def get_aeat347_operation_key(cls, invoice_type):
