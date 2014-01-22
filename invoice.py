@@ -1,6 +1,7 @@
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
@@ -74,9 +75,14 @@ class Record(ModelSQL, ModelView):
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
-    aeat347_operation_key = fields.Selection([(None, ''),] + OPERATION_KEY,
+    aeat347_operation_key = fields.Selection([(None, ''), ] + OPERATION_KEY,
         'AEAT 347 Operation Key', on_change_with=['product', 'account',
-            '_parent_invoice.type', 'aeat347_operation_key'])
+            '_parent_invoice.type', 'aeat347_operation_key'],
+        states={
+            'invisible': Eval('type') != 'line',
+            'required': Eval('type') == 'line',
+            },
+        depends=['type'])
 
     @classmethod
     def __setup__(cls):
@@ -102,6 +108,8 @@ class InvoiceLine:
     def create(cls, vlist):
         Invoice = Pool().get('account.invoice')
         for vals in vlist:
+            if vals.get('type', 'line') != 'line':
+                continue
             invoice_type = vals.get('invoice_type')
             if not invoice_type and vals.get('invoice'):
                 invoice = Invoice(vals.get('invoice'))
@@ -130,19 +138,21 @@ class Invoice:
     def create_aeat347_records(cls, invoices):
         Record = Pool().get('aeat.347.record')
         to_create = {}
-        taxes = {}
+
         for invoice in invoices:
             if not invoice.move:
                 continue
             key = None
             for line in invoice.lines:
+                if line.type != 'line':
+                    continue
                 if line.aeat347_operation_key:
                     operation_key = line.aeat347_operation_key
                     key = "%d-%s" % (invoice.id, operation_key)
                     amount = invoice._compute_total_amount(line)
 
                     if invoice.type in ('out_credit_note', 'in_credit_note'):
-                        amount *=-1
+                        amount *= -1
 
                     if key in to_create:
                         to_create[key]['amount'] += amount

@@ -198,7 +198,6 @@ Create out invoice over limit::
     True
     >>> line.amount == Decimal(3200)
     True
-    >>> line = InvoiceLine()
     >>> invoice.save()
     >>> Invoice.post([invoice.id], config.context)
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
@@ -231,7 +230,6 @@ Create out invoice not over limit::
     True
     >>> line.amount == Decimal(200)
     True
-    >>> line = InvoiceLine()
     >>> invoice.save()
     >>> Invoice.post([invoice.id], config.context)
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
