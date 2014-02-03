@@ -3,6 +3,6 @@
     <field name="month"/>
     <field name="party"/>
     <field name="operation_key"/>
-    <field name="amount"/>
+    <field name="amount" sum="Operation Amount"/>
     <field name="invoice"/>
 </tree>

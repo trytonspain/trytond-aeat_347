@@ -2,7 +2,7 @@
 	 <field name="report"/>
 	 <field name="party_name"/>
 	 <field name="party_vat"/>
-	 <field name="amount"/>
+	 <field name="amount" sum="Amount"/>
 	 <field name="cadaster_number"/>
      <field name="street"/>
 	 <field name="zip"/>
