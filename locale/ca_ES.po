@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice:"
+msgid "A journal has not been defined for \"%s\"."
+msgstr "No s'ha definit cap diari per \"%s\"."
+
 msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 340 report \"%s\" must be Euro."
 msgstr "La moneda del informe AEAT 347 \"%s\" ha de ser Euro."
@@ -32,7 +36,7 @@ msgstr "ID"
 
 msgctxt "field:aeat.347.record,amount:"
 msgid "Operation Amount"
-msgstr "Import operacions"
+msgstr "Import operació"
 
 msgctxt "field:aeat.347.record,company:"
 msgid "Company"
@@ -72,7 +76,7 @@ msgstr "Clau operació"
 
 msgctxt "field:aeat.347.record,party:"
 msgid "Party"
-msgstr "Tercers"
+msgstr "Tercer"
 
 msgctxt "field:aeat.347.record,party_name:"
 msgid "Party Name"
@@ -111,7 +115,7 @@ msgid "Calculation Date"
 msgstr "Data cálcul"
 
 msgctxt "field:aeat.347.report,cash_amount:"
-msgid "Cash Amount"
+msgid "Cash Amount (Manual)"
 msgstr "Import en efectiu"
 
 msgctxt "field:aeat.347.report,company:"
@@ -192,7 +196,7 @@ msgstr "Registres de propietat"
 
 msgctxt "field:aeat.347.report,property_amount:"
 msgid "Property Amount"
-msgstr "Import de propietsts"
+msgstr "Import de propietats"
 
 msgctxt "field:aeat.347.report,property_count:"
 msgid "Property Record Count"
@@ -232,7 +236,7 @@ msgstr "Usuari modificació"
 
 msgctxt "field:aeat.347.report.party,amount:"
 msgid "Operations Amount"
-msgstr "Import Operacions"
+msgstr "Import operacions"
 
 msgctxt "field:aeat.347.report.party,business_premises_rent:"
 msgid "Bussiness Premises Rent"
@@ -241,6 +245,10 @@ msgstr "Lloguer local de negocia"
 msgctxt "field:aeat.347.report.party,cash_amount:"
 msgid "Cash Amount Received"
 msgstr "Import en efectiu rebut"
+
+msgctxt "field:aeat.347.report.party,company:"
+msgid "Company"
+msgstr "Empresa"
 
 msgctxt "field:aeat.347.report.party,country_code:"
 msgid "Country Code"
@@ -357,6 +365,10 @@ msgstr "Referència cadastral"
 msgctxt "field:aeat.347.report.property,city:"
 msgid "City"
 msgstr "Població"
+
+msgctxt "field:aeat.347.report.property,company:"
+msgid "Company"
+msgstr "Empresa"
 
 msgctxt "field:aeat.347.report.property,complement:"
 msgid "Complement"
@@ -618,6 +630,10 @@ msgid "Aeat_347 Administration"
 msgstr "Administració AEAT 347"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisicions de bens i serveis superiors al limit (1)"
 
@@ -859,9 +875,17 @@ msgctxt "view:aeat.347.record:"
 msgid "AEAT 347 Record"
 msgstr "Registre AEAT 347"
 
+msgctxt "view:aeat.347.record:"
+msgid "Operation Amount"
+msgstr "Import operació"
+
 msgctxt "view:aeat.347.report.party:"
 msgid "AEAT 347 Party Record"
 msgstr "Registre tercer AEAT 347"
+
+msgctxt "view:aeat.347.report.party:"
+msgid "Operations Amount"
+msgstr "Import operacions"
 
 msgctxt "view:aeat.347.report.property:"
 msgid "AEAT 347 Property Record"
@@ -870,6 +894,10 @@ msgstr "Registre propietat AEAT 347"
 msgctxt "view:aeat.347.report.property:"
 msgid "Address"
 msgstr "Adreça"
+
+msgctxt "view:aeat.347.report.property:"
+msgid "Amount"
+msgstr "Import"
 
 msgctxt "view:aeat.347.report:"
 msgid "AEAT 347 Report"
