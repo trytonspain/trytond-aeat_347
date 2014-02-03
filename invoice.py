@@ -131,8 +131,9 @@ class Invoice:
             tax_amount = 0
             for tax in taxes:
                 key, val = self._compute_tax(tax, self.type)
-                tax_amount += val['base'] + val['amount']
-        return tax_amount
+                tax_amount += val['amount']
+
+        return line.get_amount('amount') + tax_amount
 
     @classmethod
     def create_aeat347_records(cls, invoices):
