@@ -194,12 +194,10 @@ class Report(Workflow, ModelSQL, ModelView):
         return self.company.currency.id
 
     def on_change_with_fiscalyear_code(self):
-        code = self.fiscalyear.code if self.fiscalyear else None
-        if code:
-            try:
-                code = int(code)
-            except ValueError:
-                code = None
+        Date = Pool().get('ir.date')
+        code = None
+        if self.fiscalyear:
+            code = self.fiscalyear.start_date.year
         return code
 
     @classmethod
