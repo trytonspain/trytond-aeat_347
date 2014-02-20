@@ -97,6 +97,15 @@
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_aeat_347_record_admin">
+            <field name="model" search="[('model', '=', 'aeat.347.record')]"/>
+            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
 
         <menuitem action="act_aeat_347_record"
             id="menu_aeat_347_record"
