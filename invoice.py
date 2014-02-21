@@ -53,20 +53,14 @@ class Record(ModelSQL, ModelView):
         for record in records:
             party = record.party
             res['party_name'][record.id] = party.rec_name[:39]
-            res['party_vat'][record.id] = party.vat_number
-            if len(party.addresses) > 0:
-                address = party.addresses[0]
-                country = None
-                province = None
-                code = address.zip
-                if code:
-                    if len(code) > 5 and '' in code:
-                        country = code[:2]
-                        code = code[2:]
-                    province = code[:2]
-            res['country_code'][record.id] = party.vat_country or country \
-                or ''
-            res['province_code'][record.id] = province or code or ''
+            res['party_vat'][record.id] = party.vat_number[:9]
+            res['country_code'][record.id] = (party.vat_country[:2] if
+                party.vat_country else None)
+            province_code = ''
+            address = self.party.address_get(type='invoice')
+            if address and address.zip:
+                province_code = zip.strip()[:2]
+            res['province_code'][record.id] = province_code
         for key in res.keys():
             if key not in names:
                 del res[key]
