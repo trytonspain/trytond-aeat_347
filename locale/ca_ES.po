@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice:"
-msgid "A journal has not been defined for \"%s\"."
-msgstr "No s'ha definit cap diari per \"%s\"."
-
 msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 340 report \"%s\" must be Euro."
 msgstr "La moneda del informe AEAT 347 \"%s\" ha de ser Euro."
@@ -13,6 +9,10 @@ msgstr "La moneda del informe AEAT 347 \"%s\" ha de ser Euro."
 msgctxt "field:account.invoice.line,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clau operació AEAT 347"
+
+msgctxt "field:account.invoice.line,include_347:"
+msgid "Include 347"
+msgstr "Incloure al 347"
 
 msgctxt "field:aeat.347.reasign.records.end,id:"
 msgid "ID"
@@ -470,6 +470,10 @@ msgctxt "field:aeat.347.report.property,zip:"
 msgid "Zip"
 msgstr "Codi postal"
 
+msgctxt "field:party.party,include_347:"
+msgid "Include on 347"
+msgstr "Incloure al 347"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -629,9 +633,10 @@ msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administració AEAT 347"
 
+#, fuzzy
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
@@ -692,6 +697,10 @@ msgstr "F - Vendes a agències de viatje"
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "G - Compres a agències de viatje"
+
+msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgid "Leave Empty"
+msgstr "Deixar en blanc"
 
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
@@ -910,6 +919,10 @@ msgstr "Calcula"
 msgctxt "view:aeat.347.report:"
 msgid "Cancel"
 msgstr "Cancel·la"
+
+msgctxt "view:aeat.347.report:"
+msgid "Declaration Number"
+msgstr "Número declaració"
 
 msgctxt "view:aeat.347.report:"
 msgid "Draft"

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice:"
-msgid "A journal has not been defined for \"%s\"."
-msgstr "No se ha definido ningun diario para \"%s\"."
-
 msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 340 report \"%s\" must be Euro."
 msgstr "La moneda del informe AEAT 349 \"%s\" debe ser Euro."
@@ -13,6 +9,10 @@ msgstr "La moneda del informe AEAT 349 \"%s\" debe ser Euro."
 msgctxt "field:account.invoice.line,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clave operación AEAT 347"
+
+msgctxt "field:account.invoice.line,include_347:"
+msgid "Include 347"
+msgstr "Incluir 347"
 
 msgctxt "field:aeat.347.reasign.records.end,id:"
 msgid "ID"
@@ -470,6 +470,11 @@ msgctxt "field:aeat.347.report.property,zip:"
 msgid "Zip"
 msgstr "Código postal"
 
+#, fuzzy
+msgctxt "field:party.party,include_347:"
+msgid "Include on 347"
+msgstr "Incluir 347"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -691,6 +696,10 @@ msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "F - Compras a agencias de viajes"
 
+msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgid "Leave Empty"
+msgstr "Dejar en blanco"
+
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisiciones de bienes y servicios superiores al límite (1)"
@@ -908,6 +917,10 @@ msgstr "Calcular"
 msgctxt "view:aeat.347.report:"
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgctxt "view:aeat.347.report:"
+msgid "Declaration Number"
+msgstr "Número declaración"
 
 msgctxt "view:aeat.347.report:"
 msgid "Draft"

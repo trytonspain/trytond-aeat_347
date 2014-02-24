@@ -144,7 +144,7 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-
+        
         <record model="ir.rule.group" id="rule_group_aeat347">
             <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
             <field name="global_p" eval="True"/>

@@ -3,10 +3,12 @@
 from trytond.pool import Pool
 from .aeat import *
 from .invoice import *
+from .party import *
 
 
 def register():
     Pool.register(
+        Party,
         Report,
         PartyRecord,
         PropertyRecord,

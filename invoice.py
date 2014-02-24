@@ -1,7 +1,7 @@
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, And, Bool
 from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
@@ -57,9 +57,9 @@ class Record(ModelSQL, ModelView):
             res['country_code'][record.id] = (party.vat_country[:2] if
                 party.vat_country else None)
             province_code = ''
-            address = self.party.address_get(type='invoice')
+            address = party.address_get(type='invoice')
             if address and address.zip:
-                province_code = zip.strip()[:2]
+                province_code = address.zip.strip()[:2]
             res['province_code'][record.id] = province_code
         for key in res.keys():
             if key not in names:
@@ -69,28 +69,36 @@ class Record(ModelSQL, ModelView):
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
-    aeat347_operation_key = fields.Selection([(None, ''), ] + OPERATION_KEY,
+    include_347 = fields.Function(fields.Boolean('Include 347',
+            on_change_with=['_parent_invoice.party', 'invoice']),
+        'on_change_with_include_347')
+    aeat347_operation_key = fields.Selection([('', ''), ] + OPERATION_KEY,
         'AEAT 347 Operation Key', on_change_with=['product', 'account',
-            '_parent_invoice.type', 'aeat347_operation_key'],
+            '_parent_invoice.type', 'aeat347_operation_key', 'include_347'],
         states={
             'invisible': Eval('type') != 'line',
-            'required': Eval('type') == 'line',
+            'required': And(Eval('type') == 'line', Bool(Eval('include_347'))),
             },
-        depends=['type'])
+        depends=['type', 'include_347'])
 
     @classmethod
     def __setup__(cls):
         super(InvoiceLine, cls).__setup__()
 
+    def on_change_with_include_347(self, name=None):
+        return self.invoice.party.include_347
+
     def on_change_with_aeat347_operation_key(self):
+        if not self.include_347:
+            return ''
         if self.aeat347_operation_key:
             return self.aeat347_operation_key
         if self.invoice and self.invoice.type:
             type_ = self.invoice.type
         elif self.invoice_type:
             type_ = self.invoice_type
-        if not type_:
-            return
+        if not type_ or self.include_347:
+            return ''
         return self.get_aeat347_operation_key(type_)
 
     @classmethod
@@ -135,7 +143,9 @@ class Invoice:
         to_create = {}
 
         for invoice in invoices:
-            if not invoice.move:
+            print "Include:", invoice.party, invoice.party.include_347
+            if not invoice.move or not invoice.party.include_347:
+                print "avoide:", invoice.number
                 continue
             key = None
             for line in invoice.lines:
@@ -220,8 +230,8 @@ class Reasign347RecordStart(ModelView):
     """
     __name__ = "aeat.347.reasign.records.start"
 
-    aeat_347_operation_key = fields.Selection(OPERATION_KEY, 'Operation Key',
-        required=True)
+    aeat_347_operation_key = fields.Selection([('none', 'Leave Empty'), ] +
+        OPERATION_KEY, 'Operation Key' ,required=True)
 
 
 class Reasign347RecordEnd(ModelView):
@@ -254,6 +264,8 @@ class Reasign347Record(Wizard):
         invoices = Invoice.browse(Transaction().context['active_ids'])
 
         value = self.start.aeat_347_operation_key
+        if value == 'none':
+            value = None
         lines = []
         invoice_ids = set()
         for invoice in invoices:

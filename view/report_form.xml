@@ -4,6 +4,8 @@ contains the full copyright notices and license terms. -->
 <form string="AEAT 347 Report">
     <label name="company"/>
     <field name="company"/>
+    <label string="Declaration Number"/>
+    <field name="id"/>
     <newline/>
     <label name="fiscalyear"/>
     <field name="fiscalyear"/>

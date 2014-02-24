@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import itertools
 import datetime
 from decimal import Decimal
 from retrofix import aeat347
 import retrofix
+import unicodedata
 
 from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
@@ -26,6 +28,15 @@ OPERATION_KEY = [
     ('G', 'G - Travel Agency Purchases'),
     ]
 
+src_chars = """àáäâÀÁÄÂèéëêÈÉËÊìíïîÌÍÏÎòóöôÒÓÖÔùúüûÙÚÜÛçñºª·¤ '"()/*-+?!&$[]{}@#`'^:;<>=~%\\"""
+src_chars = unicode( src_chars, 'iso-8859-1' )
+dst_chars = """aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcnoa.e______________________________"""
+dst_chars = unicode( dst_chars, 'iso-8859-1' )
+
+def unaccent(text):
+     if isinstance( text, str ):
+         text = unicode( text, 'utf-8' )
+     return unicodedata.normalize('NFKD', text ).encode('ASCII', 'ignore')
 
 class Report(Workflow, ModelSQL, ModelView):
     'AEAT 347 Report'
@@ -44,7 +55,7 @@ class Report(Workflow, ModelSQL, ModelView):
             }, depends=['state'])
     representative_vat = fields.Char('L.R. VAT number', size=9,
         help='Legal Representative VAT number.', states={
-            'required': Eval('state') == 'calculated',
+    #        'required': Eval('state') == 'calculated',
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
@@ -265,7 +276,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key] = {
                         'amount': record.amount,
                         'cash_amount': _ZERO,
-                        'party_vat': record.party_vat,
+                        'party_vat': record.party_vat[:9],
                         'party_name': record.party_name,
                         'country_code': record.country_code,
                         'province_code': record.province_code,
@@ -321,19 +332,19 @@ class Report(Workflow, ModelSQL, ModelView):
         record = retrofix.Record(aeat347.PRESENTER_HEADER_RECORD)
         record.fiscalyear = str(self.fiscalyear_code)
         record.nif = self.company_vat
-        #record.presenter_name =
+        record.presenter_name = unaccent(self.company.party.name)
         record.support_type = self.support_type
         record.contact_phone = self.contact_phone
-        record.contact_name = self.contact_name
-        #record.declaration_number =
+        record.contact_name = unaccent(self.contact_name)
+        record.declaration_number = str(self.id)
         #record.complementary =
         #record.replacement =
         record.previous_declaration_number = self.previous_number
         record.party_count = len(self.parties)
         record.party_amount = self.party_amount
         record.property_count = len(self.properties)
-        record.property_amount = self.property_amount
-        #record.representative_nif =
+        record.property_amount = self.property_amount or Decimal('0.0')
+        record.representative_nif = self.representative_vat
         records.append(record)
         for line in itertools.chain(self.parties, self.properties):
             record = line.get_record()
@@ -341,7 +352,6 @@ class Report(Workflow, ModelSQL, ModelView):
             record.nif = self.company_vat
             records.append(record)
         data = retrofix.record.write(records)
-        data = data.encode('iso-8859-1')
         self.file_ = buffer(data)
         self.save()
 
@@ -403,14 +413,17 @@ class PartyRecord(ModelSQL, ModelView):
         record = retrofix.Record(aeat347.PARTY_RECORD)
         record.party_nif = self.party_vat
         record.representative_nif = self.representative_vat or ''
-        record.party_name = self.party_name
+        record.party_name = unaccent(self.party_name)
         record.province_code = self.province_code
-        record.country_code = self.country_code
+        if self.country_code == 'ES':
+            record.country_code = ''
+        else:
+            record.countr_code = self.country_code
         record.operation_key = self.operation_key
         record.amount = self.amount
         record.insurance = self.insurance
         record.business_premises_rent = self.business_premises_rent
-        record.cash_amount = self.cash_amount
+        record.cash_amount = self.cash_amount or _ZERO
         record.vat_liable_property_amount = self.property_amount \
             or Decimal('0.0')
         record.fiscalyear_cash_operation = str(
