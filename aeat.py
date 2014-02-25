@@ -55,7 +55,6 @@ class Report(Workflow, ModelSQL, ModelView):
             }, depends=['state'])
     representative_vat = fields.Char('L.R. VAT number', size=9,
         help='Legal Representative VAT number.', states={
-    #        'required': Eval('state') == 'calculated',
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
@@ -65,7 +64,7 @@ class Report(Workflow, ModelSQL, ModelView):
     fiscalyear_code = fields.Integer('Fiscal Year Code',
         on_change_with=['fiscalyear'], required=True)
     company_vat = fields.Char('VAT number', size=9, states={
-            'required': Eval('state') == 'calculated',
+            'required': True,
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     type = fields.Selection([

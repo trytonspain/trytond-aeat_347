@@ -143,9 +143,7 @@ class Invoice:
         to_create = {}
 
         for invoice in invoices:
-            print "Include:", invoice.party, invoice.party.include_347
             if not invoice.move or not invoice.party.include_347:
-                print "avoide:", invoice.number
                 continue
             key = None
             for line in invoice.lines:
