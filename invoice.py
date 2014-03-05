@@ -86,7 +86,10 @@ class InvoiceLine:
         super(InvoiceLine, cls).__setup__()
 
     def on_change_with_include_347(self, name=None):
-        return self.invoice.party.include_347
+        if self.invoice:
+            return self.invoice.party.include_347
+        else:
+            return self.party.include_347
 
     def on_change_with_aeat347_operation_key(self):
         if not self.include_347:
