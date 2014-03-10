@@ -146,7 +146,8 @@ class Invoice:
         to_create = {}
 
         for invoice in invoices:
-            if not invoice.move or not invoice.party.include_347:
+            if (not invoice.move or not invoice.party.include_347 or
+                    invoice.state == 'cancel'):
                 continue
             key = None
             for line in invoice.lines:
@@ -186,6 +187,15 @@ class Invoice:
     def post(cls, invoices):
         super(Invoice, cls).post(invoices)
         cls.create_aeat347_records(invoices)
+
+    @classmethod
+    def cancel(cls, invoices):
+        pool = Pool()
+        Record = pool.get('aeat.347.record')
+        super(Invoice, cls).cancel(invoices)
+        with Transaction().set_user(0, set_context=True):
+            Record.delete(Record.search([('invoice', 'in',
+                            [i.id for i in invoices])]))
 
 
 class Recalculate347RecordStart(ModelView):
