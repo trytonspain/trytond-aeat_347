@@ -69,23 +69,33 @@ class Record(ModelSQL, ModelView):
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
-    include_347 = fields.Function(fields.Boolean('Include 347',
-            on_change_with=['_parent_invoice.party', 'invoice']),
-        'on_change_with_include_347')
+    include_347 = fields.Boolean('Include 347',
+        on_change_with=['_parent_invoice.party', 'invoice', 'party', 'type'],
+        states={
+            'invisible': Eval('type') != 'line',
+            },
+        depends=['type'])
     aeat347_operation_key = fields.Selection([('', ''), ] + OPERATION_KEY,
         'AEAT 347 Operation Key', on_change_with=['product', 'account',
             '_parent_invoice.type', 'aeat347_operation_key', 'include_347'],
         states={
-            'invisible': Eval('type') != 'line',
+            'invisible': (Eval('type') != 'line') | ~Bool(Eval('include_347')),
             'required': And(Eval('type') == 'line', Bool(Eval('include_347'))),
             },
         depends=['type', 'include_347'])
 
-    @classmethod
-    def __setup__(cls):
-        super(InvoiceLine, cls).__setup__()
+    @staticmethod
+    def default_include_347():
+        pool = Pool()
+        Party = pool.get('party.party')
+        context = Transaction().context
+        if 'party' in context:
+            return Party(context['party']).include_347
+        return True
 
     def on_change_with_include_347(self, name=None):
+        if self.type != 'line':
+            return False
         if self.invoice:
             return self.invoice.party.include_347
         else:
@@ -113,7 +123,8 @@ class InvoiceLine:
     def create(cls, vlist):
         Invoice = Pool().get('account.invoice')
         for vals in vlist:
-            if vals.get('type', 'line') != 'line':
+            if (vals.get('type', 'line') != 'line' or
+                    not vals.get('include_347', True)):
                 continue
             invoice_type = vals.get('invoice_type')
             if not invoice_type and vals.get('invoice'):
@@ -126,6 +137,16 @@ class InvoiceLine:
 
 class Invoice:
     __name__ = 'account.invoice'
+
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        if not cls.lines.context:
+            cls.lines.context = {}
+        if not 'party' in cls.lines.context:
+            cls.lines.context.update({
+                    'party': Eval('party')
+                    })
 
     def _compute_total_amount(self, line):
         Tax = Pool().get('account.tax')
