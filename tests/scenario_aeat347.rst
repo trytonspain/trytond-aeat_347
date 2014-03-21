@@ -194,6 +194,8 @@ Create out invoice over limit::
     >>> line.quantity = 80
     >>> len(line.taxes) == 1
     True
+    >>> line.include_347
+    True
     >>> line.aeat347_operation_key == 'B'
     True
     >>> line.amount == Decimal(3200)
@@ -225,6 +227,8 @@ Create out invoice not over limit::
     >>> line.product = product
     >>> line.quantity = 5
     >>> len(line.taxes) == 1
+    True
+    >>> line.include_347
     True
     >>> line.aeat347_operation_key == 'B'
     True

@@ -110,7 +110,7 @@ class InvoiceLine:
             type_ = self.invoice.type
         elif self.invoice_type:
             type_ = self.invoice_type
-        if not type_ or self.include_347:
+        if not type_ or not self.include_347:
             return ''
         return self.get_aeat347_operation_key(type_)
 
@@ -167,12 +167,11 @@ class Invoice:
         to_create = {}
 
         for invoice in invoices:
-            if (not invoice.move or not invoice.party.include_347 or
-                    invoice.state == 'cancel'):
+            if (not invoice.move or invoice.state == 'cancel'):
                 continue
             key = None
             for line in invoice.lines:
-                if line.type != 'line':
+                if line.type != 'line' or not line.include_347:
                     continue
                 if line.aeat347_operation_key:
                     operation_key = line.aeat347_operation_key
