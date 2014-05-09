@@ -216,9 +216,6 @@ Create out invoice over limit::
 
 Create out invoice not over limit::
 
-    >>> Record = Model.get('aeat.347.record')
-    >>> Invoice = Model.get('account.invoice')
-    >>> InvoiceLine = Model.get('account.invoice.line')
     >>> invoice = Invoice()
     >>> invoice.party = party2
     >>> invoice.payment_term = payment_term
@@ -246,6 +243,38 @@ Create out invoice not over limit::
     >>> rec1.operation_key == 'B'
     True
     >>> rec1.amount == Decimal(220)
+    True
+
+Create out credit note::
+
+    >>> invoice = Invoice()
+    >>> invoice.type = 'out_credit_note'
+    >>> invoice.party = party
+    >>> invoice.payment_term = payment_term
+    >>> line = InvoiceLine()
+    >>> invoice.lines.append(line)
+    >>> line.product = product
+    >>> line.quantity = 2
+    >>> len(line.taxes) == 1
+    True
+    >>> line.include_347
+    True
+    >>> line.aeat347_operation_key == 'B'
+    True
+    >>> line.amount == Decimal(80)
+    True
+    >>> invoice.save()
+    >>> Invoice.post([invoice.id], config.context)
+    >>> rec1, = Record.find([('invoice', '=', invoice.id)])
+    >>> rec1.party_name == 'Party'
+    True
+    >>> rec1.party_vat == '00000000T'
+    True
+    >>> rec1.month == today.month
+    True
+    >>> rec1.operation_key == 'B'
+    True
+    >>> rec1.amount == Decimal('-88.0')
     True
 
 Create in invoice::
@@ -279,6 +308,37 @@ Create in invoice::
     >>> rec1.amount == Decimal(137.50)
     True
 
+Create in credit note::
+
+    >>> invoice = Invoice()
+    >>> invoice.type = 'in_credit_note'
+    >>> invoice.party = party
+    >>> invoice.payment_term = payment_term
+    >>> invoice.invoice_date = today
+    >>> line = InvoiceLine()
+    >>> invoice.lines.append(line)
+    >>> line.product = product
+    >>> line.quantity = 1
+    >>> len(line.taxes) == 1
+    True
+    >>> line.aeat347_operation_key == 'A'
+    True
+    >>> line.amount == Decimal(25)
+    True
+    >>> invoice.save()
+    >>> Invoice.post([invoice.id], config.context)
+    >>> rec1, = Record.find([('invoice', '=', invoice.id)])
+    >>> rec1.party_name == 'Party'
+    True
+    >>> rec1.party_vat == '00000000T'
+    True
+    >>> rec1.month == today.month
+    True
+    >>> rec1.operation_key == 'A'
+    True
+    >>> rec1.amount == Decimal('-27.50')
+    True
+
 Generate 347 Report::
 
     >>> Report = Model.get('aeat.347.report')
@@ -296,7 +356,7 @@ Generate 347 Report::
     True
     >>> report.party_count == 1
     True
-    >>> report.party_amount == Decimal(3520)
+    >>> report.party_amount == Decimal('3432')
     True
     >>> report.cash_amount == Decimal(0)
     True
