@@ -61,8 +61,7 @@ class Report(Workflow, ModelSQL, ModelView):
         required=True, states={
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
-    fiscalyear_code = fields.Integer('Fiscal Year Code',
-        on_change_with=['fiscalyear'], required=True)
+    fiscalyear_code = fields.Integer('Fiscal Year Code', required=True)
     company_vat = fields.Char('VAT number', size=9, states={
             'required': True,
             'readonly': Eval('state') == 'done',
@@ -203,6 +202,7 @@ class Report(Workflow, ModelSQL, ModelView):
     def get_currency(self, name):
         return self.company.currency.id
 
+    @fields.depends('fiscalyear')
     def on_change_with_fiscalyear_code(self):
         code = None
         if self.fiscalyear:

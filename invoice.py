@@ -70,14 +70,12 @@ class Record(ModelSQL, ModelView):
 class InvoiceLine:
     __name__ = 'account.invoice.line'
     include_347 = fields.Boolean('Include 347',
-        on_change_with=['_parent_invoice.party', 'invoice', 'party', 'type'],
         states={
             'invisible': Eval('type') != 'line',
             },
         depends=['type'])
     aeat347_operation_key = fields.Selection([('', ''), ] + OPERATION_KEY,
-        'AEAT 347 Operation Key', on_change_with=['product', 'account',
-            '_parent_invoice.type', 'aeat347_operation_key', 'include_347'],
+        'AEAT 347 Operation Key',
         states={
             'invisible': (Eval('type') != 'line') | ~Bool(Eval('include_347')),
             'required': And(Eval('type') == 'line', Bool(Eval('include_347'))),
@@ -93,6 +91,7 @@ class InvoiceLine:
             return Party(context['party']).include_347
         return True
 
+    @fields.depends('_parent_invoice.party', 'invoice', 'party', 'type')
     def on_change_with_include_347(self, name=None):
         if self.type != 'line':
             return False
@@ -101,6 +100,8 @@ class InvoiceLine:
         else:
             return self.party.include_347
 
+    @fields.depends('product', 'account',
+            '_parent_invoice.type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
         if not self.include_347:
             return ''

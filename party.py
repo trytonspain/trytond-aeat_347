@@ -14,9 +14,9 @@ __metaclass__ = PoolMeta
 class Party:
     __name__ = 'party.party'
 
-    include_347 = fields.Boolean('Include on 347',
-        on_change_with=['vat_country'], depends=['vat_country'])
+    include_347 = fields.Boolean('Include on 347', depends=['vat_country'])
 
+    @fields.depends('vat_country')
     def on_change_with_include_347(self, name=None):
         if self.vat_country == 'ES':
             return True
