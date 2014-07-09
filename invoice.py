@@ -100,7 +100,7 @@ class InvoiceLine:
         else:
             return self.party.include_347
 
-    @fields.depends('product', 'account',
+    @fields.depends('product', 'account', 'invoice', 'invoice_type',
             '_parent_invoice.type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
         if not self.include_347:
@@ -111,6 +111,8 @@ class InvoiceLine:
             type_ = self.invoice.type
         elif self.invoice_type:
             type_ = self.invoice_type
+        else:
+            type_ = None
         if not type_ or not self.include_347:
             return ''
         return self.get_aeat347_operation_key(type_)
