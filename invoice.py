@@ -87,7 +87,7 @@ class InvoiceLine:
         pool = Pool()
         Party = pool.get('party.party')
         context = Transaction().context
-        if 'party' in context:
+        if context.get('party'):
             return Party(context['party']).include_347
         return True
 
