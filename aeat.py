@@ -281,7 +281,7 @@ class Report(Workflow, ModelSQL, ModelView):
                         'province_code': record.province_code,
                         'operation_key': record.operation_key,
                         'report': report.id,
-                        'records': [('add', [(-1, record.id)])],
+                        'records': [('add', [(record.id)])],
                     }
                     saved = False
                     for month, quarter in quarter_mapping:
