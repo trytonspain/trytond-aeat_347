@@ -26,6 +26,10 @@ msgctxt "field:aeat.347.reasign.records.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:aeat.347.reasign.records.start,include_347:"
+msgid "Include 347"
+msgstr "Incluir 347"
+
 msgctxt "field:aeat.347.recalculate.records.end,id:"
 msgid "ID"
 msgstr "ID"

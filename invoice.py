@@ -265,7 +265,12 @@ class Reasign347RecordStart(ModelView):
     __name__ = "aeat.347.reasign.records.start"
 
     aeat_347_operation_key = fields.Selection([('none', 'Leave Empty'), ] +
-        OPERATION_KEY, 'Operation Key' ,required=True)
+        OPERATION_KEY, 'Operation Key', required=True)
+    include_347 = fields.Boolean('Include 347')
+
+    @staticmethod
+    def default_aeat_347_operation_key():
+        return 'none'
 
 
 class Reasign347RecordEnd(ModelView):
@@ -298,7 +303,8 @@ class Reasign347Record(Wizard):
         invoices = Invoice.browse(Transaction().context['active_ids'])
 
         value = self.start.aeat_347_operation_key
-        if value == 'none':
+        include = self.start.include_347
+        if value == 'none' or not include:
             value = None
         lines = []
         invoice_ids = set()
@@ -309,8 +315,9 @@ class Reasign347Record(Wizard):
 
         line = Line.__table__()
         #Update to allow to modify key for posted invoices
-        cursor.execute(*line.update(columns=[line.aeat347_operation_key],
-                values=[value], where=In(line.id, lines)))
+        cursor.execute(*line.update(columns=[line.aeat347_operation_key,
+                    line.include_347],
+                values=[value, include], where=In(line.id, lines)))
 
         invoices = Invoice.browse(list(invoices))
         Invoice.create_aeat347_records(invoices)

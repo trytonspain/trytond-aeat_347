@@ -2,7 +2,9 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form string="AEAT 347 Data Reasignation" col="2">
-        <label string="Select Operation Key to reasign invoices:"
-            id="reasing"/>
-        <field name="aeat_347_operation_key"/>
+    <label name="include_347"/>
+    <field name="include_347"/>
+    <label string="Select Operation Key to reasign invoices:"
+        id="reasing"/>
+    <field name="aeat_347_operation_key"/>
 </form>

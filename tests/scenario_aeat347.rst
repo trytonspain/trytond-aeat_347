@@ -362,3 +362,14 @@ Generate 347 Report::
     True
     >>> report.property_amount == Decimal(0)
     True
+
+Reassign 347 lines::
+
+    >>> reasign = Wizard('aeat.347.reasign.records', models=[invoice])
+    >>> reasign.form.include_347 = False
+    >>> reasign.execute('reasign')
+    >>> line.reload()
+    >>> line.include_347
+    False
+    >>> line.aeat347_operation_key == None
+    True
