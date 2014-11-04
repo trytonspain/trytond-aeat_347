@@ -141,9 +141,9 @@ Create tax::
 Create party::
 
     >>> Party = Model.get('party.party')
-    >>> party = Party(name='Party', vat_number='00000000T')
+    >>> party = Party(name='Party', vat_country='ES', vat_number='00000000T')
     >>> party.save()
-    >>> party2 = Party(name='Party 2', vat_number='00000001T')
+    >>> party2 = Party(name='Party 2', vat_country='ES', vat_number='00000001R')
     >>> party2.save()
 
 Create product::
@@ -188,13 +188,12 @@ Create out invoice over limit::
     >>> invoice = Invoice()
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
-    >>> line = InvoiceLine()
-    >>> invoice.lines.append(line)
+    >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 80
     >>> len(line.taxes) == 1
     True
-    >>> line.include_347
+    >>> bool(line.include_347)
     True
     >>> line.aeat347_operation_key == 'B'
     True
@@ -219,13 +218,12 @@ Create out invoice not over limit::
     >>> invoice = Invoice()
     >>> invoice.party = party2
     >>> invoice.payment_term = payment_term
-    >>> line = InvoiceLine()
-    >>> invoice.lines.append(line)
+    >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 5
     >>> len(line.taxes) == 1
     True
-    >>> line.include_347
+    >>> bool(line.include_347)
     True
     >>> line.aeat347_operation_key == 'B'
     True
@@ -236,7 +234,7 @@ Create out invoice not over limit::
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name == 'Party 2'
     True
-    >>> rec1.party_vat == '00000001T'
+    >>> rec1.party_vat == '00000001R'
     True
     >>> rec1.month == today.month
     True
@@ -251,13 +249,12 @@ Create out credit note::
     >>> invoice.type = 'out_credit_note'
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
-    >>> line = InvoiceLine()
-    >>> invoice.lines.append(line)
+    >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 2
     >>> len(line.taxes) == 1
     True
-    >>> line.include_347
+    >>> bool(line.include_347)
     True
     >>> line.aeat347_operation_key == 'B'
     True
@@ -284,8 +281,7 @@ Create in invoice::
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
-    >>> line = InvoiceLine()
-    >>> invoice.lines.append(line)
+    >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 5
     >>> len(line.taxes) == 1
@@ -315,8 +311,7 @@ Create in credit note::
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
-    >>> line = InvoiceLine()
-    >>> invoice.lines.append(line)
+    >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 1
     >>> len(line.taxes) == 1
@@ -369,7 +364,7 @@ Reassign 347 lines::
     >>> reasign.form.include_347 = False
     >>> reasign.execute('reasign')
     >>> line.reload()
-    >>> line.include_347
+    >>> bool(line.include_347)
     False
     >>> line.aeat347_operation_key == None
     True

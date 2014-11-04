@@ -97,8 +97,9 @@ class InvoiceLine:
             return False
         if self.invoice:
             return self.invoice.party.include_347
-        else:
+        elif self.party:
             return self.party.include_347
+        return True
 
     @fields.depends('product', 'account', 'invoice', 'invoice_type',
             '_parent_invoice.type', 'aeat347_operation_key', 'include_347')
