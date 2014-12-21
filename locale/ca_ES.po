@@ -192,7 +192,7 @@ msgstr "Nombre de registres de tercer"
 
 msgctxt "field:aeat.347.report,previous_number:"
 msgid "Previous Declaration Number"
-msgstr "Número declaració previa"
+msgstr "Número declaració prèvia"
 
 msgctxt "field:aeat.347.report,properties:"
 msgid "Property Records"
