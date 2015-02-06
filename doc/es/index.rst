@@ -2,6 +2,19 @@
 Generación de fichero modelo 347
 ================================
 
+En los terceros dispondremos del campo "Incluir 347" que debemos marcar a todos nuestros
+terceros que deseamos incluir en el 347. Al marcar el campo 347 en el tercero:
+
+- Verifica que el CIF/NIF sean español ('ES').
+- Al crear una línea de factura, si el tercero tiene la opción 347, se marcará
+  la línea con el campo 347.
+
+En el caso que disponga de líneas existentes de factura sin que esté marcada la opción
+347, podemos que se marque el campo 347 en las líneas de facturas, ejecutando la acción
+"Reasignar registros AEAT 347" y marcando la casilla Incluir 347. Seleccionamos la clave
+"A - Adquisiciones de bienes y servicios superiores al límite (1)".
+Esta acción nos asignará a todas las líneas relacionado con el 347.
+
 El módulo AEAT 340 permite la presentación del modelo 347 (Declaración Anual
 de Operaciones con Terceros) como la exportación a formato AEAT.
 
