@@ -2,25 +2,42 @@
 Generación de fichero modelo 347
 ================================
 
-En los terceros dispondremos del campo "Incluir 347" que debemos marcar a todos nuestros
-terceros que deseamos incluir en el 347. Al marcar el campo 347 en el tercero:
+El módulo AEAT 340 permite crear la presentación del modelo 347 (Declaración
+Anual de Operaciones con Terceros) y la exportación a formato AEAT.
 
-- Verifica que el CIF/NIF sean español ('ES').
-- Al crear una línea de factura, si el tercero tiene la opción 347, se marcará
-  la línea con el campo 347.
+Añade la casilla "Incluir 347" en la pestaña de contabilidad del tercero
+para indicar si se debe incluir en el 347. Esta casilla se marca
+automáticamente cuando el país del CIF es 'ES' y se desmarca en caso
+contrario.
 
-En el caso que disponga de líneas existentes de factura sin que esté marcada la opción
-347, podemos que se marque el campo 347 en las líneas de facturas, ejecutando la acción
-"Reasignar registros AEAT 347" y marcando la casilla Incluir 347. Seleccionamos la clave
-"A - Adquisiciones de bienes y servicios superiores al límite (1)".
-Esta acción nos asignará a todas las líneas relacionado con el 347.
+También permite indicar en las líneas de factura si se debe incluir en el
+347 y que clave es. En las facturas nuevas se rellena la clave de las
+líneas automáticamente, pero hay que recalcularla en las que se crearon
+antes de instalar este módulo. Para ello se pueden marcar varias facturas y
+ejecutar la acción "Reasignar registros AEAT 347" y marcar casilla Incluir
+347 y seleccionar la clave correspondiente, por ejemplo "A - Adquisiciones
+de bienes y servicios superiores al límite (1)" para facturas y abonos de
+proveedor o la clave "B - Entregas de bienes y servicios superiores al
+límite (1)" para facturas y abonos de cliente. Luego hay que ejecutar la
+acción "Recalcular registros AEAT 347" para recalcular los importes de cada
+línea de factura que deben consignarse en el modelo 347.
 
-El módulo AEAT 340 permite la presentación del modelo 347 (Declaración Anual
-de Operaciones con Terceros) como la exportación a formato AEAT.
+El informe 347 se crea desde el menú Contabilidad/Informes/Informe AEAT 347
+indicando el ejercicio fiscal y rellenando los datos del informe. El botón
+"Calcular" calcula los importes de cada cliente/proveedor a declarar que se
+muestran en la pestaña "Registros de terceros". Es importante que todos los
+terceros a incluir tengan el CIF anotado. En la pestaña "Registros de
+propiedad" se pueden añadir a mano los registros de alquileres de propiedad.
 
-Basado en la Orden EHA/3012/2008, de 20 de Octubre, por el que se aprueban los diseños físicos y lógicos del 347.
+Posteriormente se puede procesar el informe 347 y nos crearà el fichero 347
+listo para ser descargado de Tryton y ser enviado a hacienda por vía
+telemática.
 
-De acuerdo con la normativa de la Hacienda Española, están obligados a presentar el modelo 347:
+Basado en la Orden EHA/3012/2008, de 20 de Octubre, por el que se aprueban los
+diseños físicos y lógicos del 347.
+
+De acuerdo con la normativa de la Hacienda Española, están obligados a presentar
+el modelo 347:
 
 * Todas aquellas personas físicas o jurídicas que no esten acogidas al regimen
   de módulos en el IRPF, de naturaleza pública o privada que desarrollen
