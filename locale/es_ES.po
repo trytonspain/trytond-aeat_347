@@ -12,7 +12,7 @@ msgstr "Clave operación AEAT 347"
 
 msgctxt "field:account.invoice.line,include_347:"
 msgid "Include 347"
-msgstr "Incluir 347"
+msgstr "Incluir en el 347"
 
 msgctxt "field:aeat.347.reasign.records.end,id:"
 msgid "ID"
@@ -20,7 +20,7 @@ msgstr "ID"
 
 msgctxt "field:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "Operation Key"
-msgstr "Clave Operación"
+msgstr "Clave operación"
 
 msgctxt "field:aeat.347.reasign.records.start,id:"
 msgid "ID"
@@ -28,7 +28,7 @@ msgstr "ID"
 
 msgctxt "field:aeat.347.reasign.records.start,include_347:"
 msgid "Include 347"
-msgstr "Incluir 347"
+msgstr "Incluir en el 347"
 
 msgctxt "field:aeat.347.recalculate.records.end,id:"
 msgid "ID"
@@ -48,15 +48,15 @@ msgstr "Empresa"
 
 msgctxt "field:aeat.347.record,country_code:"
 msgid "Country Code"
-msgstr "Código Pais"
+msgstr "Código país"
 
 msgctxt "field:aeat.347.record,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:aeat.347.record,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:aeat.347.record,fiscalyear:"
 msgid "Fiscal Year"
@@ -76,7 +76,7 @@ msgstr "Mes"
 
 msgctxt "field:aeat.347.record,operation_key:"
 msgid "Operation key"
-msgstr "Clave Operación"
+msgstr "Clave operación"
 
 msgctxt "field:aeat.347.record,party:"
 msgid "Party"
@@ -92,11 +92,11 @@ msgstr "Registro de tercero"
 
 msgctxt "field:aeat.347.record,party_vat:"
 msgid "Party VAT"
-msgstr "NIF Tercero"
+msgstr "NIF tercero"
 
 msgctxt "field:aeat.347.record,province_code:"
 msgid "Province Code"
-msgstr "Código de provincia"
+msgstr "Código provincia"
 
 msgctxt "field:aeat.347.record,rec_name:"
 msgid "Name"
@@ -140,11 +140,11 @@ msgstr "Teléfono"
 
 msgctxt "field:aeat.347.report,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:aeat.347.report,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:aeat.347.report,currency:"
 msgid "Currency"
@@ -160,7 +160,7 @@ msgstr "Ejercicio fiscal"
 
 msgctxt "field:aeat.347.report,fiscalyear_code:"
 msgid "Fiscal Year Code"
-msgstr "Código Ejercicio Fiscal"
+msgstr "Código ejercicio fiscal"
 
 msgctxt "field:aeat.347.report,group_by_vat:"
 msgid "Group by VAT"
@@ -172,11 +172,11 @@ msgstr "ID"
 
 msgctxt "field:aeat.347.report,on_behalf_third_party_limit:"
 msgid "On Behalf of Third Party Limit (3)"
-msgstr "Limite de por cuenta de tercero (3)"
+msgstr "Límite por cuenta de tercero (3)"
 
 msgctxt "field:aeat.347.report,operation_limit:"
 msgid "Invoiced Limit (1)"
-msgstr "Límite de facturas"
+msgstr "Límite de facturas (1)"
 
 msgctxt "field:aeat.347.report,parties:"
 msgid "Party Records"
@@ -216,7 +216,7 @@ msgstr "Límite efectivo recibido (2)"
 
 msgctxt "field:aeat.347.report,representative_vat:"
 msgid "L.R. VAT number"
-msgstr "NIF del representante legal"
+msgstr "NIF representante legal"
 
 msgctxt "field:aeat.347.report,state:"
 msgid "State"
@@ -256,15 +256,15 @@ msgstr "Empresa"
 
 msgctxt "field:aeat.347.report.party,country_code:"
 msgid "Country Code"
-msgstr "Código Pais"
+msgstr "Código país"
 
 msgctxt "field:aeat.347.report.party,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:aeat.347.report.party,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:aeat.347.report.party,first_quarter_amount:"
 msgid "First Quarter Amount"
@@ -292,11 +292,11 @@ msgstr "ID"
 
 msgctxt "field:aeat.347.report.party,insurance:"
 msgid "Insurance Operation"
-msgstr "Operacion de seguros"
+msgstr "Operación de seguros"
 
 msgctxt "field:aeat.347.report.party,operation_key:"
 msgid "Operation Key"
-msgstr "Clave Operación"
+msgstr "Clave operación"
 
 msgctxt "field:aeat.347.report.party,party_name:"
 msgid "Party Name"
@@ -312,7 +312,7 @@ msgstr "Importe propiedades sujetas a impuestos"
 
 msgctxt "field:aeat.347.report.party,province_code:"
 msgid "Province Code"
-msgstr "Código de provincia"
+msgstr "Código provincia"
 
 msgctxt "field:aeat.347.report.party,rec_name:"
 msgid "Name"
@@ -328,7 +328,7 @@ msgstr "Informe AEAT 347"
 
 msgctxt "field:aeat.347.report.party,representative_vat:"
 msgid "L.R. VAT number"
-msgstr "NIF del representante legal"
+msgstr "NIF representante legal"
 
 msgctxt "field:aeat.347.report.party,second_quarter_amount:"
 msgid "Second Quarter Amount"
@@ -336,7 +336,7 @@ msgstr "Importe segundo trimestre"
 
 msgctxt "field:aeat.347.report.party,second_quarter_property_amount:"
 msgid "Second Quarter Property Amount"
-msgstr "Importe propiedad segundo trimestre"
+msgstr "Importe propiedades segundo trimestre"
 
 msgctxt "field:aeat.347.report.party,third_quarter_amount:"
 msgid "Third Quarter Amount"
@@ -364,7 +364,7 @@ msgstr "Bloque"
 
 msgctxt "field:aeat.347.report.property,cadaster_number:"
 msgid "Cadaster Reference"
-msgstr "Referencia cadastral"
+msgstr "Referencia catastral"
 
 msgctxt "field:aeat.347.report.property,city:"
 msgid "City"
@@ -380,11 +380,11 @@ msgstr "Complemento"
 
 msgctxt "field:aeat.347.report.property,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:aeat.347.report.property,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:aeat.347.report.property,door:"
 msgid "Door"
@@ -408,7 +408,7 @@ msgstr "Municipalidad"
 
 msgctxt "field:aeat.347.report.property,municipality_code:"
 msgid "Municipality Code"
-msgstr "Codi municipal"
+msgstr "Código municipalidad"
 
 msgctxt "field:aeat.347.report.property,number:"
 msgid "Number"
@@ -432,7 +432,7 @@ msgstr "Número CIF/NIF"
 
 msgctxt "field:aeat.347.report.property,province_code:"
 msgid "Province Code"
-msgstr "Código de provincia"
+msgstr "Código provincia"
 
 msgctxt "field:aeat.347.report.property,rec_name:"
 msgid "Name"
@@ -444,7 +444,7 @@ msgstr "Informe AEAT 347"
 
 msgctxt "field:aeat.347.report.property,representative_vat:"
 msgid "L.R. VAT number"
-msgstr "NIF del representante legal"
+msgstr "NIF representante legal"
 
 msgctxt "field:aeat.347.report.property,road_type:"
 msgid "Road Type"
@@ -474,17 +474,16 @@ msgctxt "field:aeat.347.report.property,zip:"
 msgid "Zip"
 msgstr "Código postal"
 
-#, fuzzy
 msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
-msgstr "Incluir 347"
+msgstr "Incluir en el 347"
 
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
 "behalf of third parties, over this limit"
 msgstr ""
-"La declaración incluirà terceros de los que se hayan recibido pagos, por "
+"La declaración incluirá terceros de los que se hayan recibido pagos, por "
 "cuenta de terceros, superiores a este límite."
 
 msgctxt "help:aeat.347.report,operation_limit:"
@@ -498,12 +497,12 @@ msgstr ""
 msgctxt "help:aeat.347.report,received_cash_limit:"
 msgid "The declaration will show the total of cash operations over this limit"
 msgstr ""
-"La declaración mostrara las operaciones con total de efectivo superior a "
-"este límite. "
+"La declaración mostrará las operaciones de efectivo con importe total "
+"superior a este límite."
 
 msgctxt "help:aeat.347.report,representative_vat:"
 msgid "Legal Representative VAT number."
-msgstr "NIF del representante legal"
+msgstr "NIF del representante legal."
 
 msgctxt "help:aeat.347.report.party,business_premises_rent:"
 msgid ""
@@ -511,26 +510,29 @@ msgid ""
 " fill in the premises info only when you are the one that receives the "
 "money."
 msgstr ""
+"Marcar para identificar las operaciones con locales de alquiler aparte del "
+"resto. Sólo deberá introducir la información de los locales cuando sea el "
+"que recibe el dinero."
 
 msgctxt "help:aeat.347.report.party,insurance:"
 msgid ""
 "Only for insurance companies. Set to identify insurance operations aside "
 "from the rest."
 msgstr ""
-"Solo para agencias de seguros. Marcar para identificar las operaciones de "
+"Sólo para agencias de seguros. Marcar para identificar las operaciones de "
 "seguros del resto. "
 
 msgctxt "help:aeat.347.report.party,representative_vat:"
 msgid "Legal Representative VAT number"
-msgstr "NIF representante legal"
+msgstr "NIF del representante legal."
 
 msgctxt "help:aeat.347.report.property,complement:"
 msgid "Complement (urbanization, industrial park...)"
-msgstr "Complemento (urbanización, parque industrial...)"
+msgstr "Complemento (urbanización, parque industrial, ...)."
 
 msgctxt "help:aeat.347.report.property,representative_vat:"
 msgid "Legal Representative VAT number"
-msgstr "NIF representante legal"
+msgstr "NIF del representante legal."
 
 msgctxt "model:aeat.347.reasign.records.end,name:"
 msgid "Reasign AEAT 347 Records End"
@@ -646,16 +648,16 @@ msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
-msgstr "C - Cobros por cuentas de tercerios superiores al límite (3)"
+msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
-msgstr "D - Adquisiciones de Instituciones públicas superiores al límite (1)"
+msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
-"E - Subvenciones y ayudas satisfechos por administraciones públicas "
+"E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
@@ -676,16 +678,16 @@ msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
-msgstr "C - Cobros por cuentas de tercerios superiores al límite (3)"
+msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
-msgstr "D - Adquisiciones de Instituciones públicas superiores al límite (1)"
+msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
-"E - Subvenciones y ayudas satisfechos por administraciones públicas "
+"E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
 msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
@@ -710,16 +712,16 @@ msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
-msgstr "C - Cobros por cuentas de tercerios superiores al límite (3)"
+msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
-msgstr "D - Adquisiciones de Instituciones públicas superiores al límite (1)"
+msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
 msgctxt "selection:aeat.347.record,operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
-"E - Subvenciones y ayudas satisfechos por administraciones públicas "
+"E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
 msgctxt "selection:aeat.347.record,operation_key:"
@@ -752,7 +754,7 @@ msgstr "DVD"
 
 msgctxt "selection:aeat.347.report,support_type:"
 msgid "Telematics"
-msgstr "Telematico"
+msgstr "Telemática"
 
 msgctxt "selection:aeat.347.report,type:"
 msgid "Complementary"
@@ -764,7 +766,7 @@ msgstr "Normal"
 
 msgctxt "selection:aeat.347.report,type:"
 msgid "Substitutive"
-msgstr "Substitutiva"
+msgstr "Sustitutiva"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
@@ -776,16 +778,16 @@ msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
-msgstr "C - Cobros por cuentas de tercerios superiores al límite (3)"
+msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
-msgstr "D - Adquisiciones de Instituciones públicas superiores al límite (1)"
+msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
-"E - Subvenciones y ayudas satisfechos por administraciones públicas "
+"E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
 msgctxt "selection:aeat.347.report.party,operation_key:"
@@ -826,15 +828,15 @@ msgstr "Sin número"
 
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "1 - Spain but Basque Country and Navarra"
-msgstr "1 - España excepto Pais Basco y Navarra"
+msgstr "1 - España excepto Euskadi y Navarra"
 
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "2 - Basque Country and Navarra"
-msgstr "2 - Pais Basco y Navarra"
+msgstr "2 - Euskadi y Navarra"
 
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "3 - Spain, without catastral reference"
-msgstr "3 - España sin referencia cadastral"
+msgstr "3 - España sin referencia catastral"
 
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "4 - Foreign"
@@ -846,7 +848,7 @@ msgstr "Reasignación registros AEAT 347 hecha"
 
 msgctxt "view:aeat.347.reasign.records.end:"
 msgid "The AEAT 347 records have been reasigned."
-msgstr "Los registros del model AEAT 347 han sido reasignados."
+msgstr "Los registros del modelo AEAT 347 han sido reasignados."
 
 msgctxt "view:aeat.347.reasign.records.start:"
 msgid "AEAT 347 Data Reasignation"
@@ -854,19 +856,19 @@ msgstr "Reasignación registros AEAT 347"
 
 msgctxt "view:aeat.347.reasign.records.start:"
 msgid "Select Operation Key to reasign invoices:"
-msgstr "Selecciona la clave de operacion para reassingar las facturas"
+msgstr "Seleccione la clave de operacion para reasignar las facturas:"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "AEAT 347 Data Recalculation Done"
-msgstr "Recalculo registros AEAT 347 hecha"
+msgstr "Recálculo registros AEAT 347 hecha"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "The AEAT 347 records have been recalculated."
-msgstr "Los registros del model AEAT 347 han sido recalculados."
+msgstr "Los registros del modelo AEAT 347 han sido recalculados."
 
 msgctxt "view:aeat.347.recalculate.records.start:"
 msgid "AEAT 347 Data Recalculation"
-msgstr "Recalculo registros AEAT 347"
+msgstr "Recálculo registros AEAT 347"
 
 msgctxt "view:aeat.347.recalculate.records.start:"
 msgid "Note that this operation may take a few minutes."
@@ -932,7 +934,7 @@ msgstr "General"
 
 msgctxt "view:aeat.347.report:"
 msgid "Limits"
-msgstr "Limites"
+msgstr "Límites"
 
 msgctxt "view:aeat.347.report:"
 msgid "Party Records"
