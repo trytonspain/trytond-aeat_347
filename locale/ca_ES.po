@@ -184,7 +184,7 @@ msgstr "Registres de tercer"
 
 msgctxt "field:aeat.347.report,party_amount:"
 msgid "Party Amount"
-msgstr "Import tercer"
+msgstr "Import de tercers"
 
 msgctxt "field:aeat.347.report,party_count:"
 msgid "Party Record Count"
@@ -200,7 +200,7 @@ msgstr "Registres de propietat"
 
 msgctxt "field:aeat.347.report,property_amount:"
 msgid "Property Amount"
-msgstr "Import propietat"
+msgstr "Import de propietats"
 
 msgctxt "field:aeat.347.report,property_count:"
 msgid "Property Record Count"
@@ -840,7 +840,7 @@ msgstr "3 - Espanya sense referència cadastral"
 
 msgctxt "selection:aeat.347.report.property,situation:"
 msgid "4 - Foreign"
-msgstr "4 - Extranger"
+msgstr "4 - Estranger"
 
 msgctxt "view:aeat.347.reasign.records.end:"
 msgid "AEAT 347 Data Reassigment Done"

@@ -184,7 +184,7 @@ msgstr "Registros de tercero"
 
 msgctxt "field:aeat.347.report,party_amount:"
 msgid "Party Amount"
-msgstr "Importe tercero"
+msgstr "Importe de terceros"
 
 msgctxt "field:aeat.347.report,party_count:"
 msgid "Party Record Count"
@@ -200,7 +200,7 @@ msgstr "Registros de propiedad"
 
 msgctxt "field:aeat.347.report,property_amount:"
 msgid "Property Amount"
-msgstr "Importe propiedad"
+msgstr "Importe de propiedades"
 
 msgctxt "field:aeat.347.report,property_count:"
 msgid "Property Record Count"
