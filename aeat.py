@@ -29,14 +29,16 @@ OPERATION_KEY = [
     ]
 
 src_chars = """àáäâÀÁÄÂèéëêÈÉËÊìíïîÌÍÏÎòóöôÒÓÖÔùúüûÙÚÜÛçñºª·¤ '"()/*-+?!&$[]{}@#`'^:;<>=~%\\"""
-src_chars = unicode( src_chars, 'iso-8859-1' )
+src_chars = unicode(src_chars, 'iso-8859-1')
 dst_chars = """aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcnoa.e______________________________"""
-dst_chars = unicode( dst_chars, 'iso-8859-1' )
+dst_chars = unicode(dst_chars, 'iso-8859-1')
+
 
 def unaccent(text):
-     if isinstance( text, str ):
-         text = unicode( text, 'utf-8' )
-     return unicodedata.normalize('NFKD', text ).encode('ASCII', 'ignore')
+    if isinstance(text, str):
+        text = unicode(text, 'utf-8')
+    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+
 
 class Report(Workflow, ModelSQL, ModelView):
     'AEAT 347 Report'
@@ -98,9 +100,9 @@ class Report(Workflow, ModelSQL, ModelView):
         digits=(16, 2), required=True, help='The declaration will show the '
         'total of cash operations over this limit')
     on_behalf_third_party_limit = fields.Numeric('On Behalf of Third '
-        'Party Limit (3)', digits=(16, 2), required=True, help='The declaration'
-        ' will include parties from which we received payments, on behalf of '
-        'third parties, over this limit')
+        'Party Limit (3)', digits=(16, 2), required=True,
+        help='The declaration will include parties from which we received '
+        'payments, on behalf of third parties, over this limit')
     amount = fields.Function(fields.Numeric('Amount', digits=(16, 2)),
         'get_totals')
     cash_amount = fields.Function(fields.Numeric('Cash Amount (Manual)',
@@ -129,8 +131,8 @@ class Report(Workflow, ModelSQL, ModelView):
     def __setup__(cls):
         super(Report, cls).__setup__()
         cls._error_messages.update({
-                'invalid_currency': ('Currency in AEAT 340 report "%s" must be '
-                    'Euro.'),
+                'invalid_currency': ('Currency in AEAT 340 report "%s" must be'
+                    ' Euro.'),
                 })
         cls._buttons.update({
                 'draft': {
