@@ -417,7 +417,7 @@ class PartyRecord(ModelSQL, ModelView):
         if self.country_code == 'ES':
             record.country_code = ''
         else:
-            record.countr_code = self.country_code
+            record.country_code = self.country_code
         record.operation_key = self.operation_key
         record.amount = self.amount
         record.insurance = self.insurance
