@@ -96,7 +96,7 @@ class InvoiceLine:
     def on_change_with_include_347(self, name=None):
         if self.type != 'line':
             return False
-        if self.invoice:
+        if self.invoice and self.invoice.party:
             return self.invoice.party.include_347
         elif self.party:
             return self.party.include_347
