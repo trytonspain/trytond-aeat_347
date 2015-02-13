@@ -9,6 +9,8 @@ contains the full copyright notices and license terms. -->
 	<field name="party_name"/>
 	<label name="party_vat"/>
 	<field name="party_vat"/>
+    <label name="community_vat"/>
+    <field name="community_vat"/>
 	<label name="representative_vat"/>
 	<field name="representative_vat"/>
 	<label name="country_code"/>
@@ -21,6 +23,16 @@ contains the full copyright notices and license terms. -->
     <field name="insurance"/>
     <label name="business_premises_rent"/>
     <field name="business_premises_rent"/>
+    <group colspan="2" col="4" id="cash_vat">
+        <label name="cash_vat_operation"/>
+        <field name="cash_vat_operation"/>
+        <label name="cash_vat_criteria"/>
+        <field name="cash_vat_criteria"/>
+    </group>
+    <label name="tax_person_operation"/>
+    <field name="tax_person_operation"/>
+    <label name="related_goods_operation"/>
+    <field name="related_goods_operation"/>
     <newline/>
 	<label name="amount"/>
 	<field name="amount"/>

@@ -8,7 +8,7 @@ import unicodedata
 
 from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
-from trytond.pyson import Eval
+from trytond.pyson import Bool, Eval, Not
 from trytond.transaction import Transaction
 
 __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
@@ -371,6 +371,9 @@ class PartyRecord(ModelSQL, ModelView):
     party_vat = fields.Char('VAT', size=9)
     representative_vat = fields.Char('L.R. VAT number', size=9,
         help='Legal Representative VAT number')
+    community_vat = fields.Char('Community VAT number', size=17,
+        help='VAT number for professionals established in other state member '
+            'without national VAT')
     province_code = fields.Char('Province Code', size=2)
     country_code = fields.Char('Country Code', size=2)
     operation_key = fields.Selection(OPERATION_KEY, 'Operation Key')
@@ -382,6 +385,20 @@ class PartyRecord(ModelSQL, ModelView):
         help='Set to identify premises rent operations aside from the rest. '
         'You\'ll need to fill in the premises info only when you are the one '
         'that receives the money.')
+    cash_vat_operation = fields.Boolean('Cash VAT Operation',
+        help='Only for cash basis operations. Set to identify cash basis '
+            'operations aside from the rest.')
+    cash_vat_criteria = fields.Numeric('Cash VAT Criteria', digits=(16, 2),
+        help='Annual amount of transactions accrued under cash VAT criteria.',
+        states={
+            'invisible': Not(Bool(Eval('cash_vat_operation'))),
+            })
+    tax_person_operation = fields.Boolean('Taxable Person Operation',
+        help='Only for taxable person operations. Set to identify taxable '
+            'person operations aside from the rest.')
+    related_goods_operation = fields.Boolean('Related Goods Operation',
+        help='Only for related goods operations. Set to identify related '
+            'goods operations aside from the rest.')
     cash_amount = fields.Numeric('Cash Amount Received', digits=(16, 2))
     property_amount = fields.Numeric('VAT Liable Property Amount',
         digits=(16, 2))
@@ -413,6 +430,7 @@ class PartyRecord(ModelSQL, ModelView):
     def get_record(self):
         record = retrofix.Record(aeat347.PARTY_RECORD)
         record.party_nif = self.party_vat
+        record.community_vat = self.community_vat or ''
         record.representative_nif = self.representative_vat or ''
         record.party_name = unaccent(self.party_name)
         record.province_code = self.province_code
@@ -441,6 +459,11 @@ class PartyRecord(ModelSQL, ModelView):
         record.fourth_quarter_amount = self.fourth_quarter_amount
         record.fourth_quarter_property_amount = (
             self.fourth_quarter_property_amount)
+        record.cash_vat_operation = self.cash_vat_operation
+        record.cash_vat_criteria = (self.cash_vat_criteria or Decimal('0.0')
+            if self.cash_vat_operation else Decimal('0.0'))
+        record.tax_person_operation = self.tax_person_operation
+        record.related_goods_operation = self.related_goods_operation
         return record
 
 
