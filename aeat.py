@@ -29,9 +29,9 @@ OPERATION_KEY = [
     ]
 
 src_chars = """àáäâÀÁÄÂèéëêÈÉËÊìíïîÌÍÏÎòóöôÒÓÖÔùúüûÙÚÜÛçñºª·¤ '"()/*-+?!&$[]{}@#`'^:;<>=~%\\"""
-src_chars = unicode( src_chars, 'iso-8859-1' )
+src_chars = unicode(src_chars, 'iso-8859-1')
 dst_chars = """aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcnoa.e______________________________"""
-dst_chars = unicode( dst_chars, 'iso-8859-1' )
+dst_chars = unicode(dst_chars, 'iso-8859-1')
 
 def unaccent(text):
      if isinstance( text, str ):
@@ -417,7 +417,7 @@ class PartyRecord(ModelSQL, ModelView):
         if self.country_code == 'ES':
             record.country_code = ''
         else:
-            record.countr_code = self.country_code
+            record.country_code = self.country_code
         record.operation_key = self.operation_key
         record.amount = self.amount
         record.insurance = self.insurance
