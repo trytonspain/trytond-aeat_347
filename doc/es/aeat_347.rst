@@ -1,5 +1,3 @@
-.. inheritref:: aeat_347/aeat_347:section:aeat_347
-
 AEAT 347
 ========
 
