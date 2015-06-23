@@ -39,3 +39,21 @@ class Party:
             cursor.execute(*sql_table.update(
                     columns=[sql_table.include_347], values=[True],
                     where=(sql_table.vat_country == Literal('ES'))))
+
+    @classmethod
+    def create(cls, vlist):
+        vlist = [x.copy() for x in vlist]
+        for vals in vlist:
+            if vals.get('vat_country') == 'ES':
+                vals['include_347'] = True
+        return super(Party, cls).create(vlist)
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        args = []
+        for parties, values in zip(actions, actions):
+            if values.get('vat_country') == 'ES':
+                values['include_347'] = True
+            args.extend((parties, values))
+        return super(Party, cls).write(*args)
