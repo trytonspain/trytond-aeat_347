@@ -1,11 +1,11 @@
 <tree string="AEAT 347 Party Record">
-	 <field name="report"/>
-     <field name="party_name"/>
-	 <field name="party_vat"/>
-	 <field name="operation_key"/>
-	 <field name="province_code"/>
-	 <field name="country_code"/>
-	 <field name="amount" sum="Operations Amount"/>
-	 <field name="cash_amount"/>
-	 <field name="property_amount"/>
+    <field name="report"/>
+    <field name="party_name"/>
+    <field name="party_vat"/>
+    <field name="operation_key"/>
+    <field name="province_code"/>
+    <field name="country_code"/>
+    <field name="amount" sum="Operations Amount"/>
+    <field name="cash_amount"/>
+    <field name="property_amount"/>
 </tree>

@@ -2,23 +2,23 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="AEAT 347 Party Record">
-	<label name="report"/>
-	<field name="report"/>
+    <label name="report"/>
+    <field name="report"/>
     <newline/>
-	<label name="party_name"/>
-	<field name="party_name"/>
-	<label name="party_vat"/>
-	<field name="party_vat"/>
+    <label name="party_name"/>
+    <field name="party_name"/>
+    <label name="party_vat"/>
+    <field name="party_vat"/>
     <label name="community_vat"/>
     <field name="community_vat"/>
-	<label name="representative_vat"/>
-	<field name="representative_vat"/>
-	<label name="country_code"/>
-	<field name="country_code"/>
-	<label name="province_code"/>
-	<field name="province_code"/>
-	<label name="operation_key"/>
-	<field name="operation_key"/>
+    <label name="representative_vat"/>
+    <field name="representative_vat"/>
+    <label name="country_code"/>
+    <field name="country_code"/>
+    <label name="province_code"/>
+    <field name="province_code"/>
+    <label name="operation_key"/>
+    <field name="operation_key"/>
     <label name="insurance"/>
     <field name="insurance"/>
     <label name="business_premises_rent"/>
@@ -34,30 +34,30 @@ contains the full copyright notices and license terms. -->
     <label name="related_goods_operation"/>
     <field name="related_goods_operation"/>
     <newline/>
-	<label name="amount"/>
-	<field name="amount"/>
-	<label name="property_amount"/>
-	<field name="property_amount"/>
-	<label name="cash_amount"/>
-	<field name="cash_amount"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="property_amount"/>
+    <field name="property_amount"/>
+    <label name="cash_amount"/>
+    <field name="cash_amount"/>
     <label name="fiscalyear_code_cash_operation"/>
     <field name="fiscalyear_code_cash_operation"/>
     <newline/>
-	<label name="first_quarter_amount"/>
-	<field name="first_quarter_amount"/>
-	<label name="first_quarter_property_amount"/>
-	<field name="first_quarter_property_amount"/>
-	<label name="second_quarter_amount"/>
-	<field name="second_quarter_amount"/>
-	<label name="second_quarter_property_amount"/>
-	<field name="second_quarter_property_amount"/>
-	<label name="third_quarter_amount"/>
-	<field name="third_quarter_amount"/>
-	<label name="third_quarter_property_amount"/>
-	<field name="third_quarter_property_amount"/>
-	<label name="fourth_quarter_amount"/>
-	<field name="fourth_quarter_amount"/>
-	<label name="fourth_quarter_property_amount"/>
-	<field name="fourth_quarter_property_amount"/>
+    <label name="first_quarter_amount"/>
+    <field name="first_quarter_amount"/>
+    <label name="first_quarter_property_amount"/>
+    <field name="first_quarter_property_amount"/>
+    <label name="second_quarter_amount"/>
+    <field name="second_quarter_amount"/>
+    <label name="second_quarter_property_amount"/>
+    <field name="second_quarter_property_amount"/>
+    <label name="third_quarter_amount"/>
+    <field name="third_quarter_amount"/>
+    <label name="third_quarter_property_amount"/>
+    <field name="third_quarter_property_amount"/>
+    <label name="fourth_quarter_amount"/>
+    <field name="fourth_quarter_amount"/>
+    <label name="fourth_quarter_property_amount"/>
+    <field name="fourth_quarter_property_amount"/>
     <field name="records" colspan="4"/>
 </form>

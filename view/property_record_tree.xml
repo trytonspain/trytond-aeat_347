@@ -1,10 +1,10 @@
 <tree string="AEAT 347 Property Record">
-	 <field name="report"/>
-	 <field name="party_name"/>
-	 <field name="party_vat"/>
-	 <field name="amount" sum="Amount"/>
-	 <field name="cadaster_number"/>
-     <field name="street"/>
-	 <field name="zip"/>
-	 <field name="city"/>
+    <field name="report"/>
+    <field name="party_name"/>
+    <field name="party_vat"/>
+    <field name="amount" sum="Amount"/>
+    <field name="cadaster_number"/>
+    <field name="street"/>
+    <field name="zip"/>
+    <field name="city"/>
 </tree>
