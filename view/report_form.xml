@@ -62,8 +62,7 @@ contains the full copyright notices and license terms. -->
     <group id="state" colspan="2" col="6">
         <label name="state"/>
         <field name="state"/>
-        <field name="calculation_date" widget="date"/>
-        <field name="calculation_date" widget="time" string="Time"/>
+        <field name="calculation_date"/>
         <label name="file_"/>
         <field name="file_"/>
     </group>
