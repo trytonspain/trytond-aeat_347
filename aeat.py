@@ -353,7 +353,7 @@ class Report(Workflow, ModelSQL, ModelView):
             record.nif = self.company_vat
             records.append(record)
         data = retrofix.record.write(records)
-        self.file_ = buffer(data)
+        self.file_ = bytes(data)
         self.save()
 
 
