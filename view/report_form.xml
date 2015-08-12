@@ -53,7 +53,7 @@ contains the full copyright notices and license terms. -->
             <newline/>
         </page>
         <page string="Party Records" id="parties">
-	        <field name="parties" colspan="4"/>
+            <field name="parties" colspan="4"/>
         </page>
         <page string="Property Records" id="properties">
             <field name="properties" colspan="4"/>
