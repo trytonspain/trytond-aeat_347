@@ -123,9 +123,11 @@ class Report(Workflow, ModelSQL, ModelView):
         'Property Records', states={
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
-    file_ = fields.Binary('File', states={
+    file_ = fields.Binary('File', filename='filename', states={
             'invisible': Eval('state') != 'done',
             })
+    filename = fields.Function(fields.Char("File Name"),
+        'get_filename')
 
     @classmethod
     def __setup__(cls):
@@ -203,6 +205,9 @@ class Report(Workflow, ModelSQL, ModelView):
 
     def get_currency(self, name):
         return self.company.currency.id
+
+    def get_filename(self, name):
+        return 'aeat347-%s.txt' % self.fiscalyear_code
 
     @fields.depends('fiscalyear')
     def on_change_with_fiscalyear_code(self):
