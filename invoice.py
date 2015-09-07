@@ -155,7 +155,7 @@ class Invoice:
 
     def _compute_total_amount(self, line):
         Tax = Pool().get('account.tax')
-        context = self.get_tax_context()
+        context = self._get_tax_context()
 
         with Transaction().set_context(**context):
             taxes = Tax.compute(line.taxes, line.unit_price, line.quantity)
