@@ -698,7 +698,7 @@ msgstr "Administració AEAT 347"
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid ""
-msgstr " "
+msgstr ""
 
 msgctxt "selection:account.invoice.line,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
