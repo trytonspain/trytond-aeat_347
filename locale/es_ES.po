@@ -154,6 +154,10 @@ msgctxt "field:aeat.347.report,file_:"
 msgid "File"
 msgstr "Archivo"
 
+msgctxt "field:aeat.347.report,filename:"
+msgid "File Name"
+msgstr "Nombre fichero"
+
 msgctxt "field:aeat.347.report,fiscalyear:"
 msgid "Fiscal Year"
 msgstr "Ejercicio fiscal"
