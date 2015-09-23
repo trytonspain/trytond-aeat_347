@@ -161,8 +161,7 @@ class Invoice:
             taxes = Tax.compute(line.taxes, line.unit_price, line.quantity)
             tax_amount = 0
             for tax in taxes:
-                key, val = self._compute_tax(tax, self.type)
-                tax_amount += val['amount']
+                tax_amount += tax['amount']
 
         return line.get_amount('amount') + tax_amount
 
