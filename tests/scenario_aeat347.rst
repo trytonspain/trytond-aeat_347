@@ -17,11 +17,11 @@ Create database::
 
 Install account_invoice::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> aeat_347_module, = Module.find(
     ...     [('name', '=', 'aeat_347')])
     >>> Module.install([aeat_347_module.id], config.context)
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create company::
 
