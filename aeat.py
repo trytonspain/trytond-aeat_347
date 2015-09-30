@@ -194,6 +194,12 @@ class Report(Workflow, ModelSQL, ModelView):
         return Transaction().context.get('company')
 
     @staticmethod
+    def default_company_vat():
+        Company = Pool().get('company.company')
+        company = Company(Transaction().context.get('company'))
+        return company.party.vat_code[2:]
+
+    @staticmethod
     def default_fiscalyear():
         FiscalYear = Pool().get('account.fiscalyear')
         return FiscalYear.find(
