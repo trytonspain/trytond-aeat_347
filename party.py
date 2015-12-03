@@ -5,6 +5,7 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond import backend
 from trytond.transaction import Transaction
+from trytond.config import config, parse_uri
 
 __all__ = ['Party']
 __metaclass__ = PoolMeta
@@ -33,23 +34,25 @@ class Party:
 
         super(Party, cls).__register__(module_name)
 
-        #We need to reload table as it may be modified by __register__
-        table = TableHandler(cursor, cls, module_name)
-        if (not created_347 and table.column_exist('include_347')):
-            parties = []
-            query = '''
-                SELECT
-                    party
-                FROM
-                    party_identifier
-                WHERE
-                    left(code, 2) = 'ES'
-                '''
-            cursor.execute(query)
-            for party_id, in cursor.fetchall():
-                parties.append(
-                    cls(id=party_id, include_347=True))
-            cls.save(parties)
+        uri = parse_uri(config.get('database', 'uri'))
+        if uri.scheme in ['postgresql']:
+            #We need to reload table as it may be modified by __register__
+            table = TableHandler(cursor, cls, module_name)
+            if (not created_347 and table.column_exist('include_347')):
+                parties = []
+                query = '''
+                    SELECT
+                        party
+                    FROM
+                        party_identifier
+                    WHERE
+                        left(code, 2) = 'ES'
+                    '''
+                cursor.execute(query)
+                for party_id, in cursor.fetchall():
+                    parties.append(
+                        cls(id=party_id, include_347=True))
+                cls.save(parties)
 
     @classmethod
     def create(cls, vlist):
