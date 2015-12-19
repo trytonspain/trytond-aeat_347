@@ -1,11 +1,11 @@
 #This file is part of aeat_347 module for Tryton.
 #The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
+from sql.functions import Substring
 from trytond.model import fields
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.config import config, parse_uri
 
 __all__ = ['Party']
 __metaclass__ = PoolMeta
@@ -34,25 +34,16 @@ class Party:
 
         super(Party, cls).__register__(module_name)
 
-        uri = parse_uri(config.get('database', 'uri'))
-        if uri.scheme in ['postgresql']:
-            #We need to reload table as it may be modified by __register__
-            table = TableHandler(cursor, cls, module_name)
-            if (not created_347 and table.column_exist('include_347')):
-                parties = []
-                query = '''
-                    SELECT
-                        party
-                    FROM
-                        party_identifier
-                    WHERE
-                        left(code, 2) = 'ES'
-                    '''
-                cursor.execute(query)
-                for party_id, in cursor.fetchall():
-                    parties.append(
-                        cls(id=party_id, include_347=True))
-                cls.save(parties)
+        #We need to reload table as it may be modified by __register__
+        table = TableHandler(cursor, cls, module_name)
+        if (not created_347 and table.column_exist('include_347')):
+            sql_table = cls.__table__()
+            identifier = Pool().get('party.identifier').__table__()
+            query = identifier.select(identifier.party, where=Substring(
+                    identifier.code, 1, 2) == 'ES')
+            cursor.execute(*sql_table.update(
+                    columns=[sql_table.include_347], values=[True],
+                    where=(sql_table.id.in_(query))))
 
     @classmethod
     def create(cls, vlist):

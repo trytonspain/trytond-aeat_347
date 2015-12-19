@@ -197,7 +197,9 @@ class Report(Workflow, ModelSQL, ModelView):
     def default_company_vat():
         Company = Pool().get('company.company')
         company = Company(Transaction().context.get('company'))
-        return company.party.vat_code[2:]
+        for identifier in company.party.identifiers:
+            if identifier.code[:2] == 'ES':
+                return identifier.code[2:]
 
     @staticmethod
     def default_fiscalyear():

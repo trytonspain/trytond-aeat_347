@@ -8,6 +8,7 @@ Imports::
     >>> from decimal import Decimal
     >>> from operator import attrgetter
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -31,7 +32,8 @@ Install account_invoice::
 
 Create company::
 
-    >>> _ = create_company()
+    >>> eur = get_currency('EUR')
+    >>> _ = create_company(currency=eur)
     >>> company = get_company()
 
 Reload the context::
@@ -56,23 +58,28 @@ Create chart of accounts::
 
 Create tax::
 
+    >>> Tax = Model.get('account.tax')
     >>> tax = set_tax_code(create_tax(Decimal('.10')))
     >>> tax.save()
 
 Create party::
 
     >>> Party = Model.get('party.party')
-    >>> Identifier = Model.get('party.identifier')
     >>> party = Party(name='Party')
     >>> party.include_347 = True
+    >>> identifier = party.identifiers.new()
+    >>> identifier.type = 'eu_vat'
+    >>> identifier.code = 'ES00000000T'
+    >>> bool(party.include_347)
+    True
     >>> party.save()
-    >>> identifier = Identifier(party=party, type='eu_vat', code='ES00000000T')
-    >>> identifier.save()
     >>> party2 = Party(name='Party 2')
-    >>> party.include_347 = True
+    >>> identifier = party2.identifiers.new()
+    >>> identifier.type = 'eu_vat'
+    >>> identifier.code = 'ES00000001R'
+    >>> bool(party2.include_347)
+    True
     >>> party2.save()
-    >>> identifier2 = Identifier(party=party2, type='', code='ES00000001R')
-    >>> identifier2.save()
 
 Create product::
 
@@ -92,54 +99,48 @@ Create product::
     >>> template.cost_price_method = 'fixed'
     >>> template.account_expense = expense
     >>> template.account_revenue = revenue
-    >>> template.customer_taxes.append(tax)
-    >>> template.supplier_taxes.append(tax)
+    >>> template.customer_taxes.append(Tax(tax.id))
+    >>> template.supplier_taxes.append(Tax(tax.id))
     >>> template.save()
     >>> product.template = template
     >>> product.save()
-    
+
 Create payment term::
 
-    >>> PaymentTerm = Model.get('account.invoice.payment_term')
-    >>> payment_term = PaymentTerm(name='Term')
-    >>> line = payment_term.lines.new(type='percent', percentage=Decimal(50))
-    >>> delta = line.relativedeltas.new(days=20)
-    >>> line = payment_term.lines.new(type='remainder')
-    >>> delta = line.relativedeltas.new(days=40)
+    >>> payment_term = create_payment_term()
     >>> payment_term.save()
 
 Create out invoice over limit::
 
     >>> Record = Model.get('aeat.347.record')
     >>> Invoice = Model.get('account.invoice')
-    >>> InvoiceLine = Model.get('account.invoice.line')
     >>> invoice = Invoice()
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
+    >>> line.unit_price = Decimal(40)
     >>> line.quantity = 80
-    >>> len(line.taxes) == 1
-    True
+    >>> len(line.taxes)
+    1
     >>> bool(line.include_347)
     True
-    >>> line.aeat347_operation_key == 'B'
-    True
-    >>> line.amount == Decimal(3200)
-    True
-    >>> invoice.save()
-    >>> Invoice.post([invoice.id], config.context)
+    >>> line.aeat347_operation_key
+    'B'
+    >>> line.amount
+    Decimal('3200.00')
+    >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name == 'Party'
-    True
-    >>> rec1.party_vat == '00000000T'
-    True
+    >>> rec1.party_name
+    u'Party'
+    >>> rec1.party_vat
+    u'00000000T'
     >>> rec1.month == today.month
     True
-    >>> rec1.operation_key == 'B'
-    True
-    >>> rec1.amount == Decimal(3520)
-    True
+    >>> rec1.operation_key
+    u'B'
+    >>> rec1.amount
+    Decimal('3520.00')
 
 Create out invoice not over limit::
 
@@ -148,28 +149,28 @@ Create out invoice not over limit::
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
+    >>> line.unit_price = Decimal(40)
     >>> line.quantity = 5
-    >>> len(line.taxes) == 1
-    True
+    >>> len(line.taxes)
+    1
     >>> bool(line.include_347)
     True
-    >>> line.aeat347_operation_key == 'B'
-    True
-    >>> line.amount == Decimal(200)
-    True
-    >>> invoice.save()
-    >>> Invoice.post([invoice.id], config.context)
+    >>> line.aeat347_operation_key
+    'B'
+    >>> line.amount
+    Decimal('200.00')
+    >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name == 'Party 2'
-    True
-    >>> rec1.party_vat == '00000001R'
-    True
+    >>> rec1.party_name
+    u'Party 2'
+    >>> rec1.party_vat
+    u'00000001R'
     >>> rec1.month == today.month
     True
-    >>> rec1.operation_key == 'B'
-    True
-    >>> rec1.amount == Decimal(220)
-    True
+    >>> rec1.operation_key
+    u'B'
+    >>> rec1.amount
+    Decimal('220.00')
 
 Create out credit note::
 
@@ -179,28 +180,28 @@ Create out credit note::
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
+    >>> line.unit_price = Decimal(40)
     >>> line.quantity = 2
-    >>> len(line.taxes) == 1
-    True
+    >>> len(line.taxes)
+    1
     >>> bool(line.include_347)
     True
-    >>> line.aeat347_operation_key == 'B'
-    True
-    >>> line.amount == Decimal(80)
-    True
-    >>> invoice.save()
-    >>> Invoice.post([invoice.id], config.context)
+    >>> line.aeat347_operation_key
+    'B'
+    >>> line.amount
+    Decimal('80.00')
+    >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name == 'Party'
-    True
-    >>> rec1.party_vat == '00000000T'
-    True
+    >>> rec1.party_name
+    u'Party'
+    >>> rec1.party_vat
+    u'00000000T'
     >>> rec1.month == today.month
     True
-    >>> rec1.operation_key == 'B'
-    True
-    >>> rec1.amount == Decimal('-88.0')
-    True
+    >>> rec1.operation_key
+    u'B'
+    >>> rec1.amount
+    Decimal('-88.00')
 
 Create in invoice::
 
@@ -212,25 +213,25 @@ Create in invoice::
     >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.quantity = 5
-    >>> len(line.taxes) == 1
-    True
-    >>> line.aeat347_operation_key == 'A'
-    True
-    >>> line.amount == Decimal(125)
-    True
-    >>> invoice.save()
-    >>> Invoice.post([invoice.id], config.context)
+    >>> line.unit_price = Decimal('25')
+    >>> len(line.taxes)
+    1
+    >>> line.aeat347_operation_key
+    'A'
+    >>> line.amount
+    Decimal('125.00')
+    >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name == 'Party'
-    True
-    >>> rec1.party_vat == '00000000T'
-    True
+    >>> rec1.party_name
+    u'Party'
+    >>> rec1.party_vat
+    u'00000000T'
     >>> rec1.month == today.month
     True
-    >>> rec1.operation_key == 'A'
-    True
-    >>> rec1.amount == Decimal(137.50)
-    True
+    >>> rec1.operation_key
+    u'A'
+    >>> rec1.amount
+    Decimal('137.50')
 
 Create in credit note::
 
@@ -241,26 +242,26 @@ Create in credit note::
     >>> invoice.invoice_date = today
     >>> line = invoice.lines.new()
     >>> line.product = product
+    >>> line.unit_price = Decimal('25.00')
     >>> line.quantity = 1
-    >>> len(line.taxes) == 1
-    True
-    >>> line.aeat347_operation_key == 'A'
-    True
-    >>> line.amount == Decimal(25)
-    True
-    >>> invoice.save()
-    >>> Invoice.post([invoice.id], config.context)
+    >>> len(line.taxes)
+    1
+    >>> line.aeat347_operation_key
+    'A'
+    >>> line.amount
+    Decimal('25.00')
+    >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name == 'Party'
-    True
-    >>> rec1.party_vat == '00000000T'
-    True
+    >>> rec1.party_name
+    u'Party'
+    >>> rec1.party_vat
+    u'00000000T'
     >>> rec1.month == today.month
     True
-    >>> rec1.operation_key == 'A'
-    True
-    >>> rec1.amount == Decimal('-27.50')
-    True
+    >>> rec1.operation_key
+    u'A'
+    >>> rec1.amount
+    Decimal('-27.50')
 
 Generate 347 Report::
 
@@ -272,19 +273,18 @@ Generate 347 Report::
     >>> report.contact_name = 'Guido van Rosum'
     >>> report.contact_phone = '987654321'
     >>> report.representative_vat = '22334455'
-    >>> report.save()
-    >>> Report.calculate([report.id], config.context)
+    >>> report.click('calculate')
     >>> report.reload()
-    >>> report.property_count == 0
-    True
-    >>> report.party_count == 1
-    True
-    >>> report.party_amount == Decimal('3432')
-    True
-    >>> report.cash_amount == Decimal(0)
-    True
-    >>> report.property_amount == Decimal(0)
-    True
+    >>> report.property_count
+    0
+    >>> report.party_count
+    1
+    >>> report.party_amount
+    Decimal('3432.00')
+    >>> report.cash_amount
+    Decimal('0.0')
+    >>> report.property_amount
+    Decimal('0.0')
 
 Reassign 347 lines::
 
@@ -294,5 +294,4 @@ Reassign 347 lines::
     >>> line.reload()
     >>> bool(line.include_347)
     False
-    >>> line.aeat347_operation_key == None
-    True
+    >>> line.aeat347_operation_key
