@@ -7,7 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond import backend
 from trytond.transaction import Transaction
 
-__all__ = ['Party']
+__all__ = ['Party', 'PartyIdentifier']
 __metaclass__ = PoolMeta
 
 
@@ -20,7 +20,8 @@ class Party:
         if self.include_347:
             return True
         for identifier in self.identifiers:
-            if identifier.code and identifier.code[:2] == 'ES':
+            if identifier.code and identifier.type == 'eu_vat' \
+                    and identifier.code[:2] == 'ES':
                 return True
         return False
 
@@ -45,20 +46,35 @@ class Party:
                     columns=[sql_table.include_347], values=[True],
                     where=(sql_table.id.in_(query))))
 
+
+class PartyIdentifier:
+    __name__ = 'party.identifier'
+
     @classmethod
     def create(cls, vlist):
+        Party = Pool().get('party.party')
+
+        to_write = []
         vlist = [x.copy() for x in vlist]
         for vals in vlist:
-            if vals.get('vat_country') == 'ES':
-                vals['include_347'] = True
-        return super(Party, cls).create(vlist)
+            if (vals.get('type' == 'eu_vat') and vals['code'][:2] == 'ES'):
+                to_write.append(vals['party'])
+
+        if to_write:
+            Party.write(to_write, {'include_347': True})
+
+        return super(PartyIdentifier, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
         actions = iter(args)
-        args = []
-        for parties, values in zip(actions, actions):
-            if values.get('vat_country') == 'ES':
-                values['include_347'] = True
-            args.extend((parties, values))
-        return super(Party, cls).write(*args)
+
+        to_write = []
+        for parties, vals in zip(actions, actions):
+            if (vals.get('type' == 'eu_vat') and vals['code'][:2] == 'ES'):
+                to_write.append(vals['party'])
+
+        if to_write:
+            Party.write(to_write, {'include_347': True})
+
+        return super(PartyIdentifier, cls).write(*args)
