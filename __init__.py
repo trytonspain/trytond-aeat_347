@@ -9,6 +9,7 @@ from .party import *
 def register():
     Pool.register(
         Party,
+        PartyIdentifier,
         Report,
         PartyRecord,
         PropertyRecord,
