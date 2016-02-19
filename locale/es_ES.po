@@ -92,7 +92,7 @@ msgstr "Registro de tercero"
 
 msgctxt "field:aeat.347.record,party_vat:"
 msgid "Party VAT"
-msgstr "NIF tercero"
+msgstr "NIF del tercero"
 
 msgctxt "field:aeat.347.record,province_code:"
 msgid "Province Code"
@@ -156,7 +156,7 @@ msgstr "Archivo"
 
 msgctxt "field:aeat.347.report,filename:"
 msgid "File Name"
-msgstr "Nombre fichero"
+msgstr "Nombre archivo"
 
 msgctxt "field:aeat.347.report,fiscalyear:"
 msgid "Fiscal Year"
@@ -196,7 +196,7 @@ msgstr "Número de registros de tercero"
 
 msgctxt "field:aeat.347.report,previous_number:"
 msgid "Previous Declaration Number"
-msgstr "Numero declaración anterior"
+msgstr "Número declaración anterior"
 
 msgctxt "field:aeat.347.report,properties:"
 msgid "Property Records"
@@ -679,11 +679,11 @@ msgstr "Recalcular registros AEAT 347"
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_record"
 msgid "AEAT 347 Record"
-msgstr "Registro AEAT 347"
+msgstr "Registros AEAT 347"
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_report"
 msgid "AEAT 347 Report"
-msgstr "Informe AEAT 347"
+msgstr "Informes AEAT 347"
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_report_party"
 msgid "AEAT 347 Party Records"
@@ -817,7 +817,7 @@ msgstr "DVD"
 
 msgctxt "selection:aeat.347.report,support_type:"
 msgid "Telematics"
-msgstr "Telemática"
+msgstr "Telemático"
 
 msgctxt "selection:aeat.347.report,type:"
 msgid "Complementary"
@@ -907,7 +907,7 @@ msgstr "4 - Extranjero"
 
 msgctxt "view:aeat.347.reasign.records.end:"
 msgid "AEAT 347 Data Reassigment Done"
-msgstr "Reasignación registros AEAT 347 hecha"
+msgstr "Reasignación registros AEAT 347 realizada"
 
 msgctxt "view:aeat.347.reasign.records.end:"
 msgid "The AEAT 347 records have been reasigned."
@@ -923,7 +923,7 @@ msgstr "Seleccione la clave de operacion para reasignar las facturas:"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "AEAT 347 Data Recalculation Done"
-msgstr "Recálculo registros AEAT 347 hecha"
+msgstr "Recálculo registros AEAT 347 realizado"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "The AEAT 347 records have been recalculated."
