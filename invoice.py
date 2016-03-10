@@ -309,7 +309,7 @@ class Reasign347Record(Wizard):
     def transition_reasign(self):
         Invoice = Pool().get('account.invoice')
         Line = Pool().get('account.invoice.line')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoices = Invoice.browse(Transaction().context['active_ids'])
 
         value = self.start.aeat_347_operation_key

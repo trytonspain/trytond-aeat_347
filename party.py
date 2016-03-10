@@ -28,15 +28,15 @@ class Party:
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        cursor = Transaction().connection.cursor()
+        table = TableHandler(cls, module_name)
 
         created_347 = table.column_exist('include_347')
 
         super(Party, cls).__register__(module_name)
 
         #We need to reload table as it may be modified by __register__
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         if (not created_347 and table.column_exist('include_347')):
             sql_table = cls.__table__()
             identifier = Pool().get('party.identifier').__table__()
