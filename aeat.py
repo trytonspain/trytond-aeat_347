@@ -28,16 +28,28 @@ OPERATION_KEY = [
     ('G', 'G - Travel Agency Purchases'),
     ]
 
-src_chars = """àáäâÀÁÄÂèéëêÈÉËÊìíïîÌÍÏÎòóöôÒÓÖÔùúüûÙÚÜÛçñºª·¤ '"()/*-+?!&$[]{}@#`'^:;<>=~%\\"""
-src_chars = unicode(src_chars, 'iso-8859-1')
-dst_chars = """aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcnoa.e______________________________"""
-dst_chars = unicode(dst_chars, 'iso-8859-1')
 
+def remove_accents(unicode_string):
+    if isinstance(unicode_string, str):
+        unicode_string_bak = unicode_string
+        try:
+            unicode_string = unicode_string_bak.decode('iso-8859-1')
+        except UnicodeDecodeError:
+            try:
+                unicode_string = unicode_string_bak.decode('utf-8')
+            except UnicodeDecodeError:
+                return unicode_string_bak
 
-def unaccent(text):
-    if isinstance(text, str):
-        text = unicode(text, 'utf-8')
-    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+    if not isinstance(unicode_string, unicode):
+        return unicode_string
+
+    unicode_string_nfd = ''.join(
+        (c for c in unicodedata.normalize('NFD', unicode_string)
+            if (unicodedata.category(c) != 'Mn'
+                or c in (u'\u0327', u'\u0303'))  # Avoids normalize ç and ñ
+            ))
+    # It converts nfd to nfc to allow unicode.decode()
+    return unicodedata.normalize('NFC', unicode_string_nfd)
 
 
 class Report(Workflow, ModelSQL, ModelView):
@@ -346,10 +358,10 @@ class Report(Workflow, ModelSQL, ModelView):
         record = retrofix.Record(aeat347.PRESENTER_HEADER_RECORD)
         record.fiscalyear = str(self.fiscalyear_code)
         record.nif = self.company_vat
-        record.presenter_name = unaccent(self.company.party.name)
+        record.presenter_name = self.company.party.name
         record.support_type = self.support_type
         record.contact_phone = self.contact_phone
-        record.contact_name = unaccent(self.contact_name)
+        record.contact_name = self.contact_name
         record.declaration_number = str(self.id)
         #record.complementary =
         #record.replacement =
@@ -366,7 +378,10 @@ class Report(Workflow, ModelSQL, ModelView):
             record.nif = self.company_vat
             records.append(record)
         data = retrofix.record.write(records)
-        self.file_ = bytes(data)
+        data = remove_accents(data).upper()
+        if isinstance(data, unicode):
+            data = data.encode('iso-8859-1')
+        self.file_ = buffer(data)
         self.save()
 
 
@@ -445,7 +460,7 @@ class PartyRecord(ModelSQL, ModelView):
         record.party_nif = self.party_vat
         record.community_vat = self.community_vat or ''
         record.representative_nif = self.representative_vat or ''
-        record.party_name = unaccent(self.party_name)
+        record.party_name = remove_accents(self.party_name)
         record.province_code = self.province_code
         if self.country_code == 'ES':
             record.country_code = ''
