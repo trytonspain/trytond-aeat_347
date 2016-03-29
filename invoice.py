@@ -11,8 +11,6 @@ __all__ = ['Record', 'Invoice', 'InvoiceLine',
     'Recalculate347Record', 'Reasign347RecordStart',
     'Reasign347RecordEnd', 'Reasign347Record']
 
-__metaclass__ = PoolMeta
-
 
 class Record(ModelSQL, ModelView):
     """
@@ -69,6 +67,7 @@ class Record(ModelSQL, ModelView):
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
     include_347 = fields.Boolean('Include 347',
         states={
@@ -141,6 +140,7 @@ class InvoiceLine:
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     @classmethod

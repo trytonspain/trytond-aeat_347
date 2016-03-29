@@ -8,10 +8,10 @@ from trytond import backend
 from trytond.transaction import Transaction
 
 __all__ = ['Party', 'PartyIdentifier']
-__metaclass__ = PoolMeta
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
     include_347 = fields.Boolean('Include on 347', depends=['identifiers'])
 
@@ -48,6 +48,7 @@ class Party:
 
 
 class PartyIdentifier:
+    __metaclass__ = PoolMeta
     __name__ = 'party.identifier'
 
     @classmethod
