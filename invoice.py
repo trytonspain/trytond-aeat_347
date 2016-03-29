@@ -182,9 +182,6 @@ class Invoice:
                     key = "%d-%s" % (invoice.id, operation_key)
                     amount = invoice._compute_total_amount(line)
 
-                    if invoice.type in ('out_credit_note', 'in_credit_note'):
-                        amount *= -1
-
                     if key in to_create:
                         to_create[key]['amount'] += amount
                     else:
