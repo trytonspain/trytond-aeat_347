@@ -205,13 +205,15 @@ class Report(Workflow, ModelSQL, ModelView):
     def default_company():
         return Transaction().context.get('company')
 
-    @staticmethod
-    def default_company_vat():
+    @classmethod
+    def default_company_vat(cls):
         Company = Pool().get('company.company')
-        company = Company(Transaction().context.get('company'))
-        for identifier in company.party.identifiers:
-            if identifier.code[:2] == 'ES':
-                return identifier.code[2:]
+        company_id = cls.default_company()
+        if company_id:
+            vat_code = Company(company_id).party.vat_code
+            if vat_code and vat_code.startswith('ES'):
+                return vat_code[2:]
+            return vat_code
 
     @staticmethod
     def default_fiscalyear():

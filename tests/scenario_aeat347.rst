@@ -175,13 +175,13 @@ Create out invoice not over limit::
 Create out credit note::
 
     >>> invoice = Invoice()
-    >>> invoice.type = 'out_credit_note'
+    >>> invoice.type = 'out'
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.unit_price = Decimal(40)
-    >>> line.quantity = 2
+    >>> line.quantity = -2
     >>> len(line.taxes)
     1
     >>> bool(line.include_347)
@@ -189,7 +189,7 @@ Create out credit note::
     >>> line.aeat347_operation_key
     'B'
     >>> line.amount
-    Decimal('80.00')
+    Decimal('-80.00')
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -206,7 +206,7 @@ Create out credit note::
 Create in invoice::
 
     >>> invoice = Invoice()
-    >>> invoice.type = 'in_invoice'
+    >>> invoice.type = 'in'
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
@@ -236,20 +236,20 @@ Create in invoice::
 Create in credit note::
 
     >>> invoice = Invoice()
-    >>> invoice.type = 'in_credit_note'
+    >>> invoice.type = 'in'
     >>> invoice.party = party
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
     >>> line = invoice.lines.new()
     >>> line.product = product
     >>> line.unit_price = Decimal('25.00')
-    >>> line.quantity = 1
+    >>> line.quantity = -1
     >>> len(line.taxes)
     1
     >>> line.aeat347_operation_key
     'A'
     >>> line.amount
-    Decimal('25.00')
+    Decimal('-25.00')
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
