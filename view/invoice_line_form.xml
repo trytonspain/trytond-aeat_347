@@ -3,11 +3,11 @@
 contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='general']/field[@name='taxes']" position="after">
-        <group col="4" colspan="4" id="aeat_347">
-            <label name="include_347"/>
-            <field name="include_347"/>
-            <label name="aeat347_operation_key"/>
-            <field name="aeat347_operation_key"/>
+            <group id="include_347" xexpand="0" xfill="0">
+                <label name="include_347"/>
+                <field name="include_347"/>
+            </group>
+            <field name="aeat347_operation_key" colspan="3"/>
         </group>
     </xpath>
 </data>
