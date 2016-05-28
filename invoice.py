@@ -120,7 +120,7 @@ class InvoiceLine:
 
     @classmethod
     def get_aeat347_operation_key(cls, invoice_type):
-        type_ = 'in' if invoice_type[0:2] == 'in' else 'out'
+        type_ = 'in' if invoice_type == 'in' else 'out'
         return 'A' if type_ == 'in' else 'B'
 
     @classmethod
