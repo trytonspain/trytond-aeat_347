@@ -7,7 +7,8 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from operator import attrgetter
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
+    >>> from trytond.tests.tools import install_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
@@ -17,29 +18,15 @@ Imports::
     ...     set_fiscalyear_invoice_sequences, create_payment_term
     >>> today = datetime.date.today()
 
-Create database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install account_invoice::
 
-    >>> Module = Model.get('ir.module')
-    >>> aeat_347_module, = Module.find(
-    ...     [('name', '=', 'aeat_347')])
-    >>> Module.install([aeat_347_module.id], config.context)
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = install_modules('aeat_347')
 
 Create company::
 
     >>> eur = get_currency('EUR')
     >>> _ = create_company(currency=eur)
     >>> company = get_company()
-
-Reload the context::
-
-    >>> User = Model.get('res.user')
-    >>> config._context = User.get_preferences(True, config.context)
 
 Create fiscal year::
 
