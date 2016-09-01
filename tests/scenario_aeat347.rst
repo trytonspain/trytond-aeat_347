@@ -273,6 +273,13 @@ Generate 347 Report::
     >>> report.property_amount
     Decimal('0.0')
 
+Test report is generated correctly::
+
+    >>> report.file_
+    >>> report.click('process')
+    >>> bool(report.file_)
+    True
+
 Reassign 347 lines::
 
     >>> reasign = Wizard('aeat.347.reasign.records', models=[invoice])
