@@ -1,6 +1,6 @@
-#This file is part of aeat_347 module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains
-#the full copyright notices and license terms.
+# This file is part of aeat_347 module for Tryton.
+# The COPYRIGHT file at the top level of this repository contains
+# the full copyright notices and license terms.
 from sql.functions import Substring
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
@@ -35,7 +35,7 @@ class Party:
 
         super(Party, cls).__register__(module_name)
 
-        #We need to reload table as it may be modified by __register__
+        # We need to reload table as it may be modified by __register__
         table = TableHandler(cls, module_name)
         if (not created_347 and table.column_exist('include_347')):
             sql_table = cls.__table__()

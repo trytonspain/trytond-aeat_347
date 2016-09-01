@@ -316,7 +316,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     saved = False
                     for month, quarter in quarter_mapping:
                         qkey = "%s_quarter_amount" % quarter
-                        if not qkey in to_create[key]:
+                        if qkey not in to_create[key]:
                             to_create[key][qkey] = _ZERO
 
                         if month >= record.month and not saved:
