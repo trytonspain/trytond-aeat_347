@@ -51,10 +51,10 @@ class Record(ModelSQL, ModelView):
         for record in records:
             party = record.party
             res['party_name'][record.id] = party.rec_name[:39]
-            res['party_vat'][record.id] = (party.vat_code[2:] if
-                party.vat_code else '')
-            res['country_code'][record.id] = (party.vat_code[:2] if
-                party.vat_code else '')
+            res['party_vat'][record.id] = (party.tax_identifier.code[2:]
+                if party.tax_identifier else '')
+            res['country_code'][record.id] = (party.tax_identifier.code[:2]
+                if party.tax_identifier else '')
             province_code = ''
             address = party.address_get(type='invoice')
             if address and address.zip:

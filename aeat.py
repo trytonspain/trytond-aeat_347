@@ -209,16 +209,6 @@ class Report(Workflow, ModelSQL, ModelView):
     def default_company():
         return Transaction().context.get('company')
 
-    @classmethod
-    def default_company_vat(cls):
-        Company = Pool().get('company.company')
-        company_id = cls.default_company()
-        if company_id:
-            vat_code = Company(company_id).party.vat_code
-            if vat_code and vat_code.startswith('ES'):
-                return vat_code[2:]
-            return vat_code
-
     @staticmethod
     def default_fiscalyear():
         FiscalYear = Pool().get('account.fiscalyear')
@@ -241,6 +231,13 @@ class Report(Workflow, ModelSQL, ModelView):
         if self.fiscalyear:
             code = self.fiscalyear.start_date.year
         return code
+
+    @fields.depends('company')
+    def on_change_with_company_vat(self, name=None):
+        if self.company:
+            tax_identifier = self.company.party.tax_identifier
+            if tax_identifier and tax_identifier.code.startswith('ES'):
+                return tax_identifier.code[2:]
 
     @classmethod
     def get_totals(cls, reports, names):
