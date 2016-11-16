@@ -52,11 +52,11 @@ msgstr "Código país"
 
 msgctxt "field:aeat.347.record,create_date:"
 msgid "Create Date"
-msgstr "Fecha creación"
+msgstr "Fecha de creación"
 
 msgctxt "field:aeat.347.record,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"
+msgstr "Usuario de creación"
 
 msgctxt "field:aeat.347.record,fiscalyear:"
 msgid "Fiscal Year"
@@ -104,11 +104,11 @@ msgstr "Nombre"
 
 msgctxt "field:aeat.347.record,write_date:"
 msgid "Write Date"
-msgstr "Fecha modificación"
+msgstr "Fecha de modificación"
 
 msgctxt "field:aeat.347.record,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuario de modificación"
 
 msgctxt "field:aeat.347.report,amount:"
 msgid "Amount"
@@ -140,11 +140,11 @@ msgstr "Teléfono"
 
 msgctxt "field:aeat.347.report,create_date:"
 msgid "Create Date"
-msgstr "Fecha creación"
+msgstr "Fecha de creación"
 
 msgctxt "field:aeat.347.report,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"
+msgstr "Usuario de creación"
 
 msgctxt "field:aeat.347.report,currency:"
 msgid "Currency"
@@ -236,11 +236,11 @@ msgstr "Tipo de declaración"
 
 msgctxt "field:aeat.347.report,write_date:"
 msgid "Write Date"
-msgstr "Fecha modificación"
+msgstr "Fecha de modificación"
 
 msgctxt "field:aeat.347.report,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuario de modificación"
 
 msgctxt "field:aeat.347.report.party,amount:"
 msgid "Operations Amount"
@@ -276,11 +276,11 @@ msgstr "Código país"
 
 msgctxt "field:aeat.347.report.party,create_date:"
 msgid "Create Date"
-msgstr "Fecha creación"
+msgstr "Fecha de creación"
 
 msgctxt "field:aeat.347.report.party,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"
+msgstr "Usuario de creación"
 
 msgctxt "field:aeat.347.report.party,first_quarter_amount:"
 msgid "First Quarter Amount"
@@ -372,11 +372,11 @@ msgstr "Importe propiedades tercer trimestre"
 
 msgctxt "field:aeat.347.report.party,write_date:"
 msgid "Write Date"
-msgstr "Fecha modificación"
+msgstr "Fecha de modificación"
 
 msgctxt "field:aeat.347.report.party,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuario de modificación"
 
 msgctxt "field:aeat.347.report.property,amount:"
 msgid "Amount"
@@ -404,11 +404,11 @@ msgstr "Complemento"
 
 msgctxt "field:aeat.347.report.property,create_date:"
 msgid "Create Date"
-msgstr "Fecha creación"
+msgstr "Fecha de creación"
 
 msgctxt "field:aeat.347.report.property,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"
+msgstr "Usuario de creación"
 
 msgctxt "field:aeat.347.report.property,door:"
 msgid "Door"
@@ -488,11 +488,11 @@ msgstr "Calle"
 
 msgctxt "field:aeat.347.report.property,write_date:"
 msgid "Write Date"
-msgstr "Fecha modificación"
+msgstr "Fecha de modificación"
 
 msgctxt "field:aeat.347.report.property,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuario de modificación"
 
 msgctxt "field:aeat.347.report.property,zip:"
 msgid "Zip"
