@@ -193,6 +193,16 @@ class Invoice:
         super(Invoice, cls).cancel(invoices)
         Record.delete_record(invoices)
 
+    @classmethod
+    def create(cls, vlist):
+        for vals in vlist:
+            if not vals.get('include_347', True):
+                continue
+            invoice_type = vals.get('type')
+            vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
+                invoice_type)
+        return super(Invoice, cls).create(vlist)
+
 
 class Recalculate347RecordStart(ModelView):
     """
