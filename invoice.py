@@ -95,7 +95,7 @@ class Invoice:
         Record = pool.get('aeat.347.record')
         TableHandler = backend.get('TableHandler')
 
-        cursor = Transaction().connection.cursor
+        cursor = Transaction().connection.cursor()
         table = TableHandler(cls, module_name)
         table_line = TableHandler(cls, 'account.invoice.line')
         sql_table = cls.__table__()
