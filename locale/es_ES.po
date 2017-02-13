@@ -697,37 +697,37 @@ msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administración AEAT 347"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid ""
 msgstr ""
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisiciones de bienes y servicios superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "B - Good and service deliveries above limit (1)"
 msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
 msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
 "E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "F - Travel Agency Sales"
 msgstr "F - Ventas a agencias de viajes"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "F - Compras a agencias de viajes"
 

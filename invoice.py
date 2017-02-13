@@ -1,3 +1,6 @@
+# The COPYRIGHT file at the top level of this repository contains the full
+# copyright notices and license terms.
+from trytond import backend
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
@@ -6,12 +9,9 @@ from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
 
-__all__ = ['Record', 'Invoice', 'InvoiceLine',
-    'Recalculate347RecordStart', 'Recalculate347RecordEnd',
-    'Recalculate347Record', 'Reasign347RecordStart',
+__all__ = ['Record', 'Invoice', 'Recalculate347RecordStart',
+    'Recalculate347RecordEnd', 'Recalculate347Record', 'Reasign347RecordStart',
     'Reasign347RecordEnd', 'Reasign347Record']
-
-__metaclass__ = PoolMeta
 
 
 class Record(ModelSQL, ModelView):
@@ -67,57 +67,77 @@ class Record(ModelSQL, ModelView):
                 del res[key]
         return res
 
+    @classmethod
+    def delete_record(cls, invoices):
+        pool = Pool()
+        Record = pool.get('aeat.347.record')
+        with Transaction().set_user(0, set_context=True):
+            Record.delete(Record.search([('invoice', 'in',
+                            [i.id for i in invoices])]))
 
-class InvoiceLine:
-    __name__ = 'account.invoice.line'
-    include_347 = fields.Boolean('Include 347',
-        states={
-            'invisible': Eval('type') != 'line',
-            },
-        depends=['type'])
+
+class Invoice:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice'
+
+    include_347 = fields.Boolean('Include 347')
     aeat347_operation_key = fields.Selection([('', ''), ] + OPERATION_KEY,
         'AEAT 347 Operation Key',
         states={
-            'invisible': (Eval('type') != 'line') | ~Bool(Eval('include_347')),
-            'required': And(Eval('type') == 'line', Bool(Eval('include_347'))),
+            'invisible': ~Bool(Eval('include_347')),
+            'required': Bool(Eval('include_347')),
             },
-        depends=['type', 'include_347'])
+        depends=['include_347'])
+
+    @classmethod
+    def __register__(cls, module_name):
+        pool = Pool()
+        Record = pool.get('aeat.347.record')
+        TableHandler = backend.get('TableHandler')
+
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+        table_line = TableHandler(cursor, cls, 'account.invoice.line')
+        sql_table = cls.__table__()
+        record_table = Record.__table__()
+
+        exist_347 = table.column_exist('include_347')
+
+        super(Invoice, cls).__register__(module_name)
+
+        # Migration: moved 347 check mark from invoice line to invice
+        if not exist_347:
+            cursor.execute(*record_table.select(record_table.invoice,
+                    record_table.operation_key))
+            for invoice_id, operation_key in cursor.fetchall():
+                cursor.execute(*sql_table.update(
+                        columns=[sql_table.include_347,
+                            sql_table.aeat347_operation_key],
+                        values=[True, operation_key],
+                        where=sql_table.id == invoice_id))
+            table_line.drop_column('include_347')
+            table_line.drop_column('aeat347_operation_key')
 
     @staticmethod
     def default_include_347():
-        pool = Pool()
-        Party = pool.get('party.party')
-        context = Transaction().context
-        if context.get('party'):
-            return Party(context['party']).include_347
         return True
 
-    @fields.depends('_parent_invoice.party', 'invoice', 'party', 'type')
+    @fields.depends('party')
     def on_change_with_include_347(self, name=None):
-        if self.type != 'line':
-            return False
-        if self.invoice and self.invoice.party:
-            return self.invoice.party.include_347
-        elif self.party:
+        if self.party:
             return self.party.include_347
         return True
 
-    @fields.depends('product', 'account', 'invoice', 'invoice_type',
-            '_parent_invoice.type', 'aeat347_operation_key', 'include_347')
+    @fields.depends('type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
         if not self.include_347:
             return ''
         if self.aeat347_operation_key:
             return self.aeat347_operation_key
-        if self.invoice and self.invoice.type:
-            type_ = self.invoice.type
-        elif self.invoice_type:
-            type_ = self.invoice_type
+        if self.type:
+            return self.get_aeat347_operation_key(self.type)
         else:
-            type_ = None
-        if not type_ or not self.include_347:
             return ''
-        return self.get_aeat347_operation_key(type_)
 
     @classmethod
     def get_aeat347_operation_key(cls, invoice_type):
@@ -125,86 +145,33 @@ class InvoiceLine:
         return 'A' if type_ == 'in' else 'B'
 
     @classmethod
-    def create(cls, vlist):
-        Invoice = Pool().get('account.invoice')
-        for vals in vlist:
-            if (vals.get('type', 'line') != 'line' or
-                    not vals.get('include_347', True)):
-                continue
-            invoice_type = vals.get('invoice_type')
-            if not invoice_type and vals.get('invoice'):
-                invoice = Invoice(vals.get('invoice'))
-                invoice_type = invoice.type
-            vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
-                invoice_type)
-        return super(InvoiceLine, cls).create(vlist)
-
-
-class Invoice:
-    __name__ = 'account.invoice'
-
-    @classmethod
-    def __setup__(cls):
-        super(Invoice, cls).__setup__()
-        if not cls.lines.context:
-            cls.lines.context = {}
-        if not 'party' in cls.lines.context:
-            cls.lines.context.update({
-                    'party': Eval('party')
-                    })
-
-    def _compute_total_amount(self, line):
-        Tax = Pool().get('account.tax')
-        context = self._get_tax_context()
-
-        with Transaction().set_context(**context):
-            taxes = Tax.compute(line.taxes, line.unit_price, line.quantity)
-            tax_amount = 0
-            for tax in taxes:
-                tax_amount += tax['amount']
-
-        return line.get_amount('amount') + tax_amount
-
-    @classmethod
     def create_aeat347_records(cls, invoices):
         Record = Pool().get('aeat.347.record')
         to_create = {}
 
         for invoice in invoices:
-            if (not invoice.move or invoice.state == 'cancel'):
+            if (not invoice.move or invoice.state == 'cancel' or
+                    not invoice.include_347):
                 continue
-            key = None
-            for line in invoice.lines:
-                if line.type != 'line' or not line.include_347:
-                    continue
-                if line.aeat347_operation_key:
-                    operation_key = line.aeat347_operation_key
-                    key = "%d-%s" % (invoice.id, operation_key)
-                    amount = invoice._compute_total_amount(line)
+            if invoice.aeat347_operation_key:
+                operation_key = invoice.aeat347_operation_key
+                amount = invoice.total_amount
 
-                    if invoice.type in ('out_credit_note', 'in_credit_note'):
-                        amount *= -1
+            if invoice.type in ('out_credit_note', 'in_credit_note'):
+                amount *= -1
 
-                    if key in to_create:
-                        to_create[key]['amount'] += amount
-                    else:
-                        to_create[key] = {
-                                'company': invoice.company.id,
-                                'fiscalyear': invoice.move.period.fiscalyear,
-                                'month': invoice.invoice_date.month,
-                                'party': invoice.party.id,
-                                'amount': amount,
-                                'operation_key': operation_key,
-                                'invoice': invoice.id,
-                        }
+            to_create[invoice.id] = {
+                'company': invoice.company.id,
+                'fiscalyear': invoice.move.period.fiscalyear,
+                'month': invoice.invoice_date.month,
+                'party': invoice.party.id,
+                'amount': amount,
+                'operation_key': operation_key,
+                'invoice': invoice.id,
+                }
 
-            if key and key in to_create:
-                to_create[key]['amount'] = invoice.currency.round(
-                    to_create[key]['amount'])
-
+        Record.delete_record(invoices)
         with Transaction().set_user(0, set_context=True):
-            Record.delete(Record.search([('invoice', 'in',
-                            [i.id for i in invoices])]))
             Record.create(to_create.values())
 
     @classmethod
@@ -212,9 +179,7 @@ class Invoice:
         pool = Pool()
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).draft(invoices)
-        with Transaction().set_user(0, set_context=True):
-            Record.delete(Record.search([('invoice', 'in',
-                            [i.id for i in invoices])]))
+        Record.delete_record(invoices)
 
     @classmethod
     def post(cls, invoices):
@@ -226,9 +191,7 @@ class Invoice:
         pool = Pool()
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).cancel(invoices)
-        with Transaction().set_user(0, set_context=True):
-            Record.delete(Record.search([('invoice', 'in',
-                            [i.id for i in invoices])]))
+        Record.delete_record(invoices)
 
 
 class Recalculate347RecordStart(ModelView):
@@ -308,28 +271,21 @@ class Reasign347Record(Wizard):
 
     def transition_reasign(self):
         Invoice = Pool().get('account.invoice')
-        Line = Pool().get('account.invoice.line')
         cursor = Transaction().cursor
-        invoices = Invoice.browse(Transaction().context['active_ids'])
+        invoice_ids = Transaction().context['active_ids']
+        invoices = Invoice.browse(invoice_ids)
 
         value = self.start.aeat_347_operation_key
         include = self.start.include_347
         if value == 'none' or not include:
             value = None
-        lines = []
-        invoice_ids = set()
-        for invoice in invoices:
-            for line in invoice.lines:
-                lines.append(line.id)
-                invoice_ids.add(invoice.id)
 
-        line = Line.__table__()
+        invoice = Invoice.__table__()
         #Update to allow to modify key for posted invoices
-        cursor.execute(*line.update(columns=[line.aeat347_operation_key,
-                    line.include_347],
-                values=[value, include], where=In(line.id, lines)))
+        cursor.execute(*invoice.update(columns=[invoice.aeat347_operation_key,
+                    invoice.include_347],
+                values=[value, include], where=In(invoice.id, invoice_ids)))
 
-        invoices = Invoice.browse(list(invoices))
         Invoice.create_aeat347_records(invoices)
 
         return 'done'
