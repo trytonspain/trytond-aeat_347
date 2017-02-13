@@ -184,7 +184,6 @@ Create out invoice over limit::
 
     >>> Record = Model.get('aeat.347.record')
     >>> Invoice = Model.get('account.invoice')
-    >>> InvoiceLine = Model.get('account.invoice.line')
     >>> invoice = Invoice()
     >>> invoice.party = party
     >>> bool(invoice.include_347)
