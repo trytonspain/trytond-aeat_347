@@ -6,11 +6,11 @@ msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 340 report \"%s\" must be Euro."
 msgstr "La moneda de l'informe AEAT 347 \"%s\" ha de ser Euro."
 
-msgctxt "field:account.invoice.line,aeat347_operation_key:"
+msgctxt "field:account.invoice,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clau operació AEAT 347"
 
-msgctxt "field:account.invoice.line,include_347:"
+msgctxt "field:account.invoice,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
