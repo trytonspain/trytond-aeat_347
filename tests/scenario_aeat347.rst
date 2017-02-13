@@ -187,16 +187,16 @@ Create out invoice over limit::
     >>> InvoiceLine = Model.get('account.invoice.line')
     >>> invoice = Invoice()
     >>> invoice.party = party
+    >>> bool(invoice.include_347)
+    True
+    >>> invoice.aeat347_operation_key == 'B'
+    True
     >>> invoice.payment_term = payment_term
     >>> line = InvoiceLine()
     >>> invoice.lines.append(line)
     >>> line.product = product
     >>> line.quantity = 80
     >>> len(line.taxes) == 1
-    True
-    >>> line.include_347
-    True
-    >>> line.aeat347_operation_key == 'B'
     True
     >>> line.amount == Decimal(3200)
     True
@@ -218,16 +218,16 @@ Create out invoice not over limit::
 
     >>> invoice = Invoice()
     >>> invoice.party = party2
+    >>> bool(invoice.include_347)
+    True
+    >>> invoice.aeat347_operation_key == 'B'
+    True
     >>> invoice.payment_term = payment_term
     >>> line = InvoiceLine()
     >>> invoice.lines.append(line)
     >>> line.product = product
     >>> line.quantity = 5
     >>> len(line.taxes) == 1
-    True
-    >>> line.include_347
-    True
-    >>> line.aeat347_operation_key == 'B'
     True
     >>> line.amount == Decimal(200)
     True
@@ -250,16 +250,16 @@ Create out credit note::
     >>> invoice = Invoice()
     >>> invoice.type = 'out_credit_note'
     >>> invoice.party = party
+    >>> bool(invoice.include_347)
+    True
+    >>> invoice.aeat347_operation_key == 'B'
+    True
     >>> invoice.payment_term = payment_term
     >>> line = InvoiceLine()
     >>> invoice.lines.append(line)
     >>> line.product = product
     >>> line.quantity = 2
     >>> len(line.taxes) == 1
-    True
-    >>> line.include_347
-    True
-    >>> line.aeat347_operation_key == 'B'
     True
     >>> line.amount == Decimal(80)
     True
@@ -282,6 +282,10 @@ Create in invoice::
     >>> invoice = Invoice()
     >>> invoice.type = 'in_invoice'
     >>> invoice.party = party
+    >>> bool(invoice.include_347)
+    True
+    >>> invoice.aeat347_operation_key == 'A'
+    True
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
     >>> line = InvoiceLine()
@@ -289,8 +293,6 @@ Create in invoice::
     >>> line.product = product
     >>> line.quantity = 5
     >>> len(line.taxes) == 1
-    True
-    >>> line.aeat347_operation_key == 'A'
     True
     >>> line.amount == Decimal(125)
     True
@@ -313,6 +315,10 @@ Create in credit note::
     >>> invoice = Invoice()
     >>> invoice.type = 'in_credit_note'
     >>> invoice.party = party
+    >>> bool(invoice.include_347)
+    True
+    >>> invoice.aeat347_operation_key == 'A'
+    True
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
     >>> line = InvoiceLine()
@@ -320,8 +326,6 @@ Create in credit note::
     >>> line.product = product
     >>> line.quantity = 1
     >>> len(line.taxes) == 1
-    True
-    >>> line.aeat347_operation_key == 'A'
     True
     >>> line.amount == Decimal(25)
     True

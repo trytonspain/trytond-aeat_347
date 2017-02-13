@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="aeat_347_invoice_line_form_view">
-            <field name="model">account.invoice.line</field>
+        <record model="ir.ui.view" id="aeat_347_invoice_form_view">
+            <field name="model">account.invoice</field>
             <field name="type">form</field>
-            <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
-            <field name="name">invoice_line_form</field>
+            <field name="inherit" ref="account_invoice.invoice_view_form"/>
+            <field name="name">invoice_form</field>
         </record>
         <record model="ir.ui.view" id="aeat_347_tax_form_view">
             <field name="model">account.tax</field>
@@ -106,11 +106,9 @@
             <field name="perm_delete" eval="True"/>
         </record>
 
-
         <menuitem action="act_aeat_347_record"
             id="menu_aeat_347_record"
             parent="menu_aeat_347_report" sequence="30"
             name="AEAT 347 Record"/>
-
     </data>
 </tryton>
