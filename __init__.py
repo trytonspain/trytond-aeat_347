@@ -7,6 +7,7 @@ from . import aeat, invoice, party
 def register():
     Pool.register(
         party.Party,
+        party.PartyIdentifier,
         aeat.Report,
         aeat.PartyRecord,
         aeat.PropertyRecord,
