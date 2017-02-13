@@ -3,10 +3,10 @@
 contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.ui.view" id="aeat_347_invoice_line_form_view">
-            <field name="model">account.invoice.line</field>
-            <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
-            <field name="name">invoice_line_form</field>
+        <record model="ir.ui.view" id="aeat_347_invoice_form_view">
+            <field name="model">account.invoice</field>
+            <field name="inherit" ref="account_invoice.invoice_view_form"/>
+            <field name="name">invoice_form</field>
         </record>
         <record model="ir.ui.view" id="aeat_347_tax_form_view">
             <field name="model">account.tax</field>
@@ -106,11 +106,9 @@ contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
 
-
         <menuitem action="act_aeat_347_record"
             id="menu_aeat_347_record"
             parent="menu_aeat_347_report" sequence="30"
             name="AEAT 347 Record"/>
-
     </data>
 </tryton>
