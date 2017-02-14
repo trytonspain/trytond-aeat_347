@@ -157,22 +157,32 @@ class Invoice:
                 operation_key = invoice.aeat347_operation_key
                 amount = invoice.total_amount
 
-            if invoice.type in ('out_credit_note', 'in_credit_note'):
-                amount *= -1
+                if invoice.type in ('out_credit_note', 'in_credit_note'):
+                    amount *= -1
 
-            to_create[invoice.id] = {
-                'company': invoice.company.id,
-                'fiscalyear': invoice.move.period.fiscalyear,
-                'month': invoice.invoice_date.month,
-                'party': invoice.party.id,
-                'amount': amount,
-                'operation_key': operation_key,
-                'invoice': invoice.id,
-                }
+                to_create[invoice.id] = {
+                    'company': invoice.company.id,
+                    'fiscalyear': invoice.move.period.fiscalyear,
+                    'month': invoice.invoice_date.month,
+                    'party': invoice.party.id,
+                    'amount': amount,
+                    'operation_key': operation_key,
+                    'invoice': invoice.id,
+                    }
 
         Record.delete_record(invoices)
         with Transaction().set_user(0, set_context=True):
             Record.create(to_create.values())
+
+    @classmethod
+    def create(cls, vlist):
+        for vals in vlist:
+            if not vals.get('include_347', True):
+                continue
+            invoice_type = vals.get('type')
+            vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
+                invoice_type)
+        return super(Invoice, cls).create(vlist)
 
     @classmethod
     def draft(cls, invoices):
@@ -192,16 +202,6 @@ class Invoice:
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).cancel(invoices)
         Record.delete_record(invoices)
-
-    @classmethod
-    def create(cls, vlist):
-        for vals in vlist:
-            if not vals.get('include_347', True):
-                continue
-            invoice_type = vals.get('type')
-            vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
-                invoice_type)
-        return super(Invoice, cls).create(vlist)
 
 
 class Recalculate347RecordStart(ModelView):
