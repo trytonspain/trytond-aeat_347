@@ -141,8 +141,7 @@ class Invoice:
 
     @classmethod
     def get_aeat347_operation_key(cls, invoice_type):
-        type_ = 'in' if invoice_type[0:2] == 'in' else 'out'
-        return 'A' if type_ == 'in' else 'B'
+        return 'A' if invoice_type == 'in' else 'B'
 
     @classmethod
     def create_aeat347_records(cls, invoices):
@@ -157,7 +156,7 @@ class Invoice:
                 operation_key = invoice.aeat347_operation_key
                 amount = invoice.total_amount
 
-                if invoice.type in ('out_credit_note', 'in_credit_note'):
+                if invoice.total_amount <= 0:
                     amount *= -1
 
                 to_create[invoice.id] = {
