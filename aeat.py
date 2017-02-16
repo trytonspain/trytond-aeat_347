@@ -291,7 +291,7 @@ class Report(Workflow, ModelSQL, ModelView):
             to_create = {}
             for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
 
-                if group_by_vat:
+                if report.group_by_vat:
                     key = '%s-%s-%s' % (report.id, record.party.vat_code,
                         record.operation_key)
                 else:
