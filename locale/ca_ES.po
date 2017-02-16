@@ -520,6 +520,10 @@ msgstr ""
 "La declaració mostrarà les operacions d'efectiu amb import total superior a "
 "aquest límit."
 
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,representative_vat:"
 msgid "Legal Representative VAT number."
 msgstr "NIF del representant legal."

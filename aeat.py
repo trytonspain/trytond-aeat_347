@@ -104,8 +104,8 @@ class Report(Workflow, ModelSQL, ModelView):
     contact_phone = fields.Char('Phone', size=9)
     group_by_vat = fields.Boolean('Group by VAT', states={
             'readonly': Eval('state') == 'done',
-            }, depends=['state'], help='The registers will be grouped by '
-            'party VAT number instead of party.')
+            }, depends=['state'], help='Registers will be grouped by party '
+            'VAT number instead of party.')
     operation_limit = fields.Numeric('Invoiced Limit (1)', digits=(16, 2),
         required=True, help='The declaration will include parties with the '
         'total of operations over this limit')
@@ -276,7 +276,7 @@ class Report(Workflow, ModelSQL, ModelView):
             for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
 
                 if group_by_vat:
-                    key = '%s-%s-%s' % (report.id, record.party.vat_number,
+                    key = '%s-%s-%s' % (report.id, record.party.vat_code,
                         record.operation_key)
                 else:
                     key = '%s-%s-%s' % (report.id, record.party.id,
