@@ -206,12 +206,11 @@ Create out credit note::
 Create in invoice::
 
     >>> invoice = Invoice()
-    >>> invoice.type = 'in'
     >>> invoice.party = party
     >>> bool(invoice.include_347)
     True
-    >>> invoice.aeat347_operation_key
-    'A'
+    >>> invoice.type = 'in'
+    >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
     >>> line = invoice.lines.new()
@@ -242,8 +241,7 @@ Create in credit note::
     >>> invoice.party = party
     >>> bool(invoice.include_347)
     True
-    >>> invoice.aeat347_operation_key
-    'A'
+    >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
     >>> line = invoice.lines.new()
@@ -295,7 +293,7 @@ Reassign 347 lines::
     >>> reasign = Wizard('aeat.347.reasign.records', models=[invoice])
     >>> reasign.form.include_347 = False
     >>> reasign.execute('reasign')
-    >>> line.reload()
-    >>> bool(line.include_347)
+    >>> invoice.reload()
+    >>> bool(invoice.include_347)
     False
-    >>> line.aeat347_operation_key
+    >>> invoice.aeat347_operation_key

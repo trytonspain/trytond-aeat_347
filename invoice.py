@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, And, Bool
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
@@ -156,9 +156,6 @@ class Invoice:
                 operation_key = invoice.aeat347_operation_key
                 amount = invoice.total_amount
 
-                if invoice.total_amount <= 0:
-                    amount *= -1
-
                 to_create[invoice.id] = {
                     'company': invoice.company.id,
                     'fiscalyear': invoice.move.period.fiscalyear,
@@ -290,7 +287,7 @@ class Reasign347Record(Wizard):
             value = None
 
         invoice = Invoice.__table__()
-        #Update to allow to modify key for posted invoices
+        # Update to allow to modify key for posted invoices
         cursor.execute(*invoice.update(columns=[invoice.aeat347_operation_key,
                     invoice.include_347],
                 values=[value, include], where=In(invoice.id, invoice_ids)))

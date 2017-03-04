@@ -290,7 +290,7 @@ class Report(Workflow, ModelSQL, ModelView):
             to_create = {}
             for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
 
-                if report.group_by_vat:
+                if report.group_by_vat and record.party.vat_code:
                     key = '%s-%s-%s' % (report.id, record.party.vat_code,
                         record.operation_key)
                 else:
@@ -320,7 +320,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     saved = False
                     for month, quarter in quarter_mapping:
                         qkey = "%s_quarter_amount" % quarter
-                        if not qkey in to_create[key]:
+                        if qkey not in to_create[key]:
                             to_create[key][qkey] = _ZERO
 
                         if month >= record.month and not saved:
