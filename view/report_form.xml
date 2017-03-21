@@ -67,7 +67,7 @@ contains the full copyright notices and license terms. -->
         <field name="file_"/>
         <field name="filename" invisible="1"/>
     </group>
-    <group id="buttons" colspan="2" col="-1">
+    <group id="buttons" colspan="2">
         <button name="draft" string="Draft"/>
         <button name="calculate" string="Calculate"/>
         <button name="process" string="Process"/>
