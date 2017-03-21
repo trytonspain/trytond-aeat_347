@@ -175,7 +175,7 @@ class Invoice:
         for vals in vlist:
             if not vals.get('include_347', True):
                 continue
-            invoice_type = vals.get('type')
+            invoice_type = vals.get('type', 'out')
             vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
                 invoice_type)
         return super(Invoice, cls).create(vlist)
