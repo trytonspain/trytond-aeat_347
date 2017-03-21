@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+# This file is part aeat_347 module for Tryton.
+# The COPYRIGHT file at the top level of this repository contains
+# the full copyright notices and license terms.
 import itertools
 import datetime
 from decimal import Decimal
 import unicodedata
-import sys
-
 from retrofix import aeat347
 from retrofix.record import Record, write as retrofix_write
 
@@ -32,9 +32,7 @@ OPERATION_KEY = [
 
 
 def remove_accents(unicode_string):
-    str_ = str if sys.version_info < (3, 0) else bytes
-    unicode_ = unicode if sys.version_info < (3, 0) else str
-    if isinstance(unicode_string, str_):
+    if isinstance(unicode_string, str):
         unicode_string_bak = unicode_string
         try:
             unicode_string = unicode_string_bak.decode('iso-8859-1')
@@ -44,7 +42,7 @@ def remove_accents(unicode_string):
             except UnicodeDecodeError:
                 return unicode_string_bak
 
-    if not isinstance(unicode_string, unicode_):
+    if not isinstance(unicode_string, unicode):
         return unicode_string
 
     unicode_string_nfd = ''.join(
@@ -108,7 +106,8 @@ class Report(Workflow, ModelSQL, ModelView):
     contact_phone = fields.Char('Phone', size=9)
     group_by_vat = fields.Boolean('Group by VAT', states={
             'readonly': Eval('state') == 'done',
-            }, depends=['state'])
+            }, depends=['state'], help='Registers will be grouped by party '
+            'VAT number instead of party.')
     operation_limit = fields.Numeric('Invoiced Limit (1)', digits=(16, 2),
         required=True, help='The declaration will include parties with the '
         'total of operations over this limit')
@@ -290,8 +289,12 @@ class Report(Workflow, ModelSQL, ModelView):
             to_create = {}
             for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
 
-                key = '%s-%s-%s' % (report.id, record.party.id,
-                    record.operation_key)
+                if report.group_by_vat and record.party.tax_identifier:
+                    key = '%s-%s-%s' % (report.id, record.party.tax_identifier.code,
+                        record.operation_key)
+                else:
+                    key = '%s-%s-%s' % (report.id, record.party.id,
+                        record.operation_key)
 
                 if key in to_create:
                     for month, quarter in quarter_mapping:
@@ -366,6 +369,8 @@ class Report(Workflow, ModelSQL, ModelView):
         record.contact_phone = self.contact_phone
         record.contact_name = self.contact_name
         record.declaration_number = str(self.id)
+        #record.complementary =
+        #record.replacement =
         record.previous_declaration_number = self.previous_number
         record.party_count = len(self.parties)
         record.party_amount = self.party_amount
@@ -382,7 +387,7 @@ class Report(Workflow, ModelSQL, ModelView):
         data = remove_accents(data).upper()
         if isinstance(data, unicode):
             data = data.encode('iso-8859-1')
-        self.file_ = self.__class__.file_.cast(data)
+        self.file_ = buffer(data)
         self.save()
 
 
