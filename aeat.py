@@ -3,8 +3,9 @@
 # the full copyright notices and license terms.
 import itertools
 import datetime
-from decimal import Decimal
 import unicodedata
+import sys
+from decimal import Decimal
 from retrofix import aeat347
 from retrofix.record import Record, write as retrofix_write
 
@@ -32,7 +33,9 @@ OPERATION_KEY = [
 
 
 def remove_accents(unicode_string):
-    if isinstance(unicode_string, str):
+    str_ = str if sys.version_info < (3, 0) else bytes
+    unicode_ = unicode if sys.version_info < (3, 0) else str
+    if isinstance(unicode_string, str_):
         unicode_string_bak = unicode_string
         try:
             unicode_string = unicode_string_bak.decode('iso-8859-1')
@@ -42,7 +45,7 @@ def remove_accents(unicode_string):
             except UnicodeDecodeError:
                 return unicode_string_bak
 
-    if not isinstance(unicode_string, unicode):
+    if not isinstance(unicode_string, unicode_):
         return unicode_string
 
     unicode_string_nfd = ''.join(
@@ -387,7 +390,7 @@ class Report(Workflow, ModelSQL, ModelView):
         data = remove_accents(data).upper()
         if isinstance(data, unicode):
             data = data.encode('iso-8859-1')
-        self.file_ = buffer(data)
+        self.file_ = self.__class__.file_.cast(data)
         self.save()
 
 
