@@ -1,7 +1,10 @@
-# The COPYRIGHT file at the top level of this repository contains the full
-# copyright notices and license terms.
+# This file is part aeat_347 module for Tryton.
+# The COPYRIGHT file at the top level of this repository contains
+# the full copyright notices and license terms.
 from trytond.pool import Pool
-from . import aeat, invoice, party
+from . import aeat
+from . import invoice
+from . import party
 
 
 def register():
