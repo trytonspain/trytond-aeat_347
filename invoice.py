@@ -129,7 +129,7 @@ class Invoice:
             return self.party.include_347
         return True
 
-    @fields.depends('type', 'aeat347_operation_key', 'include_347')
+    @fields.depends('type', 'party', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
         if not self.include_347:
             return ''
