@@ -146,7 +146,7 @@ class Report(Workflow, ModelSQL, ModelView):
     def __setup__(cls):
         super(Report, cls).__setup__()
         cls._error_messages.update({
-                'invalid_currency': ('Currency in AEAT 340 report "%s" must be'
+                'invalid_currency': ('Currency in AEAT 347 report "%s" must be'
                     ' Euro.'),
                 })
         cls._buttons.update({
@@ -360,7 +360,7 @@ class Report(Workflow, ModelSQL, ModelView):
 
     def auto_sequence(self):
         pool = Pool()
-        Report = pool.get('aeat.340.report')
+        Report = pool.get('aeat.347.report')
         count = Report.search([
                 ('state', '=', 'done'),
                 ],
