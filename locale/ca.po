@@ -164,7 +164,7 @@ msgstr "Exercici fiscal"
 
 msgctxt "field:aeat.347.report,fiscalyear_code:"
 msgid "Fiscal Year Code"
-msgstr "Codi exercici fiscal"
+msgstr "Any exercici fiscal"
 
 msgctxt "field:aeat.347.report,group_by_vat:"
 msgid "Group by VAT"

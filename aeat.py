@@ -383,10 +383,9 @@ class Report(Workflow, ModelSQL, ModelView):
         record.support_type = self.support_type
         record.contact_phone = self.contact_phone
         record.contact_name = self.contact_name
-        record.declaration_number = '347{}{}{:0>4}'.format(
+        record.declaration_number = int('347{}{:0>6}'.format(
             self.fiscalyear_code,
-            self.period,
-            self.auto_sequence())
+            self.auto_sequence()))
         record.previous_declaration_number = self.previous_number
         record.party_count = len(self.parties)
         record.party_amount = self.party_amount
