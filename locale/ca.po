@@ -3,7 +3,7 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:aeat.347.report:"
-msgid "Currency in AEAT 340 report \"%s\" must be Euro."
+msgid "Currency in AEAT 347 report \"%s\" must be Euro."
 msgstr "La moneda de l'informe AEAT 347 \"%s\" ha de ser Euro."
 
 msgctxt "field:account.invoice.line,aeat347_operation_key:"
