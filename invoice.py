@@ -118,15 +118,19 @@ class Invoice:
             table_line.drop_column('include_347')
             table_line.drop_column('aeat347_operation_key')
 
-    @staticmethod
-    def default_include_347():
-        return True
+    @fields.depends('party')
+    def on_change_party(self):
+        super(Invoice, self).on_change_party()
+        self.include_347 = False
+        if self.party:
+            self.include_347 = self.party.include_347
 
     @fields.depends('party')
-    def on_change_with_include_347(self, name=None):
+    def on_change_type(self):
+        super(Invoice, self).on_change_type()
+        self.include_347 = False
         if self.party:
-            return self.party.include_347
-        return True
+            self.include_347 = self.party.include_347
 
     @fields.depends('type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
