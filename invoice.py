@@ -119,18 +119,8 @@ class Invoice:
             table_line.drop_column('aeat347_operation_key')
 
     @fields.depends('party')
-    def on_change_party(self):
-        super(Invoice, self).on_change_party()
-        self.include_347 = False
-        if self.party:
-            self.include_347 = self.party.include_347
-
-    @fields.depends('party')
-    def on_change_type(self):
-        super(Invoice, self).on_change_type()
-        self.include_347 = False
-        if self.party:
-            self.include_347 = self.party.include_347
+    def on_change_with_include_347(self, name=None):
+        return self.party.include_347 if self.party else False
 
     @fields.depends('type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
@@ -176,12 +166,29 @@ class Invoice:
 
     @classmethod
     def create(cls, vlist):
+        Party = Pool().get('party.party')
+
+        vlist = [x.copy() for x in vlist]
+
+        party_ids = set()
         for vals in vlist:
+            if not 'include_347' in vals:
+                party_ids.add(vals['party'])
+
+        if party_ids:
+            parties = dict([(x.id, x.include_347) for x in Party.search([
+                        ('id', 'in', list(party_ids))])])
+
+        for vals in vlist:
+            if not 'include_347' in vals:
+                party_id = vals['party']
+                vals['include_347'] = parties[party_id]
             if not vals.get('include_347', True):
                 continue
             invoice_type = vals.get('type', 'out')
             vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
                 invoice_type)
+
         return super(Invoice, cls).create(vlist)
 
     @classmethod
