@@ -105,8 +105,6 @@ Create out invoice over limit::
     >>> invoice.party = party
     >>> bool(invoice.include_347)
     True
-    >>> invoice.aeat347_operation_key
-    'B'
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -135,8 +133,6 @@ Create out invoice not over limit::
     >>> invoice.party = party2
     >>> bool(invoice.include_347)
     True
-    >>> invoice.aeat347_operation_key
-    'B'
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -166,8 +162,6 @@ Create out credit note::
     >>> invoice.party = party
     >>> bool(invoice.include_347)
     True
-    >>> invoice.aeat347_operation_key
-    'B'
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
