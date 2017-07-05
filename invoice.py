@@ -119,6 +119,12 @@ class Invoice:
             table_line.drop_column('include_347')
             table_line.drop_column('aeat347_operation_key')
 
+    def on_change_party(self):
+        super(Invoice, self).on_change_party()
+        self.include_347 = self.on_change_with_include_347()
+        self.aeat347_operation_key = \
+            self.on_change_with_aeat347_operation_key()
+
     @fields.depends('party')
     def on_change_with_include_347(self, name=None):
         return self.party.include_347 if self.party else False
