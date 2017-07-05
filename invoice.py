@@ -122,6 +122,12 @@ class Invoice:
     def default_include_347():
         return True
 
+    def on_change_party(self):
+        super(Invoice, self).on_change_party()
+        self.include_347 = self.on_change_with_include_347()
+        self.aeat347_operation_key = \
+            self.on_change_with_aeat347_operation_key()
+
     @fields.depends('party')
     def on_change_with_include_347(self, name=None):
         if self.party:
