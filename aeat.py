@@ -51,7 +51,7 @@ def remove_accents(unicode_string):
     unicode_string_nfd = ''.join(
         (c for c in unicodedata.normalize('NFD', unicode_string)
             if (unicodedata.category(c) != 'Mn'
-                or c in (u'\u0327', u'\u0303'))  # Avoids normalize ç and ñ
+                or c in (u'\u0327', u'\u0303'))
             ))
     # It converts nfd to nfc to allow unicode.decode()
     return unicodedata.normalize('NFC', unicode_string_nfd)
