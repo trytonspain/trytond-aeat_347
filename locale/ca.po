@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,11 +6,11 @@ msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 347 report \"%s\" must be Euro."
 msgstr "La moneda de l'informe AEAT 347 \"%s\" ha de ser Euro."
 
-msgctxt "field:account.invoice.line,aeat347_operation_key:"
+msgctxt "field:account.invoice,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clau operació AEAT 347"
 
-msgctxt "field:account.invoice.line,include_347:"
+msgctxt "field:account.invoice,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
@@ -502,6 +502,10 @@ msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
 msgstr "Incloure al 347"
 
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -541,8 +545,8 @@ msgstr ""
 msgctxt "help:aeat.347.report.party,cash_vat_criteria:"
 msgid "Annual amount of transactions accrued under cash VAT criteria."
 msgstr ""
-"Import anual de les transaccions meritades d'acord al criteri de caixa "
-"de l'IVA"
+"Import anual de les transaccions meritades d'acord al criteri de caixa de "
+"l'IVA"
 
 msgctxt "help:aeat.347.report.party,cash_vat_operation:"
 msgid ""
@@ -696,37 +700,37 @@ msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administració AEAT 347"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid ""
 msgstr ""
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisicions de bens i serveis superiors al límit (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "B - Good and service deliveries above limit (1)"
 msgstr "B - Entregues de bens i serveis superiors al límit (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
 msgstr "C - Cobraments per compte de tercers superiors al límit (3)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
 "D - Adquisicions d'institucions públiques (...) superiors al límit (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
 "E - Ajudes i subvencions d'administracions públiques superiors al límit (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "F - Travel Agency Sales"
 msgstr "F - Vendes a agències de viatge"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "G - Compres a agències de viatge"
 
@@ -905,32 +909,16 @@ msgid "4 - Foreign"
 msgstr "4 - Estranger"
 
 msgctxt "view:aeat.347.reasign.records.end:"
-msgid "AEAT 347 Data Reassigment Done"
-msgstr "Reassignació registres AEAT 347 realitzada"
-
-msgctxt "view:aeat.347.reasign.records.end:"
 msgid "The AEAT 347 records have been reasigned."
 msgstr "Els registres del model AEAT 347 han estat reassignats."
-
-msgctxt "view:aeat.347.reasign.records.start:"
-msgid "AEAT 347 Data Reasignation"
-msgstr "Reassignació registres AEAT 347"
 
 msgctxt "view:aeat.347.reasign.records.start:"
 msgid "Select Operation Key to reasign invoices:"
 msgstr "Seleccioneu la clau d'operació per reassignar les factures:"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
-msgid "AEAT 347 Data Recalculation Done"
-msgstr "Recàlcul registres AEAT 347 realitzat"
-
-msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "The AEAT 347 records have been recalculated."
 msgstr "Els registres del model AEAT 347 han estat recalculats."
-
-msgctxt "view:aeat.347.recalculate.records.start:"
-msgid "AEAT 347 Data Recalculation"
-msgstr "Recàlcul registres AEAT 347"
 
 msgctxt "view:aeat.347.recalculate.records.start:"
 msgid "Note that this operation may take a few minutes."
@@ -943,24 +931,12 @@ msgstr ""
 "recalculada."
 
 msgctxt "view:aeat.347.record:"
-msgid "AEAT 347 Record"
-msgstr "Registre AEAT 347"
-
-msgctxt "view:aeat.347.record:"
 msgid "Operation Amount"
 msgstr "Import operació"
 
 msgctxt "view:aeat.347.report.party:"
-msgid "AEAT 347 Party Record"
-msgstr "Registre tercer AEAT 347"
-
-msgctxt "view:aeat.347.report.party:"
 msgid "Operations Amount"
 msgstr "Import operacions"
-
-msgctxt "view:aeat.347.report.property:"
-msgid "AEAT 347 Property Record"
-msgstr "Registre propietat AEAT 347"
 
 msgctxt "view:aeat.347.report.property:"
 msgid "Address"
@@ -969,10 +945,6 @@ msgstr "Adreça"
 msgctxt "view:aeat.347.report.property:"
 msgid "Amount"
 msgstr "Import"
-
-msgctxt "view:aeat.347.report:"
-msgid "AEAT 347 Report"
-msgstr "Informe AEAT 347"
 
 msgctxt "view:aeat.347.report:"
 msgid "Calculate"

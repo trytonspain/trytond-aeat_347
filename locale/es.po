@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,11 +6,11 @@ msgctxt "error:aeat.347.report:"
 msgid "Currency in AEAT 347 report \"%s\" must be Euro."
 msgstr "La moneda del informe AEAT 349 \"%s\" debe ser Euro."
 
-msgctxt "field:account.invoice.line,aeat347_operation_key:"
+msgctxt "field:account.invoice,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clave operación AEAT 347"
 
-msgctxt "field:account.invoice.line,include_347:"
+msgctxt "field:account.invoice,include_347:"
 msgid "Include 347"
 msgstr "Incluir en el 347"
 
@@ -502,6 +502,10 @@ msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
 msgstr "Incluir en el 347"
 
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -697,37 +701,37 @@ msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administración AEAT 347"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid ""
 msgstr ""
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisiciones de bienes y servicios superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "B - Good and service deliveries above limit (1)"
 msgstr "B - Entregas de bienes y servicios superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
 msgstr "C - Cobros por cuenta de terceros superiores al límite (3)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr "D - Adquisiciones de instituciones públicas superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
 "E - Subvenciones y ayudas satisfechas por administraciones públicas "
 "superiores al límite (1)"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "F - Travel Agency Sales"
 msgstr "F - Ventas a agencias de viajes"
 
-msgctxt "selection:account.invoice.line,aeat347_operation_key:"
+msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "F - Compras a agencias de viajes"
 
@@ -906,32 +910,16 @@ msgid "4 - Foreign"
 msgstr "4 - Extranjero"
 
 msgctxt "view:aeat.347.reasign.records.end:"
-msgid "AEAT 347 Data Reassigment Done"
-msgstr "Reasignación registros AEAT 347 realizada"
-
-msgctxt "view:aeat.347.reasign.records.end:"
 msgid "The AEAT 347 records have been reasigned."
 msgstr "Los registros del modelo AEAT 347 han sido reasignados."
-
-msgctxt "view:aeat.347.reasign.records.start:"
-msgid "AEAT 347 Data Reasignation"
-msgstr "Reasignación registros AEAT 347"
 
 msgctxt "view:aeat.347.reasign.records.start:"
 msgid "Select Operation Key to reasign invoices:"
 msgstr "Seleccione la clave de operacion para reasignar las facturas:"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
-msgid "AEAT 347 Data Recalculation Done"
-msgstr "Recálculo registros AEAT 347 realizado"
-
-msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "The AEAT 347 records have been recalculated."
 msgstr "Los registros del modelo AEAT 347 han sido recalculados."
-
-msgctxt "view:aeat.347.recalculate.records.start:"
-msgid "AEAT 347 Data Recalculation"
-msgstr "Recálculo registros AEAT 347"
 
 msgctxt "view:aeat.347.recalculate.records.start:"
 msgid "Note that this operation may take a few minutes."
@@ -944,24 +932,12 @@ msgstr ""
 "seleccionadas."
 
 msgctxt "view:aeat.347.record:"
-msgid "AEAT 347 Record"
-msgstr "Registro AEAT 347"
-
-msgctxt "view:aeat.347.record:"
 msgid "Operation Amount"
 msgstr "Importe operación"
 
 msgctxt "view:aeat.347.report.party:"
-msgid "AEAT 347 Party Record"
-msgstr "Registro de tercero AEAT 347"
-
-msgctxt "view:aeat.347.report.party:"
 msgid "Operations Amount"
 msgstr "Importe operaciones"
-
-msgctxt "view:aeat.347.report.property:"
-msgid "AEAT 347 Property Record"
-msgstr "Registro de propiedad AEAT 347"
 
 msgctxt "view:aeat.347.report.property:"
 msgid "Address"
@@ -970,10 +946,6 @@ msgstr "Direcciones"
 msgctxt "view:aeat.347.report.property:"
 msgid "Amount"
 msgstr "Importe"
-
-msgctxt "view:aeat.347.report:"
-msgid "AEAT 347 Report"
-msgstr "Informe AEAT 347"
 
 msgctxt "view:aeat.347.report:"
 msgid "Calculate"
