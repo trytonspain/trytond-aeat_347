@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -502,6 +502,10 @@ msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
 msgstr "Incloure al 347"
 
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -545,8 +549,8 @@ msgstr ""
 msgctxt "help:aeat.347.report.party,cash_vat_criteria:"
 msgid "Annual amount of transactions accrued under cash VAT criteria."
 msgstr ""
-"Import anual de les transaccions meritades d'acord al criteri de caixa "
-"de l'IVA"
+"Import anual de les transaccions meritades d'acord al criteri de caixa de "
+"l'IVA"
 
 msgctxt "help:aeat.347.report.party,cash_vat_operation:"
 msgid ""
@@ -909,32 +913,16 @@ msgid "4 - Foreign"
 msgstr "4 - Estranger"
 
 msgctxt "view:aeat.347.reasign.records.end:"
-msgid "AEAT 347 Data Reassigment Done"
-msgstr "Reassignació registres AEAT 347 realitzada"
-
-msgctxt "view:aeat.347.reasign.records.end:"
 msgid "The AEAT 347 records have been reasigned."
 msgstr "Els registres del model AEAT 347 han estat reassignats."
-
-msgctxt "view:aeat.347.reasign.records.start:"
-msgid "AEAT 347 Data Reasignation"
-msgstr "Reassignació registres AEAT 347"
 
 msgctxt "view:aeat.347.reasign.records.start:"
 msgid "Select Operation Key to reasign invoices:"
 msgstr "Seleccioneu la clau d'operació per reassignar les factures:"
 
 msgctxt "view:aeat.347.recalculate.records.end:"
-msgid "AEAT 347 Data Recalculation Done"
-msgstr "Recàlcul registres AEAT 347 realitzat"
-
-msgctxt "view:aeat.347.recalculate.records.end:"
 msgid "The AEAT 347 records have been recalculated."
 msgstr "Els registres del model AEAT 347 han estat recalculats."
-
-msgctxt "view:aeat.347.recalculate.records.start:"
-msgid "AEAT 347 Data Recalculation"
-msgstr "Recàlcul registres AEAT 347"
 
 msgctxt "view:aeat.347.recalculate.records.start:"
 msgid "Note that this operation may take a few minutes."
@@ -947,24 +935,12 @@ msgstr ""
 "recalculada."
 
 msgctxt "view:aeat.347.record:"
-msgid "AEAT 347 Record"
-msgstr "Registre AEAT 347"
-
-msgctxt "view:aeat.347.record:"
 msgid "Operation Amount"
 msgstr "Import operació"
 
 msgctxt "view:aeat.347.report.party:"
-msgid "AEAT 347 Party Record"
-msgstr "Registre tercer AEAT 347"
-
-msgctxt "view:aeat.347.report.party:"
 msgid "Operations Amount"
 msgstr "Import operacions"
-
-msgctxt "view:aeat.347.report.property:"
-msgid "AEAT 347 Property Record"
-msgstr "Registre propietat AEAT 347"
 
 msgctxt "view:aeat.347.report.property:"
 msgid "Address"
@@ -973,10 +949,6 @@ msgstr "Adreça"
 msgctxt "view:aeat.347.report.property:"
 msgid "Amount"
 msgstr "Import"
-
-msgctxt "view:aeat.347.report:"
-msgid "AEAT 347 Report"
-msgstr "Informe AEAT 347"
 
 msgctxt "view:aeat.347.report:"
 msgid "Calculate"
