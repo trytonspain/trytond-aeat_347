@@ -52,7 +52,7 @@ class Record(ModelSQL, ModelView):
             res[name] = dict.fromkeys([x.id for x in records], '')
         for record in records:
             party = record.party
-            res['party_name'][record.id] = party.rec_name[:39]
+            res['party_name'][record.id] = party.name[:39]
             res['party_vat'][record.id] = (party.vat_code[2:] if
                 party.vat_code else '')
             res['country_code'][record.id] = (party.vat_code[:2] if
