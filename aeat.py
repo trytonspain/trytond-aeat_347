@@ -60,8 +60,6 @@ def remove_accents(unicode_string):
 class Report(Workflow, ModelSQL, ModelView):
     'AEAT 347 Report'
     __name__ = "aeat.347.report"
-    _rec_name = "fiscalyear_code"
-
     company = fields.Many2One('company.company', 'Company', required=True,
         states={
             'readonly': Eval('state') == 'done',
