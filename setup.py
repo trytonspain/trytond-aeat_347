@@ -12,6 +12,8 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
+MODULE = 'aeat_347'
+PREFIX = 'trytonspain'
 MODULE2PREFIX = {}
 
 
@@ -40,10 +42,8 @@ version = info.get('version', '0.0.1')
 major_version, minor_version, _ = version.split('.', 2)
 major_version = int(major_version)
 minor_version = int(minor_version)
-name = 'trytonspain_aeat_347'
-download_url = 'https://bitbucket.org/trytonspain/trytond-aeat_347'
 
-requires = ['retrofix>=0.21']
+requires = []
 for dep in info.get('depends', []):
     if not re.match(r'(ir|res)(\W|$)', dep):
         prefix = MODULE2PREFIX.get(dep, 'trytond')
@@ -56,22 +56,22 @@ if minor_version % 2:
     # Add development index for testing with proteus
     dependency_links.append('https://trydevpi.tryton.org/')
 
-setup(name=name,
+setup(name='%s_%s' % (PREFIX, MODULE),
     version=version,
-    description='Tryton Aeat 347 Module',
+    description='Tryton aeat_347 Module',
     long_description=read('README'),
     author='TrytonSpain',
     author_email='info@trytonspain.com',
     url='https://bitbucket.org/trytonspain/',
-    download_url=download_url,
+    download_url="https://bitbucket.org/trytonspain/trytond-%s" % MODULE,
     keywords='',
-    package_dir={'trytond.modules.aeat_347': '.'},
+    package_dir={'trytond.modules.%s' % MODULE: '.'},
     packages=[
-        'trytond.modules.aeat_347',
-        'trytond.modules.aeat_347.tests',
+        'trytond.modules.%s' % MODULE,
+        'trytond.modules.%s.tests' % MODULE,
         ],
     package_data={
-        'trytond.modules.aeat_347': (info.get('xml', [])
+        'trytond.modules.%s' % MODULE: (info.get('xml', [])
             + ['tryton.cfg', 'view/*.xml', 'locale/*.po', '*.odt',
                 'icons/*.svg', 'tests/*.rst']),
         },
@@ -98,9 +98,9 @@ setup(name=name,
         'Natural Language :: Spanish',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Office/Business',
@@ -111,11 +111,13 @@ setup(name=name,
     zip_safe=False,
     entry_points="""
     [trytond.modules]
-    aeat_347 = trytond.modules.aeat_347
-    """,
+    %s = trytond.modules.%s
+    """ % (MODULE, MODULE),
     test_suite='tests',
     test_loader='trytond.test_loader:Loader',
     tests_require=tests_require,
     use_2to3=True,
-    convert_2to3_doctests=['tests/scenario_aeat347.rst'],
+    convert_2to3_doctests=[
+        'tests/scenario_aeat_347.rst',
+        ],
     )
