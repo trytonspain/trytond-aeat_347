@@ -179,7 +179,7 @@ class Invoice:
 
         party_ids = set()
         for vals in vlist:
-            if not 'include_347' in vals:
+            if 'include_347' not in vals:
                 party_ids.add(vals['party'])
 
         if party_ids:
@@ -187,7 +187,7 @@ class Invoice:
                         ('id', 'in', list(party_ids))])])
 
         for vals in vlist:
-            if not 'include_347' in vals:
+            if 'include_347' not in vals:
                 party_id = vals['party']
                 vals['include_347'] = parties[party_id]
             if not vals.get('include_347', True):
