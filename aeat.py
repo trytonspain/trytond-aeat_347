@@ -259,6 +259,17 @@ class Report(Workflow, ModelSQL, ModelView):
         return res
 
     @classmethod
+    def copy(cls, reports, default=None):
+        if default is None:
+            default = {}
+        default = default.copy()
+        if 'parties' not in default:
+            default['parties'] = None
+        if 'properties' not in default:
+            default['properties'] = None
+        return super(Report, cls).copy(reports, default=default)
+
+    @classmethod
     def validate(cls, reports):
         for report in reports:
             report.check_euro()
