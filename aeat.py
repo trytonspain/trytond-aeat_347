@@ -10,6 +10,7 @@ from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval, Not
 from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
 
 __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 
@@ -72,7 +73,7 @@ class Report(Workflow, ModelSQL, ModelView):
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
-        required=True, states={
+        required=True, select=True, states={
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear_code = fields.Integer('Fiscal Year Code', required=True)
@@ -283,72 +284,87 @@ class Report(Workflow, ModelSQL, ModelView):
     @Workflow.transition('calculated')
     def calculate(cls, reports):
         pool = Pool()
-        Data = pool.get('aeat.347.record')
         Operation = pool.get('aeat.347.report.party')
-
-        quarter_mapping = [(3, 'first'), (6, 'second'), (9, 'third'),
-            (12, 'fourth')]
+        Party = pool.get('party.party')
 
         with Transaction().set_user(0):
             Operation.delete(Operation.search([
                 ('report', 'in', [r.id for r in reports])]))
 
         for report in reports:
-            fiscalyear = report.fiscalyear
+            cursor = Transaction().cursor
+            cursor.execute("""
+            select
+                r.party,
+                pi.code,
+                operation_key,
+                sum(case when month <= 3 then amount else 0 end) as first,
+                sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
+                sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
+                sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
+                sum(amount) as total,
+                array_agg(r.id)
+            from (aeat_347_record r left join
+                 party_identifier pi on r.party = pi.party),
+                 party_party p
+            where
+            r.party = p.id and
+            r.fiscalyear = %s
+            group by r.party, pi.code, r.operation_key, p.name
+            having sum(amount) > %s
+            """, (report.fiscalyear.id, report.operation_limit))
 
             to_create = {}
-            for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
+            for (party, code, opkey, q1, q2, q3, q4, amount, r) in cursor.fetchall():
 
-                if report.group_by_vat and record.party.vat_code:
-                    key = '%s-%s-%s' % (report.id, record.party.vat_code,
-                        record.operation_key)
+                if report.group_by_vat and code:
+                    key = '%s-%s-%s' % (report.id, code, opkey)
                 else:
-                    key = '%s-%s-%s' % (report.id, record.party.id,
-                        record.operation_key)
+                    key = '%s-%s-%s' % (report.id, party, opkey)
 
                 if key in to_create:
-                    for month, quarter in quarter_mapping:
-                        if month >= record.month:
-                            break
-                    qkey = "%s_quarter_amount" % quarter
-                    to_create[key]['amount'] += record.amount
-                    to_create[key][qkey] += record.amount
-                    to_create[key]['records'][0][1].append(record.id)
+                    to_create[key]['amount'] += amount
+                    to_create[key]['records'] = [('add',
+                        to_create[key]['records'][0][1] + r)]
                 else:
-                    to_create[key] = {
-                        'amount': record.amount,
-                        'cash_amount': _ZERO,
-                        'party_vat': record.party_vat[:9],
-                        'party_name': record.party_name,
-                        'country_code': record.country_code,
-                        'province_code': record.province_code,
-                        'operation_key': record.operation_key,
-                        'report': report.id,
-                        'records': [('add', [(record.id)])],
-                    }
-                    saved = False
-                    for month, quarter in quarter_mapping:
-                        qkey = "%s_quarter_amount" % quarter
-                        if qkey not in to_create[key]:
-                            to_create[key][qkey] = _ZERO
+                    p = Party(party)
+                    address = p.address_get(type='invoice')
+                    province_code = ''
+                    if address and address.zip:
+                        province_code = address.zip.strip()[:2]
 
-                        if month >= record.month and not saved:
-                            to_create[key][qkey] += record.amount
-                            saved = True
-                        qkey = "%s_quarter_property_amount" % quarter
+                    to_create[key] = {
+                        'amount': amount,
+                        'cash_amount': _ZERO,
+                        'party_vat': code and code[:9],
+                        'party_name': p.name[:38],
+                        'country_code': p.vat_code and p.vat_code[0:2],
+                        'province_code': province_code,
+                        'operation_key': opkey,
+                        'report': report.id,
+                        'records': [('add', r)],
+                    }
+
+                for f in ['first', 'second', 'third', 'fourth']:
+                    qkey = "%s_quarter_amount" % f
+                    if qkey not in to_create[key]:
                         to_create[key][qkey] = _ZERO
 
-            for key, record in to_create.copy().iteritems():
-                amount = record['amount']
-                cash_amount = record['cash_amount']
-                if not (amount > report.operation_limit or
-                        cash_amount > report.received_cash_limit):
-                    del to_create[key]
+                    qkey = "%s_quarter_property_amount" % f
+                    to_create[key][qkey] = _ZERO
+
+                to_create[key]['first_quarter_amount'] += q1
+                to_create[key]['second_quarter_amount'] += q2
+                to_create[key]['third_quarter_amount'] += q3
+                to_create[key]['fourth_quarter_amount'] += q4
+
         with Transaction().set_user(0, set_context=True):
             Operation.create(to_create.values())
+
         cls.write(reports, {
                 'calculation_date': datetime.datetime.now(),
                 })
+
 
     @classmethod
     @ModelView.button
