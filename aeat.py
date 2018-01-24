@@ -393,7 +393,6 @@ class Report(Workflow, ModelSQL, ModelView):
                 ],
             order=[
                 ('fiscalyear', 'DESC'),
-                ('period', 'DESC'),
             ], count=True)
         return count + 1
 
