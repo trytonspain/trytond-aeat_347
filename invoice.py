@@ -146,9 +146,11 @@ class Invoice:
 
     @classmethod
     def create_aeat347_records(cls, invoices):
-        Record = Pool().get('aeat.347.record')
-        to_create = {}
+        pool = Pool()
+        Record = pool.get('aeat.347.record')
+        Period = pool.get('account.period')
 
+        to_create = {}
         for invoice in invoices:
             if (not invoice.move or invoice.state == 'cancel' or
                     not invoice.include_347):
@@ -157,9 +159,19 @@ class Invoice:
                 operation_key = invoice.aeat347_operation_key
                 amount = invoice.total_amount
 
+                if invoice.type == 'in':
+                    accounting_date = (invoice.accounting_date
+                        or invoice.invoice_date)
+                    period_id = Period.find(
+                        invoice.company.id, date=accounting_date)
+                    period = Period(period_id)
+                    fiscalyear = period.fiscalyear
+                else:
+                    fiscalyear = invoice.move.period.fiscalyear
+
                 to_create[invoice.id] = {
                     'company': invoice.company.id,
-                    'fiscalyear': invoice.move.period.fiscalyear,
+                    'fiscalyear': fiscalyear,
                     'month': invoice.invoice_date.month,
                     'party': invoice.party.id,
                     'amount': amount,
