@@ -10,7 +10,6 @@ from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval, Not
 from trytond.transaction import Transaction
-from trytond.tools import grouped_slice
 
 __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 
@@ -287,35 +286,45 @@ class Report(Workflow, ModelSQL, ModelView):
         Operation = pool.get('aeat.347.report.party')
         Party = pool.get('party.party')
 
+        cursor = Transaction().cursor
+
         with Transaction().set_user(0):
             Operation.delete(Operation.search([
                 ('report', 'in', [r.id for r in reports])]))
 
         for report in reports:
-            cursor = Transaction().cursor
-            cursor.execute("""
-            select
-                r.party,
-                pi.code,
-                operation_key,
-                sum(case when month <= 3 then amount else 0 end) as first,
-                sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
-                sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
-                sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
-                sum(amount) as total,
-                array_agg(r.id)
-            from (aeat_347_record r left join
-                 party_identifier pi on r.party = pi.party),
-                 party_party p
-            where
-            r.party = p.id and
-            r.fiscalyear = %s
-            group by r.party, pi.code, r.operation_key, p.name
-            having sum(amount) > %s
-            """, (report.fiscalyear.id, report.operation_limit))
+            query = """
+                SELECT
+                    r.party,
+                    pi.code as vat_code,
+                    operation_key,
+                    sum(case when month <= 3 then amount else 0 end) as first,
+                    sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
+                    sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
+                    sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
+                    sum(amount) as total,
+                    array_agg(r.id)
+                FROM (aeat_347_record r
+                    LEFT JOIN
+                        party_identifier pi on r.party = pi.party),
+                        party_party p
+                WHERE
+                    r.party = p.id and
+                    r.fiscalyear = %s and
+                    pi.type = 'eu_vat'
+                GROUP BY r.party, pi.code, r.operation_key, p.name
+                HAVING
+                    sum(amount) > %s
+                """ % (report.fiscalyear.id, report.operation_limit)
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            party_ids = [r[0] for r in result]
+            parties = dict((p.id, p) for p in Party.browse(party_ids))
 
             to_create = {}
-            for (party, code, opkey, q1, q2, q3, q4, amount, r) in cursor.fetchall():
+            for (party, vat_code, opkey, q1, q2, q3, q4, amount, r) in result:
+                code, country_code = (vat_code[2:], vat_code[:2])
 
                 if report.group_by_vat and code:
                     key = '%s-%s-%s' % (report.id, code, opkey)
@@ -327,7 +336,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key]['records'] = [('add',
                         to_create[key]['records'][0][1] + r)]
                 else:
-                    p = Party(party)
+                    p = parties[party]
                     address = p.address_get(type='invoice')
                     province_code = ''
                     if address and address.zip:
@@ -338,7 +347,7 @@ class Report(Workflow, ModelSQL, ModelView):
                         'cash_amount': _ZERO,
                         'party_vat': code and code[:9],
                         'party_name': p.name[:38],
-                        'country_code': p.vat_code and p.vat_code[0:2],
+                        'country_code': country_code,
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
@@ -362,8 +371,8 @@ class Report(Workflow, ModelSQL, ModelView):
             Operation.create(to_create.values())
 
         cls.write(reports, {
-                'calculation_date': datetime.datetime.now(),
-                })
+            'calculation_date': datetime.datetime.now(),
+            })
 
 
     @classmethod
