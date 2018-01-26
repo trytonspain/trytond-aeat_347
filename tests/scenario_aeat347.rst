@@ -112,8 +112,8 @@ Create out invoice over limit::
     >>> line.quantity = 80
     >>> len(line.taxes)
     1
-    >>> line.amount
-    Decimal('3200.00')
+    >>> line.amount == Decimal('3200.00')
+    True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -124,8 +124,8 @@ Create out invoice over limit::
     True
     >>> rec1.operation_key
     u'B'
-    >>> rec1.amount
-    Decimal('3520.00')
+    >>> rec1.amount == Decimal('3520.00')
+    True
 
 Create out invoice not over limit::
 
@@ -140,8 +140,8 @@ Create out invoice not over limit::
     >>> line.quantity = 5
     >>> len(line.taxes)
     1
-    >>> line.amount
-    Decimal('200.00')
+    >>> line.amount == Decimal('200.00')
+    True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -152,8 +152,8 @@ Create out invoice not over limit::
     True
     >>> rec1.operation_key
     u'B'
-    >>> rec1.amount
-    Decimal('220.00')
+    >>> rec1.amount == Decimal('220.00')
+    True
 
 Create out credit note::
 
@@ -169,8 +169,8 @@ Create out credit note::
     >>> line.quantity = -2
     >>> len(line.taxes)
     1
-    >>> line.amount
-    Decimal('-80.00')
+    >>> line.amount == Decimal('-80.00')
+    True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -181,8 +181,8 @@ Create out credit note::
     True
     >>> rec1.operation_key
     u'B'
-    >>> rec1.amount
-    Decimal('-88.00')
+    >>> rec1.amount == Decimal('-88.00')
+    True
 
 Create in invoice::
 
@@ -200,8 +200,8 @@ Create in invoice::
     >>> line.unit_price = Decimal('25')
     >>> len(line.taxes)
     1
-    >>> line.amount
-    Decimal('125.00')
+    >>> line.amount == Decimal('125.00')
+    True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -212,8 +212,8 @@ Create in invoice::
     True
     >>> rec1.operation_key
     u'A'
-    >>> rec1.amount
-    Decimal('137.50')
+    >>> rec1.amount == Decimal('137.50')
+    True
 
 Create in credit note::
 
@@ -231,8 +231,8 @@ Create in credit note::
     >>> line.quantity = -1
     >>> len(line.taxes)
     1
-    >>> line.amount
-    Decimal('-25.00')
+    >>> line.amount == Decimal('-25.00')
+    True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
@@ -243,8 +243,8 @@ Create in credit note::
     True
     >>> rec1.operation_key
     u'A'
-    >>> rec1.amount
-    Decimal('-27.50')
+    >>> rec1.amount == Decimal('-27.50')
+    True
 
 Generate 347 Report::
 
@@ -262,12 +262,12 @@ Generate 347 Report::
     0
     >>> report.party_count
     1
-    >>> report.party_amount
-    Decimal('3432.00')
-    >>> report.cash_amount
-    Decimal('0.0')
-    >>> report.property_amount
-    Decimal('0.0')
+    >>> report.party_amount == Decimal('3432.00')
+    True
+    >>> report.cash_amount == Decimal('0.0')
+    True
+    >>> report.property_amount == Decimal('0.0')
+    True
 
 Reassign 347 lines::
 
