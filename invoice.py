@@ -169,10 +169,8 @@ class Invoice:
                     amount *= -1
 
                 if invoice.type in ('in_invoice', 'in_credit_note'):
-                    accounting_date = (invoice.accounting_date
-                        or invoice.invoice_date)
                     period_id = Period.find(
-                        invoice.company.id, date=accounting_date)
+                        invoice.company.id, date=invoice.invoice_date)
                     period = Period(period_id)
                     fiscalyear = period.fiscalyear
                 else:
