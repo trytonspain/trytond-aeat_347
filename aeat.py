@@ -8,7 +8,7 @@ import sys
 from decimal import Decimal
 from retrofix import aeat347
 from retrofix.record import Record, write as retrofix_write
-
+from trytond.config import config, parse_uri
 from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval, Not
@@ -75,7 +75,7 @@ class Report(Workflow, ModelSQL, ModelView):
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
-        required=True, states={
+        required=True, select=True, states={
             'readonly': Eval('state') == 'done',
             }, depends=['state'])
     fiscalyear_code = fields.Integer('Fiscal Year Code', required=True)
@@ -280,79 +280,116 @@ class Report(Workflow, ModelSQL, ModelView):
         if self.currency.code != 'EUR':
             self.raise_user_error('invalid_currency', self.rec_name)
 
+    @staticmethod
+    def aggregate_function():
+        uri = parse_uri(config.get('database', 'uri'))
+        if uri.scheme == 'postgresql':
+            return "array_agg(r.id)"
+        return "group_concat(r.id, ',')"
+
     @classmethod
     @ModelView.button
     @Workflow.transition('calculated')
     def calculate(cls, reports):
         pool = Pool()
-        Data = pool.get('aeat.347.record')
         Operation = pool.get('aeat.347.report.party')
+        Party = pool.get('party.party')
 
-        quarter_mapping = [(3, 'first'), (6, 'second'), (9, 'third'),
-            (12, 'fourth')]
+        cursor = Transaction().connection.cursor()
 
         with Transaction().set_user(0):
             Operation.delete(Operation.search([
                 ('report', 'in', [r.id for r in reports])]))
 
+        def is_decimal(value):
+            if not isinstance(value, Decimal):
+                return Decimal(value)
+            return value
+
         for report in reports:
-            fiscalyear = report.fiscalyear
+            query = """
+                SELECT
+                    r.party,
+                    pi.code as vat_code,
+                    operation_key,
+                    sum(case when month <= 3 then amount else 0 end) as first,
+                    sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
+                    sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
+                    sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
+                    sum(amount) as total,
+                    %s
+                FROM (aeat_347_record r
+                    LEFT JOIN
+                        party_identifier pi on r.party = pi.party),
+                        party_party p
+                WHERE
+                    r.party = p.id and
+                    r.fiscalyear = %s and
+                    pi.type = 'eu_vat'
+                GROUP BY r.party, pi.code, r.operation_key, p.name
+                HAVING
+                    sum(amount) > %s
+                """ % (cls.aggregate_function(), report.fiscalyear.id,
+                    report.operation_limit)
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            party_ids = [r[0] for r in result]
+            parties = dict((p.id, p) for p in Party.browse(party_ids))
 
             to_create = {}
-            for record in Data.search([('fiscalyear', '=', fiscalyear.id)]):
+            for (party, vat_code, opkey, q1, q2, q3, q4, amount, records) in result:
+                code, country_code = (vat_code[2:], vat_code[:2])
+                records = (records if isinstance(records, (list))
+                    else records.split(','))
 
-                if report.group_by_vat and record.party.tax_identifier:
-                    key = '%s-%s-%s' % (
-                        report.id,
-                        record.party.tax_identifier.code,
-                        record.operation_key)
+                if report.group_by_vat and code:
+                    key = '%s-%s-%s' % (report.id, code, opkey)
                 else:
-                    key = '%s-%s-%s' % (report.id, record.party.id,
-                        record.operation_key)
+                    key = '%s-%s-%s' % (report.id, party, opkey)
 
                 if key in to_create:
-                    for month, quarter in quarter_mapping:
-                        if month >= record.month:
-                            break
-                    qkey = "%s_quarter_amount" % quarter
-                    to_create[key]['amount'] += record.amount
-                    to_create[key][qkey] += record.amount
-                    to_create[key]['records'][0][1].append(record.id)
+                    to_create[key]['amount'] += amount
+                    to_create[key]['records'] = [('add',
+                        to_create[key]['records'][0][1] + records)]
                 else:
-                    to_create[key] = {
-                        'amount': record.amount,
-                        'cash_amount': _ZERO,
-                        'party_vat': record.party_vat[:9],
-                        'party_name': record.party_name,
-                        'country_code': record.country_code,
-                        'province_code': record.province_code,
-                        'operation_key': record.operation_key,
-                        'report': report.id,
-                        'records': [('add', [(record.id)])],
-                    }
-                    saved = False
-                    for month, quarter in quarter_mapping:
-                        qkey = "%s_quarter_amount" % quarter
-                        if qkey not in to_create[key]:
-                            to_create[key][qkey] = _ZERO
+                    p = parties[party]
+                    address = p.address_get(type='invoice')
+                    province_code = ''
+                    if address and address.zip:
+                        province_code = address.zip.strip()[:2]
 
-                        if month >= record.month and not saved:
-                            to_create[key][qkey] += record.amount
-                            saved = True
-                        qkey = "%s_quarter_property_amount" % quarter
+                    to_create[key] = {
+                        'amount': is_decimal(amount),
+                        'cash_amount': _ZERO,
+                        'party_vat': code and code[:9],
+                        'party_name': p.name[:38],
+                        'country_code': country_code,
+                        'province_code': province_code,
+                        'operation_key': opkey,
+                        'report': report.id,
+                        'records': [('add', records)],
+                    }
+
+                for f in ['first', 'second', 'third', 'fourth']:
+                    qkey = "%s_quarter_amount" % f
+                    if qkey not in to_create[key]:
                         to_create[key][qkey] = _ZERO
 
-            for key, record in to_create.copy().iteritems():
-                amount = record['amount']
-                cash_amount = record['cash_amount']
-                if not (amount > report.operation_limit or
-                        cash_amount > report.received_cash_limit):
-                    del to_create[key]
+                    qkey = "%s_quarter_property_amount" % f
+                    to_create[key][qkey] = _ZERO
+
+                to_create[key]['first_quarter_amount'] += is_decimal(q1)
+                to_create[key]['second_quarter_amount'] += is_decimal(q2)
+                to_create[key]['third_quarter_amount'] += is_decimal(q3)
+                to_create[key]['fourth_quarter_amount'] += is_decimal(q4)
+
         with Transaction().set_user(0, set_context=True):
             Operation.create(to_create.values())
+
         cls.write(reports, {
-                'calculation_date': datetime.datetime.now(),
-                })
+            'calculation_date': datetime.datetime.now(),
+            })
 
     @classmethod
     @ModelView.button
