@@ -5,7 +5,7 @@ from decimal import Decimal
 import unicodedata
 from retrofix import aeat347
 from retrofix.record import Record, write as retrofix_write
-
+from trytond.config import config, parse_uri
 from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval, Not
@@ -278,6 +278,13 @@ class Report(Workflow, ModelSQL, ModelView):
         if self.currency.code != 'EUR':
             self.raise_user_error('invalid_currency', self.rec_name)
 
+    @staticmethod
+    def aggregate_function():
+        uri = parse_uri(config.get('database', 'uri'))
+        if uri.scheme == 'postgresql':
+            return "array_agg(r.id)"
+        return "group_concat(r.id, ',')"
+
     @classmethod
     @ModelView.button
     @Workflow.transition('calculated')
@@ -292,6 +299,11 @@ class Report(Workflow, ModelSQL, ModelView):
             Operation.delete(Operation.search([
                 ('report', 'in', [r.id for r in reports])]))
 
+        def is_decimal(value):
+            if not isinstance(value, Decimal):
+                return Decimal(value)
+            return value
+
         for report in reports:
             query = """
                 SELECT
@@ -303,7 +315,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
                     sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
                     sum(amount) as total,
-                    array_agg(r.id)
+                    %s
                 FROM (aeat_347_record r
                     LEFT JOIN
                         party_identifier pi on r.party = pi.party),
@@ -315,7 +327,8 @@ class Report(Workflow, ModelSQL, ModelView):
                 GROUP BY r.party, pi.code, r.operation_key, p.name
                 HAVING
                     sum(amount) > %s
-                """ % (report.fiscalyear.id, report.operation_limit)
+                """ % (cls.aggregate_function(), report.fiscalyear.id,
+                    report.operation_limit)
             cursor.execute(query)
             result = cursor.fetchall()
 
@@ -323,8 +336,10 @@ class Report(Workflow, ModelSQL, ModelView):
             parties = dict((p.id, p) for p in Party.browse(party_ids))
 
             to_create = {}
-            for (party, vat_code, opkey, q1, q2, q3, q4, amount, r) in result:
+            for (party, vat_code, opkey, q1, q2, q3, q4, amount, records) in result:
                 code, country_code = (vat_code[2:], vat_code[:2])
+                records = (records if isinstance(records, (list))
+                    else records.split(','))
 
                 if report.group_by_vat and code:
                     key = '%s-%s-%s' % (report.id, code, opkey)
@@ -334,7 +349,7 @@ class Report(Workflow, ModelSQL, ModelView):
                 if key in to_create:
                     to_create[key]['amount'] += amount
                     to_create[key]['records'] = [('add',
-                        to_create[key]['records'][0][1] + r)]
+                        to_create[key]['records'][0][1] + records)]
                 else:
                     p = parties[party]
                     address = p.address_get(type='invoice')
@@ -343,7 +358,7 @@ class Report(Workflow, ModelSQL, ModelView):
                         province_code = address.zip.strip()[:2]
 
                     to_create[key] = {
-                        'amount': amount,
+                        'amount': is_decimal(amount),
                         'cash_amount': _ZERO,
                         'party_vat': code and code[:9],
                         'party_name': p.name[:38],
@@ -351,7 +366,7 @@ class Report(Workflow, ModelSQL, ModelView):
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
-                        'records': [('add', r)],
+                        'records': [('add', records)],
                     }
 
                 for f in ['first', 'second', 'third', 'fourth']:
@@ -362,10 +377,10 @@ class Report(Workflow, ModelSQL, ModelView):
                     qkey = "%s_quarter_property_amount" % f
                     to_create[key][qkey] = _ZERO
 
-                to_create[key]['first_quarter_amount'] += q1
-                to_create[key]['second_quarter_amount'] += q2
-                to_create[key]['third_quarter_amount'] += q3
-                to_create[key]['fourth_quarter_amount'] += q4
+                to_create[key]['first_quarter_amount'] += is_decimal(q1)
+                to_create[key]['second_quarter_amount'] += is_decimal(q2)
+                to_create[key]['third_quarter_amount'] += is_decimal(q3)
+                to_create[key]['fourth_quarter_amount'] += is_decimal(q4)
 
         with Transaction().set_user(0, set_context=True):
             Operation.create(to_create.values())
