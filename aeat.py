@@ -617,7 +617,7 @@ class PropertyRecord(ModelSQL, ModelView):
 
     def get_record(self):
         record = Record(aeat347.PROPERTY_RECORD)
-        record.party_vat = self.party_vat
+        record.party_nif = self.party_vat
         record.representative_vat = self.representative_vat
         record.party_name = self.party_name
         record.amount = self.amount
