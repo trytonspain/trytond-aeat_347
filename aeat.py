@@ -104,7 +104,9 @@ class Report(Workflow, ModelSQL, ModelView):
             ('done', 'Done'),
             ('cancelled', 'Cancelled')
             ], 'State', readonly=True)
-    contact_name = fields.Char('Full Name', size=40)
+    contact_name = fields.Char('Full Name', size=40, help='The full name must '
+        'appear in a correct order: First surname, blank space, Second '
+        'surname, blank space, Name')
     contact_phone = fields.Char('Phone', size=9)
     group_by_vat = fields.Boolean('Group by VAT', states={
             'readonly': Eval('state') == 'done',
@@ -339,7 +341,8 @@ class Report(Workflow, ModelSQL, ModelView):
             parties = dict((p.id, p) for p in Party.browse(party_ids))
 
             to_create = {}
-            for (party, vat_code, opkey, q1, q2, q3, q4, amount, records) in result:
+            for (party, vat_code, opkey, q1, q2, q3, q4, amount, records
+                    ) in result:
                 code, country_code = (vat_code[2:], vat_code[:2])
                 records = (records if isinstance(records, (list))
                     else records.split(','))
@@ -356,19 +359,26 @@ class Report(Workflow, ModelSQL, ModelView):
                 else:
                     p = parties[party]
                     address = p.address_get(type='invoice')
-                    province_code = ''
-                    if address and address.zip:
+                    if not country_code:
+                        if address and address.country:
+                            country_code = address.country.code
+                    if address and address.zip and country_code == 'ES':
                         province_code = address.zip.strip()[:2]
+                    else:
+                        province_code = '99'
 
                     to_create[key] = {
                         'amount': is_decimal(amount),
                         'cash_amount': _ZERO,
-                        'party_vat': code and code[:9],
+                        'party_vat': (country_code == 'ES' and code and
+                            code[:9] or ''),
                         'party_name': p.name[:38],
                         'country_code': country_code,
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
+                        'community_vat': (country_code != 'ES' and vat_code
+                            or ''),
                         'records': [('add', records)],
                     }
 
@@ -593,7 +603,7 @@ class PropertyRecord(ModelSQL, ModelView):
             ('KM.', 'Kilometer'),
             ('S/N', 'Without number'),
             ], 'Number type')
-    number = fields.Integer('Number')
+    number = fields.Char('Number', size=5)
     number_qualifier = fields.Selection([
             ('BIS', 'Bis'),
             ('MOD', 'Mod'),
