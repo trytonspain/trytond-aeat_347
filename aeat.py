@@ -100,7 +100,9 @@ class Report(Workflow, ModelSQL, ModelView):
             ('done', 'Done'),
             ('cancelled', 'Cancelled')
             ], 'State', readonly=True)
-    contact_name = fields.Char('Full Name', size=40)
+    contact_name = fields.Char('Full Name', size=40, help='The full name must '
+        'appear in a correct order: First surname, blank space, Second '
+        'surname, blank space, Name')
     contact_phone = fields.Char('Phone', size=9)
     group_by_vat = fields.Boolean('Group by VAT', states={
             'readonly': Eval('state') == 'done',
@@ -305,12 +307,17 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key] = {
                         'amount': record.amount,
                         'cash_amount': _ZERO,
-                        'party_vat': record.party_vat[:9],
+                        'party_vat': (record.country_code == 'ES' and
+                            record.party_vat and record.party_vat[:9] or ''),
                         'party_name': record.party_name,
                         'country_code': record.country_code,
                         'province_code': record.province_code,
                         'operation_key': record.operation_key,
                         'report': report.id,
+                        'community_vat': (record.country_code != 'ES' and
+                            record.party_vat and
+                            record.country_code + record.party_vat or '')
+                            or ''),
                         'records': [('add', [(record.id)])],
                     }
                     saved = False
@@ -538,7 +545,7 @@ class PropertyRecord(ModelSQL, ModelView):
             ('KM.', 'Kilometer'),
             ('S/N', 'Without number'),
             ], 'Number type')
-    number = fields.Integer('Number')
+    number = fields.Char('Number', size=5)
     number_qualifier = fields.Selection([
             ('BIS', 'Bis'),
             ('MOD', 'Mod'),
