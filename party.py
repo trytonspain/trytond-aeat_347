@@ -20,8 +20,7 @@ class Party:
         if self.include_347:
             return True
         for identifier in self.identifiers:
-            if identifier.code and identifier.type == 'eu_vat' \
-                    and identifier.code[:2] == 'ES':
+            if identifier.code and identifier.type == 'eu_vat':
                 return True
         return False
 

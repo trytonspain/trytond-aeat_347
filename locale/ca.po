@@ -132,7 +132,7 @@ msgstr "Número CIF/NIF"
 
 msgctxt "field:aeat.347.report,contact_name:"
 msgid "Full Name"
-msgstr "Nom complet"
+msgstr "Cognom i Nom"
 
 msgctxt "field:aeat.347.report,contact_phone:"
 msgid "Phone"
@@ -416,7 +416,7 @@ msgstr "Porta"
 
 msgctxt "field:aeat.347.report.property,doorway:"
 msgid "Doorway"
-msgstr "Porta (bis)"
+msgstr "Portal"
 
 msgctxt "field:aeat.347.report.property,floor:"
 msgid "Floor"
@@ -599,6 +599,14 @@ msgstr "Complement (urbanització, parc industrial, ...)."
 msgctxt "help:aeat.347.report.property,representative_vat:"
 msgid "Legal Representative VAT number"
 msgstr "NIF del representant legal."
+
+msgctxt "help:aeat.347.report,contact_name:"
+msgid ""
+"The full name must appear in a correct order: First surname, blank space, "
+"Second surname, blank space, Name"
+msgstr ""
+"Se consignará el primer apellido, un espacio, el segundo apellido, un espacio "
+"y el nombre completo, necesariamente en este ordden."
 
 msgctxt "model:aeat.347.reasign.records.end,name:"
 msgid "Reasign AEAT 347 Records End"
