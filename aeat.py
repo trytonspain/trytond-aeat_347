@@ -316,8 +316,7 @@ class Report(Workflow, ModelSQL, ModelView):
                         'report': report.id,
                         'community_vat': (record.country_code != 'ES' and
                             record.party_vat and
-                            record.country_code + record.party_vat or '')
-                            or ''),
+                            record.country_code + record.party_vat or ''),
                         'records': [('add', [(record.id)])],
                     }
                     saved = False
