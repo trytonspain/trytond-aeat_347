@@ -194,8 +194,9 @@ class Invoice:
                 party_ids.add(vals['party'])
 
         if party_ids:
-            parties = dict([(x.id, x.include_347) for x in Party.search([
-                        ('id', 'in', list(party_ids))])])
+            with Transaction().set_context(active_test=False):
+                parties = dict([(x.id, x.include_347) for x in Party.search([
+                            ('id', 'in', list(party_ids))])])
 
         for vals in vlist:
             if not 'include_347' in vals:
