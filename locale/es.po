@@ -14,6 +14,14 @@ msgctxt "field:account.invoice,include_347:"
 msgid "Include 347"
 msgstr "Incluir en el 347"
 
+msgctxt "field:account.invoice.tax,include_347:"
+msgid "Include 347"
+msgstr "Incluir en el 347"
+
+msgctxt "field:account.tax,include_347:"
+msgid "Include 347"
+msgstr "Incluir en el 347"
+
 msgctxt "field:aeat.347.reasign.records.end,id:"
 msgid "ID"
 msgstr "ID"
