@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="aeat_347_invoice_form_view">
+        <record model="ir.ui.view" id="invoice_form_view">
             <field name="model">account.invoice</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
             <field name="name">invoice_form</field>
         </record>
-        <record model="ir.ui.view" id="aeat_347_tax_form_view">
-            <field name="model">account.tax</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="account.tax_view_form"/>
-            <field name="name">tax_form</field>
+        <record model="ir.ui.view" id="invoice_tax_view_form">
+            <field name="model">invoice.tax</field>
+            <field name="inherit" ref="account_invoice.tax_view_form"/>
+            <field name="name">invoice_tax_form</field>
         </record>
 
         <record model="ir.ui.view" id="aeat_347_recalculate_start_view">

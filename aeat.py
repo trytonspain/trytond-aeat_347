@@ -311,6 +311,7 @@ class Report(Workflow, ModelSQL, ModelView):
                 SELECT
                     r.party,
                     pi.code as vat_code,
+                    pi.type as vat_code_type,
                     operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
@@ -318,15 +319,16 @@ class Report(Workflow, ModelSQL, ModelView):
                     sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
                     sum(amount) as total,
                     %s
-                FROM (aeat_347_record r
-                    LEFT JOIN
-                        party_identifier pi on r.party = pi.party),
-                        party_party p
+                FROM
+                    aeat_347_record r
+                    LEFT JOIN party_identifier pi on r.party = pi.party,
+                    party_party p
                 WHERE
                     r.party = p.id and
                     r.fiscalyear = %s and
-                    pi.type = 'eu_vat'
-                GROUP BY r.party, pi.code, r.operation_key, p.name
+                    (pi.type = 'eu_vat' or pi.type is Null)
+                GROUP BY
+                    r.party, pi.code, pi.type, r.operation_key, p.name
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
@@ -338,9 +340,11 @@ class Report(Workflow, ModelSQL, ModelView):
             parties = dict((p.id, p) for p in Party.browse(party_ids))
 
             to_create = {}
-            for (party, vat_code, opkey, q1, q2, q3, q4, amount, records
-                    ) in result:
-                code, country_code = (vat_code[2:], vat_code[:2])
+            for (party, vat_code, vat_code_type, opkey, q1, q2, q3, q4, amount,
+                    records) in result:
+                code = country_code = None
+                if vat_code_type == 'eu_vat':
+                    code, country_code = (vat_code[2:], vat_code[:2])
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
@@ -374,8 +378,8 @@ class Report(Workflow, ModelSQL, ModelView):
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
-                        'community_vat': (country_code != 'ES' and vat_code
-                            or ''),
+                        'community_vat': (country_code != 'ES' and vat_code_type
+                            and vat_code or ''),
                         'records': [('add', records)],
                     }
 
