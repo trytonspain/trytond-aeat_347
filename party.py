@@ -18,7 +18,9 @@ class Party:
 
     @fields.depends('vat_country')
     def on_change_with_include_347(self, name=None):
-        if self.vat_country:
+        if self.include_347:
+            return True
+        if self.vat_country and self.vat_country == 'ES':
             return True
         return False
 

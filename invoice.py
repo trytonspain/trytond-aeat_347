@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
 
-__all__ = ['Record', 'Invoice', 'Recalculate347RecordStart',
+__all__ = ['Record', 'Invoice', 'InvoiceTax', 'Recalculate347RecordStart',
     'Recalculate347RecordEnd', 'Recalculate347Record', 'Reasign347RecordStart',
     'Reasign347RecordEnd', 'Reasign347Record']
 
@@ -218,6 +218,26 @@ class Invoice:
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).cancel(invoices)
         Record.delete_record(invoices)
+
+class InvoiceTax:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice.tax'
+
+    include_347 = fields.Boolean('Include 347', readonly=True)
+
+    @fields.depends('include_347')
+    def on_change_tax(self):
+        Tax = Pool().get('account.tax')
+        super(InvoiceTax, self).on_change_tax()
+        if not self.tax:
+            return
+        if self.invoice:
+            context = self.invoice._get_tax_context()
+        else:
+            context = {}
+        with Transaction().set_context(**context):
+            tax = Tax(self.tax.id)
+        self.include_347 = tax.include_347
 
 
 class Recalculate347RecordStart(ModelView):

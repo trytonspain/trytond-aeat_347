@@ -1,7 +1,7 @@
 #The COPYRIGHT file at the top level of this repository contains the full
 #copyright notices and license terms.
 from trytond.pool import Pool
-from . import aeat, invoice, party
+from . import aeat, invoice, party, tax
 
 
 def register():
@@ -16,6 +16,8 @@ def register():
         invoice.Recalculate347RecordEnd,
         invoice.Reasign347RecordStart,
         invoice.Reasign347RecordEnd,
+        invoice.InvoiceTax,
+        tax.Tax,
         module='aeat_347', type_='model')
     Pool.register(
         invoice.Recalculate347Record,

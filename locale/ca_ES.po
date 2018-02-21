@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -11,6 +11,14 @@ msgid "AEAT 347 Operation Key"
 msgstr "Clau operació AEAT 347"
 
 msgctxt "field:account.invoice,include_347:"
+msgid "Include 347"
+msgstr "Incloure al 347"
+
+msgctxt "field:account.invoice.tax,include_347:"
+msgid "Include 347"
+msgstr "Incloure al 347"
+
+msgctxt "field:account.tax,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
@@ -498,6 +506,18 @@ msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
 msgstr "Incloure al 347"
 
+msgctxt "help:aeat.347.report,contact_name:"
+msgid ""
+"The full name must appear in a correct order: First surname, blank space, "
+"Second surname, blank space, Name"
+msgstr ""
+"Se consignará el primer apellido, un espacio, el segundo apellido, un "
+"espacio y el nombre completo, necesariamente en este ordden."
+
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -520,10 +540,6 @@ msgstr ""
 "La declaració mostrarà les operacions d'efectiu amb import total superior a "
 "aquest límit."
 
-msgctxt "help:aeat.347.report,group_by_vat:"
-msgid "Registers will be grouped by party VAT number instead of party."
-msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
-
 msgctxt "help:aeat.347.report,representative_vat:"
 msgid "Legal Representative VAT number."
 msgstr "NIF del representant legal."
@@ -541,8 +557,8 @@ msgstr ""
 msgctxt "help:aeat.347.report.party,cash_vat_criteria:"
 msgid "Annual amount of transactions accrued under cash VAT criteria."
 msgstr ""
-"Import anual de les transaccions meritades d'acord al criteri de caixa "
-"de l'IVA"
+"Import anual de les transaccions meritades d'acord al criteri de caixa de "
+"l'IVA"
 
 msgctxt "help:aeat.347.report.party,cash_vat_operation:"
 msgid ""
@@ -595,14 +611,6 @@ msgstr "Complement (urbanització, parc industrial, ...)."
 msgctxt "help:aeat.347.report.property,representative_vat:"
 msgid "Legal Representative VAT number"
 msgstr "NIF del representant legal."
-
-msgctxt "help:aeat.347.report,contact_name:"
-msgid ""
-"The full name must appear in a correct order: First surname, blank space, "
-"Second surname, blank space, Name"
-msgstr ""
-"Se consignará el primer apellido, un espacio, el segundo apellido, un espacio "
-"y el nombre completo, necesariamente en este ordden."
 
 msgctxt "model:aeat.347.reasign.records.end,name:"
 msgid "Reasign AEAT 347 Records End"
@@ -704,6 +712,7 @@ msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administració AEAT 347"
 
+#, fuzzy
 msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid ""
 msgstr " "
