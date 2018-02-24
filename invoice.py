@@ -149,7 +149,9 @@ class Invoice:
         for tax in self.taxes:
             if tax.include_347:
                 amount += (tax.base + tax.amount)
-        return (amount < self.total_amount and amount or self.total_amount)
+        if amount > self.total_amount:
+            amount = self.total_amount
+        return amount
 
     @classmethod
     def create_aeat347_records(cls, invoices):
