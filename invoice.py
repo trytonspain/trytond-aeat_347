@@ -151,12 +151,19 @@ class Invoice:
         return 'A' if type_ == 'in' else 'B'
 
     def get_aeat347_total_amount(self):
+        pool = Pool()
+        Currency = pool.get('currency.currency')
+
         amount = 0
         for tax in self.taxes:
             if tax.include_347:
                 amount += (tax.base + tax.amount)
         if amount > self.total_amount:
             amount = self.total_amount
+        if self.currency != self.company.currency:
+            with Transaction().set_context(date=self.currency_date):
+                amount = Currency.compute(self.currency, amount,
+                    self.company.currency, round=True)
         return amount
 
     @classmethod
