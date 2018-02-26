@@ -144,6 +144,22 @@ class Invoice:
         type_ = 'in' if invoice_type[0:2] == 'in' else 'out'
         return 'A' if type_ == 'in' else 'B'
 
+    def get_aeat347_total_amount(self):
+        pool = Pool()
+        Currency = pool.get('currency.currency')
+
+        amount = 0
+        for tax in self.taxes:
+            if tax.include_347:
+                amount += (tax.base + tax.amount)
+        if amount > self.total_amount:
+            amount = self.total_amount
+        if self.currency != self.company.currency:
+            with Transaction().set_context(date=self.currency_date):
+                amount = Currency.compute(self.currency, amount,
+                    self.company.currency, round=True)
+        return amount
+
     @classmethod
     def create_aeat347_records(cls, invoices):
         Record = Pool().get('aeat.347.record')
@@ -155,7 +171,7 @@ class Invoice:
                 continue
             if invoice.aeat347_operation_key:
                 operation_key = invoice.aeat347_operation_key
-                amount = invoice.total_amount
+                amount = invoice.get_aeat347_total_amount()
 
                 if invoice.type in ('out_credit_note', 'in_credit_note'):
                     amount *= -1
