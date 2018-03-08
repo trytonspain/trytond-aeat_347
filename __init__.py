@@ -22,6 +22,7 @@ def register():
         invoice.Reasign347RecordStart,
         invoice.Reasign347RecordEnd,
         invoice.InvoiceTax,
+        tax.TaxTemplate,
         tax.Tax,
         module='aeat_347', type_='model')
     Pool.register(
