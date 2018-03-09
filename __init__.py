@@ -17,7 +17,6 @@ def register():
         invoice.Recalculate347RecordEnd,
         invoice.Reasign347RecordStart,
         invoice.Reasign347RecordEnd,
-        invoice.InvoiceTax,
         tax.TaxTemplate,
         tax.Tax,
         module='aeat_347', type_='model')
