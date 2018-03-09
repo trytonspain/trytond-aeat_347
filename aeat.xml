@@ -135,7 +135,31 @@ contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        
+
+        <record model="ir.model.button" id="aeat_347_report_draft_button">
+            <field name="name">draft</field>
+            <field name="string">Draft</field>
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+        </record>
+
+        <record model="ir.model.button" id="aeat_347_report_calculate_button">
+            <field name="name">calculate</field>
+            <field name="string">Calculate</field>
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+        </record>
+
+        <record model="ir.model.button" id="aeat_347_report_process_button">
+            <field name="name">process</field>
+            <field name="string">Process</field>
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+        </record>
+
+        <record model="ir.model.button" id="aeat_347_report_cancel_button">
+            <field name="name">cancel</field>
+            <field name="string">Cancel</field>
+            <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
+        </record>
+
         <record model="ir.rule.group" id="rule_group_aeat347">
             <field name="model" search="[('model', '=', 'aeat.347.report')]"/>
             <field name="global_p" eval="True"/>
