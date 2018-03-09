@@ -314,9 +314,12 @@ class Report(Workflow, ModelSQL, ModelView):
                     pi.type as vat_code_type,
                     operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
-                    sum(case when month > 3 and month <= 6 then amount else 0 end) as second,
-                    sum(case when month > 6 and month <= 9 then amount else 0 end) as third,
-                    sum(case when month > 9 and month <= 12 then amount else 0 end) as fourth,
+                    sum(case when month > 3 and month <= 6
+                        then amount else 0 end) as second,
+                    sum(case when month > 6 and month <= 9
+                        then amount else 0 end) as third,
+                    sum(case when month > 9 and month <= 12
+                        then amount else 0 end) as fourth,
                     sum(amount) as total,
                     %s
                 FROM
@@ -378,8 +381,8 @@ class Report(Workflow, ModelSQL, ModelView):
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
-                        'community_vat': (country_code != 'ES' and vat_code_type
-                            and vat_code or ''),
+                        'community_vat': (country_code != 'ES'
+                            and vat_code_type and vat_code or ''),
                         'records': [('add', records)],
                     }
 
