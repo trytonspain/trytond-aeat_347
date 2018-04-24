@@ -20,8 +20,7 @@ Imports::
 
 Install account_invoice::
 
-    >>> config = activate_modules(['aeat_347', 'account_es',
-    ...     'account_es_normal_pyme', 'account_es_normal'])
+    >>> config = activate_modules(['aeat_347', 'account_es'])
 
 Create company::
 
