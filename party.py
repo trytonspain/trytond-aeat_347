@@ -16,7 +16,7 @@ class Party:
 
     include_347 = fields.Boolean('Include on 347', depends=['vat_country'])
 
-    @fields.depends('vat_country')
+    @fields.depends('vat_country', 'include_347')
     def on_change_with_include_347(self, name=None):
         if self.include_347:
             return True
