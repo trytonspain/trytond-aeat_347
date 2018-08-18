@@ -34,7 +34,7 @@ OPERATION_KEY = [
 
 def remove_accents(unicode_string):
     str_ = str if sys.version_info < (3, 0) else bytes
-    unicode_ = unicode if sys.version_info < (3, 0) else str
+    unicode_ = str if sys.version_info < (3, 0) else str
     if isinstance(unicode_string, str_):
         unicode_string_bak = unicode_string
         try:
@@ -51,7 +51,7 @@ def remove_accents(unicode_string):
     unicode_string_nfd = ''.join(
         (c for c in unicodedata.normalize('NFD', unicode_string)
             if (unicodedata.category(c) != 'Mn'
-                or c in (u'\u0327', u'\u0303'))
+                or c in ('\\u0327', '\\u0303'))
             ))
     # It converts nfd to nfc to allow unicode.decode()
     return unicodedata.normalize('NFC', unicode_string_nfd)
@@ -257,7 +257,7 @@ class Report(Workflow, ModelSQL, ModelView):
             res['property_amount'][report.id] = sum([x.amount for x in
                     report.properties]) or Decimal('0.0')
             res['property_count'][report.id] = len(report.properties)
-        for key in res.keys():
+        for key in list(res.keys()):
             if key not in names:
                 del res[key]
         return res
@@ -464,7 +464,7 @@ class Report(Workflow, ModelSQL, ModelView):
             records.append(record)
         data = retrofix_write(records)
         data = remove_accents(data).upper()
-        if isinstance(data, unicode):
+        if isinstance(data, str):
             data = data.encode('iso-8859-1')
         self.file_ = self.__class__.file_.cast(data)
         self.save()

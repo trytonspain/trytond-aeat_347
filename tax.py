@@ -6,8 +6,7 @@ from trytond.pool import PoolMeta
 __all__ = ['TaxTemplate', 'Tax']
 
 
-class TaxTemplate:
-    __metaclass__ = PoolMeta
+class TaxTemplate(metaclass=PoolMeta):
     __name__ = 'account.tax.template'
 
     include_347 = fields.Boolean('Include 347')
@@ -24,8 +23,7 @@ class TaxTemplate:
         return res
 
 
-class Tax:
-    __metaclass__ = PoolMeta
+class Tax(metaclass=PoolMeta):
     __name__ = 'account.tax'
 
     include_347 = fields.Boolean('Include 347')

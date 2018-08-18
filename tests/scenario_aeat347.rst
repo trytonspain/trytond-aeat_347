@@ -125,13 +125,13 @@ Create out invoice over limit::
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
-    u'Party'
+    'Party'
     >>> rec1.party_vat
-    u'00000000T'
+    '00000000T'
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
-    u'B'
+    'B'
     >>> rec1.amount == Decimal('3520.00')
     True
 
@@ -153,13 +153,13 @@ Create out invoice not over limit::
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
-    u'Party 2'
+    'Party 2'
     >>> rec1.party_vat
-    u'00000001R'
+    '00000001R'
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
-    u'B'
+    'B'
     >>> rec1.amount == Decimal('220.00')
     True
 
@@ -182,13 +182,13 @@ Create out credit note::
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
-    u'Party'
+    'Party'
     >>> rec1.party_vat
-    u'00000000T'
+    '00000000T'
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
-    u'B'
+    'B'
     >>> rec1.amount == Decimal('-88.00')
     True
 
@@ -213,13 +213,13 @@ Create in invoice::
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
-    u'Party'
+    'Party'
     >>> rec1.party_vat
-    u'00000000T'
+    '00000000T'
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
-    u'A'
+    'A'
     >>> rec1.amount == Decimal('137.50')
     True
 
@@ -244,13 +244,13 @@ Create in credit note::
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
     >>> rec1.party_name
-    u'Party'
+    'Party'
     >>> rec1.party_vat
-    u'00000000T'
+    '00000000T'
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
-    u'A'
+    'A'
     >>> rec1.amount == Decimal('-27.50')
     True
 

@@ -63,7 +63,7 @@ class Record(ModelSQL, ModelView):
             if address and address.zip:
                 province_code = address.zip.strip()[:2]
             res['province_code'][record.id] = province_code
-        for key in res.keys():
+        for key in list(res.keys()):
             if key not in names:
                 del res[key]
         return res
@@ -77,8 +77,7 @@ class Record(ModelSQL, ModelView):
                             [i.id for i in invoices])]))
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     include_347 = fields.Boolean('Include 347')
