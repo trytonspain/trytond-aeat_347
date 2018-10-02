@@ -221,6 +221,13 @@ class Report(Workflow, ModelSQL, ModelView):
         return '%s - %s' % (self.company.rec_name,
             self.fiscalyear.name)
 
+    @classmethod
+    def search_rec_name(self, name, clause):
+        return ['OR',
+           ('company.rec_name',) + tuple(clause[1:]),
+            ('fiscalyear.rec_name',) + tuple(clause[1:])
+        ]
+
     def get_currency(self, name):
         return self.company.currency.id
 
