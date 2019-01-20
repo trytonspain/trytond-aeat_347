@@ -138,12 +138,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="account.tax.template" id="account_es.iva_IC_compras_21_ser_2">
             <field name="include_347" eval="True"/>
         </record>
-        <record model="account.tax.template" id="account_es.suplido_compras">
-            <field name="include_347" eval="False"/>
-        </record>
-        <record model="account.tax.template" id="account_es.suplido_ventas">
-            <field name="include_347" eval="False"/>
-        </record>
         <record model="account.tax.template" id="account_es.igic_X0_compras_bc">
             <field name="include_347" eval="True"/>
         </record>
@@ -247,15 +241,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="include_347" eval="True"/>
         </record>
         <record model="account.tax.template" id="account_es.igic_IC_compras_13_5_bi_2">
-            <field name="include_347" eval="True"/>
-        </record>
-        <record model="account.tax.template" id="account_es.iva_reagp_compras_12">
-            <field name="include_347" eval="True"/>
-        </record>
-        <record model="account.tax.template" id="account_es.iva_reagp_compras_12_1">
-            <field name="include_347" eval="True"/>
-        </record>
-        <record model="account.tax.template" id="account_es.iva_reagp_compras_12_2">
             <field name="include_347" eval="True"/>
         </record>
         <record model="account.tax.template" id="account_es.iva_ISP_compras">
