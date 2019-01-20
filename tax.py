@@ -13,7 +13,7 @@ class TaxTemplate(metaclass=PoolMeta):
 
     @staticmethod
     def default_include_347():
-        return True
+        return False
 
     def _get_tax_value(self, tax=None):
         res = super(TaxTemplate, self)._get_tax_value(tax)
@@ -30,4 +30,4 @@ class Tax(metaclass=PoolMeta):
 
     @staticmethod
     def default_include_347():
-        return True
+        return False
