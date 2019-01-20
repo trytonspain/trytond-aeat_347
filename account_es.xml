@@ -243,6 +243,9 @@ this repository contains the full copyright notices and license terms. -->
         <record model="account.tax.template" id="account_es.igic_IC_compras_13_5_bi_2">
             <field name="include_347" eval="True"/>
         </record>
+        <record model="account.tax.template" id="account_es.iva_reagp_compras_12_1">
+            <field name="include_347" eval="True"/>
+        </record>
         <record model="account.tax.template" id="account_es.iva_ISP_compras">
             <field name="include_347" eval="True"/>
         </record>
