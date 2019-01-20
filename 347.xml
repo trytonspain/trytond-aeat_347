@@ -250,13 +250,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="include_347" eval="True"/>
         </record>
         <record model="account.tax.template" id="account_es.iva_reagp_compras_12">
-            <field name="include_347" eval="True"/>
+            <field name="include_347" eval="False"/>
         </record>
         <record model="account.tax.template" id="account_es.iva_reagp_compras_12_1">
             <field name="include_347" eval="True"/>
         </record>
         <record model="account.tax.template" id="account_es.iva_reagp_compras_12_2">
-            <field name="include_347" eval="True"/>
+            <field name="include_347" eval="False"/>
         </record>
         <record model="account.tax.template" id="account_es.iva_ISP_compras">
             <field name="include_347" eval="True"/>
