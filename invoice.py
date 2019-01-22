@@ -156,7 +156,9 @@ class Invoice:
 
         amount = 0
         for tax in self.taxes:
-            if tax.tax.include_347:
+            if tax.tax.include_347 and tax.tax.recargo_equivalencia:
+                amount += tax.amount
+            elif tax.tax.include_347:
                 amount += (tax.base + tax.amount)
         if amount > self.total_amount:
             amount = self.total_amount
