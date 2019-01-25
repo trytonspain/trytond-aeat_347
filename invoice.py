@@ -162,6 +162,12 @@ class Invoice:
                     self.company.currency, round=True)
         return amount
 
+    def check_347_taxes(self):
+        for tax in self.taxes:
+            if not tax.tax.include_347:
+                return False
+        return True
+
     @classmethod
     def create_aeat347_records(cls, invoices):
         Record = Pool().get('aeat.347.record')
@@ -170,6 +176,9 @@ class Invoice:
         for invoice in invoices:
             if (not invoice.move or invoice.state == 'cancel' or
                     not invoice.include_347):
+                continue
+            if not invoice.check_347_taxes():
+                to_update.append(invoice)
                 continue
             if invoice.aeat347_operation_key:
                 operation_key = invoice.aeat347_operation_key
