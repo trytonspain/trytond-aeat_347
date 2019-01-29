@@ -174,7 +174,7 @@ class Invoice(metaclass=PoolMeta):
         Period = pool.get('account.period')
 
         to_create = {}
-        to_update = ()
+        to_update = []
         for invoice in invoices:
             if (not invoice.move or invoice.state == 'cancel' or
                     not invoice.include_347):
