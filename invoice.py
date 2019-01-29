@@ -118,15 +118,15 @@ class Invoice:
             table_line.drop_column('include_347')
             table_line.drop_column('aeat347_operation_key')
 
-    @staticmethod
-    def default_include_347():
-        return True
+    def on_change_party(self):
+        super(Invoice, self).on_change_party()
+        self.include_347 = self.on_change_with_include_347()
+        self.aeat347_operation_key = \
+            self.on_change_with_aeat347_operation_key()
 
     @fields.depends('party')
     def on_change_with_include_347(self, name=None):
-        if self.party:
-            return self.party.include_347
-        return True
+        return self.party.include_347 if self.party else False
 
     @fields.depends('type', 'aeat347_operation_key', 'include_347')
     def on_change_with_aeat347_operation_key(self):
@@ -170,9 +170,12 @@ class Invoice:
 
     @classmethod
     def create_aeat347_records(cls, invoices):
-        Record = Pool().get('aeat.347.record')
-        to_create = {}
+        pool = Pool()
+        Record = pool.get('aeat.347.record')
+        Period = pool.get('account.period')
 
+        to_create = {}
+        to_update = []
         for invoice in invoices:
             if (not invoice.move or invoice.state == 'cancel' or
                     not invoice.include_347):
@@ -187,9 +190,17 @@ class Invoice:
                 if invoice.type in ('out_credit_note', 'in_credit_note'):
                     amount *= -1
 
+                if invoice.type in ('in_invoice', 'in_credit_note'):
+                    period_id = Period.find(
+                        invoice.company.id, date=invoice.invoice_date)
+                    period = Period(period_id)
+                    fiscalyear = period.fiscalyear
+                else:
+                    fiscalyear = invoice.move.period.fiscalyear
+
                 to_create[invoice.id] = {
                     'company': invoice.company.id,
-                    'fiscalyear': invoice.move.period.fiscalyear,
+                    'fiscalyear': fiscalyear,
                     'month': invoice.invoice_date.month,
                     'party': invoice.party.id,
                     'amount': amount,
@@ -198,17 +209,39 @@ class Invoice:
                     }
 
         Record.delete_record(invoices)
+        cls.write(to_update, {
+                'aeat347_operation_key': None,
+                'include_347': False,
+                })
         with Transaction().set_user(0, set_context=True):
             Record.create(to_create.values())
 
     @classmethod
     def create(cls, vlist):
+        Party = Pool().get('party.party')
+
+        vlist = [x.copy() for x in vlist]
+
+        party_ids = set()
         for vals in vlist:
+            if 'include_347' not in vals:
+                party_ids.add(vals['party'])
+
+        if party_ids:
+            with Transaction().set_context(active_test=False):
+                parties = dict([(x.id, x.include_347) for x in Party.search([
+                            ('id', 'in', list(party_ids))])])
+
+        for vals in vlist:
+            if 'include_347' not in vals:
+                party_id = vals['party']
+                vals['include_347'] = parties[party_id]
             if not vals.get('include_347', True):
                 continue
             invoice_type = vals.get('type', 'out_invoice')
             vals['aeat347_operation_key'] = cls.get_aeat347_operation_key(
                 invoice_type)
+
         return super(Invoice, cls).create(vlist)
 
     @classmethod
