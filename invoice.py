@@ -150,7 +150,8 @@ class Invoice:
 
         amount = 0
         for tax in self.taxes:
-            if tax.tax.include_347 and tax.tax.recargo_equivalencia:
+            if tax.tax.include_347 and (hasattr(tax.tax, 'recargo_equivalencia')
+                    and tax.tax.recargo_equivalencia):
                 amount += tax.amount
             elif tax.tax.include_347:
                 amount += (tax.base + tax.amount)
