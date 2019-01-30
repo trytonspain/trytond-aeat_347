@@ -46,8 +46,10 @@ Create chart of accounts::
 Create tax::
 
     >>> tax = create_tax(Decimal('.10'))
+    >>> tax.include_347 = True
     >>> tax.save()
     >>> tax2 = create_tax(Decimal('.10'))
+    >>> tax2.include_347 = True
     >>> tax2.save()
 
 Create party::
