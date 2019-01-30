@@ -60,6 +60,7 @@ Create tax::
 
     >>> Tax = Model.get('account.tax')
     >>> tax = set_tax_code(create_tax(Decimal('.10')))
+    >>> tax.include_347 = True
     >>> tax.save()
 
 Create party::
