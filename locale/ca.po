@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:aeat.347.report:"
-msgid "Currency in AEAT 347 report \"%s\" must be Euro."
-msgstr "La moneda de l'informe AEAT 347 \"%s\" ha de ser Euro."
-
 msgctxt "field:account.invoice,aeat347_operation_key:"
 msgid "AEAT 347 Operation Key"
 msgstr "Clau operació AEAT 347"
@@ -695,6 +691,10 @@ msgstr "Reassigna registres AEAT 347"
 msgctxt "model:ir.action.wizard,name:act_aeat_347_recalculate"
 msgid "Recalculate AEAT 347 Records"
 msgstr "Recalcula registres AEAT 347"
+
+msgctxt "model:ir.message,text:invalid_currency"
+msgid "Currency in AEAT 347 report \"%(report)s\" must be Euro."
+msgstr "La moneda de l'informe AEAT 347 \"%(report)s\" ha de ser Euro."
 
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_record"
 msgid "AEAT 347 Record"

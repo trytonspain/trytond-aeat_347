@@ -13,6 +13,8 @@ from trytond.model import Workflow, ModelSQL, ModelView, fields
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval, Not
 from trytond.transaction import Transaction
+from trytond.i18n import gettext
+from trytond.exceptions import UserError
 
 __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 
@@ -150,10 +152,6 @@ class Report(Workflow, ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Report, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_currency': ('Currency in AEAT 347 report "%s" must be'
-                    ' Euro.'),
-                })
         cls._buttons.update({
                 'draft': {
                     'invisible': ~Eval('state').in_(['calculated',
@@ -287,7 +285,8 @@ class Report(Workflow, ModelSQL, ModelView):
 
     def check_euro(self):
         if self.currency.code != 'EUR':
-            self.raise_user_error('invalid_currency', self.rec_name)
+            raise UserError(gettext('aeat_347.invalid_currency',
+                report=self.rec_name))
 
     @staticmethod
     def aggregate_function():
