@@ -219,7 +219,7 @@ class Invoice(metaclass=PoolMeta):
     def check_modify(cls, invoices):
         check =Transaction().context.get('check_modify_invoice', True)
         if check:
-            super(Invoice, cls).check_modify()
+            super(Invoice, cls).check_modify(invoices)
 
     @classmethod
     def create(cls, vlist):
