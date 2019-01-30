@@ -207,12 +207,19 @@ class Invoice:
                     }
 
         Record.delete_record(invoices)
-        cls.write(to_update, {
-                'aeat347_operation_key': None,
-                'include_347': False,
-                })
+        with Transaction().set_context(check_modify_invoice=False):
+            cls.write(to_update, {
+                    'aeat347_operation_key': None,
+                    'include_347': False,
+                    })
         with Transaction().set_user(0, set_context=True):
             Record.create(to_create.values())
+
+    @classmethod
+    def check_modify(cls, invoices):
+        check =Transaction().context.get('check_modify_invoice', True)
+        if check:
+            super(Invoice, cls).check_modify()
 
     @classmethod
     def create(cls, vlist):
