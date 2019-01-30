@@ -135,6 +135,7 @@ Create tax::
     >>> credit_note_tax_code = TaxCode(name='credit note tax')
     >>> credit_note_tax_code.save()
     >>> tax.credit_note_tax_code = credit_note_tax_code
+    >>> tax.include_347 = True
     >>> tax.save()
     >>> tax.reload()
 
@@ -366,8 +367,8 @@ Reassign 347 lines::
     >>> reasign = Wizard('aeat.347.reasign.records', models=[invoice])
     >>> reasign.form.include_347 = False
     >>> reasign.execute('reasign')
-    >>> line.reload()
-    >>> bool(line.include_347)
+    >>> invoice.reload()
+    >>> bool(invoice.include_347)
     False
-    >>> line.aeat347_operation_key == None
+    >>> invoice.aeat347_operation_key == None
     True

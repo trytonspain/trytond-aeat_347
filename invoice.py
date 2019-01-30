@@ -119,10 +119,13 @@ class Invoice:
             table_line.drop_column('aeat347_operation_key')
 
     def on_change_party(self):
-        super(Invoice, self).on_change_party()
-        self.include_347 = self.on_change_with_include_347()
-        self.aeat347_operation_key = \
-            self.on_change_with_aeat347_operation_key()
+        res = super(Invoice, self).on_change_party()
+        if self.on_change_with_include_347():
+            res['include_347'] = True
+            res['aeat347_operation_key'] = (self.aeat347_operation_key
+                if hasattr(self, 'aeat347_operation_key') and self.aeat347_operation_key
+                else self.get_aeat347_operation_key(self.type))
+        return res
 
     @fields.depends('party')
     def on_change_with_include_347(self, name=None):
@@ -150,7 +153,8 @@ class Invoice:
 
         amount = 0
         for tax in self.taxes:
-            if tax.tax.include_347 and tax.tax.recargo_equivalencia:
+            if tax.tax.include_347 and (hasattr(tax.tax, 'recargo_equivalencia')
+                    and tax.tax.recargo_equivalencia):
                 amount += tax.amount
             elif tax.tax.include_347:
                 amount += (tax.base + tax.amount)
