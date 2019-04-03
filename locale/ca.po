@@ -10,11 +10,11 @@ msgctxt "field:account.invoice,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
-msgctxt "field:account.invoice.tax,include_347:"
+msgctxt "field:account.tax,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
-msgctxt "field:account.tax,include_347:"
+msgctxt "field:account.tax.template,include_347:"
 msgid "Include 347"
 msgstr "Incloure al 347"
 
@@ -103,7 +103,7 @@ msgid "Province Code"
 msgstr "Codi província"
 
 msgctxt "field:aeat.347.record,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:aeat.347.record,write_date:"
@@ -215,7 +215,7 @@ msgid "Property Record Count"
 msgstr "Nombre de registres de propietat"
 
 msgctxt "field:aeat.347.report,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:aeat.347.report,received_cash_limit:"
@@ -335,7 +335,7 @@ msgid "Province Code"
 msgstr "Codi província"
 
 msgctxt "field:aeat.347.report.party,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:aeat.347.report.party,records:"
@@ -463,7 +463,7 @@ msgid "Province Code"
 msgstr "Codi província"
 
 msgctxt "field:aeat.347.report.property,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:aeat.347.report.property,report:"
@@ -506,6 +506,18 @@ msgctxt "field:party.party,include_347:"
 msgid "Include on 347"
 msgstr "Incloure al 347"
 
+msgctxt "help:aeat.347.report,contact_name:"
+msgid ""
+"The full name must appear in a correct order: First surname, blank space, "
+"Second surname, blank space, Name"
+msgstr ""
+"Se consignará el primer apellido, un espacio, el segundo apellido, un "
+"espacio y el nombre completo, necesariamente en este ordden."
+
+msgctxt "help:aeat.347.report,group_by_vat:"
+msgid "Registers will be grouped by party VAT number instead of party."
+msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
+
 msgctxt "help:aeat.347.report,on_behalf_third_party_limit:"
 msgid ""
 "The declaration will include parties from which we received payments, on "
@@ -527,10 +539,6 @@ msgid "The declaration will show the total of cash operations over this limit"
 msgstr ""
 "La declaració mostrarà les operacions d'efectiu amb import total superior a "
 "aquest límit."
-
-msgctxt "help:aeat.347.report,group_by_vat:"
-msgid "Registers will be grouped by party VAT number instead of party."
-msgstr "Els registres seran agrupats per CIF/NIF i no per companyia"
 
 msgctxt "help:aeat.347.report,representative_vat:"
 msgid "Legal Representative VAT number."
@@ -603,14 +611,6 @@ msgstr "Complement (urbanització, parc industrial, ...)."
 msgctxt "help:aeat.347.report.property,representative_vat:"
 msgid "Legal Representative VAT number"
 msgstr "NIF del representant legal."
-
-msgctxt "help:aeat.347.report,contact_name:"
-msgid ""
-"The full name must appear in a correct order: First surname, blank space, "
-"Second surname, blank space, Name"
-msgstr ""
-"Se consignará el primer apellido, un espacio, el segundo apellido, un espacio "
-"y el nombre completo, necesariamente en este ordden."
 
 msgctxt "model:aeat.347.reasign.records.end,name:"
 msgid "Reasign AEAT 347 Records End"
@@ -696,6 +696,38 @@ msgctxt "model:ir.message,text:invalid_currency"
 msgid "Currency in AEAT 347 report \"%(report)s\" must be Euro."
 msgstr "La moneda de l'informe AEAT 347 \"%(report)s\" ha de ser Euro."
 
+msgctxt "model:ir.model.button,string:aeat_347_report_calculate_button"
+msgid "Calculate"
+msgstr "Calcula"
+
+msgctxt "model:ir.model.button,string:aeat_347_report_cancel_button"
+msgid "Cancel"
+msgstr "Cancel·lat"
+
+msgctxt "model:ir.model.button,string:aeat_347_report_draft_button"
+msgid "Draft"
+msgstr "Esborrany"
+
+msgctxt "model:ir.model.button,string:aeat_347_report_process_button"
+msgid "Process"
+msgstr "Processa"
+
+msgctxt "model:ir.rule.group,name:rule_group_aeat347"
+msgid "Aeat 347"
+msgstr "Aeat 347"
+
+msgctxt "model:ir.rule.group,name:rule_group_aeat347_party"
+msgid "Aeat 347 Party"
+msgstr "Tercer Aeat 347"
+
+msgctxt "model:ir.rule.group,name:rule_group_aeat347_property"
+msgid "Aeat 347 Property"
+msgstr "Propietat Aeat 347"
+
+msgctxt "model:ir.rule.group,name:rule_group_aeat347_record"
+msgid "Aeat 347 Record"
+msgstr "Registre Aeat 347"
+
 msgctxt "model:ir.ui.menu,name:menu_aeat_347_record"
 msgid "AEAT 347 Record"
 msgstr "Registres AEAT 347"
@@ -715,10 +747,6 @@ msgstr "Registres propietat AEAT 347"
 msgctxt "model:res.group,name:group_aeat_347_admin"
 msgid "Aeat_347 Administration"
 msgstr "Administració AEAT 347"
-
-msgctxt "selection:account.invoice,aeat347_operation_key:"
-msgid ""
-msgstr ""
 
 msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
