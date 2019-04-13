@@ -11,10 +11,6 @@ contains the full copyright notices and license terms. -->
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_aeat_347_admin"/>
         </record>
-        <record model="res.user-res.group" id="user_trigger_group_aeat_347_admin">
-            <field name="user" ref="res.user_trigger"/>
-            <field name="group" ref="group_aeat_347_admin"/>
-        </record>
         <record model="ir.ui.view" id="aeat_347_party_record_form_view">
             <field name="model">aeat.347.report.party</field>
             <field name="type">form</field>
