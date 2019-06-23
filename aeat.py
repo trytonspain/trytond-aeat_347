@@ -337,7 +337,7 @@ class Report(Workflow, ModelSQL, ModelView):
                 WHERE
                     r.party = p.id and
                     r.fiscalyear = %s and
-                    (pi.type = 'eu_vat' or pi.type is Null)
+                    (p.include_347 = true)
                 GROUP BY
                     r.party, pi.code, pi.type, r.operation_key, p.name
                 HAVING
