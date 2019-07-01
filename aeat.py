@@ -318,8 +318,6 @@ class Report(Workflow, ModelSQL, ModelView):
             query = """
                 SELECT
                     r.party,
-                    pi.code as vat_code,
-                    pi.type as vat_code_type,
                     operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6
@@ -331,15 +329,13 @@ class Report(Workflow, ModelSQL, ModelView):
                     sum(amount) as total,
                     %s
                 FROM
-                    aeat_347_record r
-                    LEFT JOIN party_identifier pi on r.party = pi.party,
-                    party_party p
+                    aeat_347_record as r
+                LEFT JOIN party_party as p on p.id = r.party
                 WHERE
-                    r.party = p.id and
                     r.fiscalyear = %s and
                     (p.include_347 = true)
                 GROUP BY
-                    r.party, pi.code, pi.type, r.operation_key, p.name
+                    r.party, r.operation_key, p.name
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
@@ -348,14 +344,44 @@ class Report(Workflow, ModelSQL, ModelView):
             result = cursor.fetchall()
 
             party_ids = [r[0] for r in result]
-            parties = dict((p.id, p) for p in Party.browse(party_ids))
+            parties = dict((p, {}) for p in party_ids)
+            for party in Party.browse(party_ids):
+                code = country_code = vat_code_type = None
+                if party.tax_identifier:
+                    vat_code_type = party.tax_identifier.type
+                    if party.tax_identifier.type == 'eu_vat':
+                        code, country_code = (party.tax_identifier.code[2:],
+                            party.tax_identifier.code[:2])
+                    else:
+                        code, country_code = (party.tax_identifier.code,
+                            party.tax_identifier.type[:2].upper())
+
+                address = party.address_get(type='invoice')
+                if not country_code:
+                    if address and address.country:
+                        country_code = address.country.code
+                if address and address.zip and country_code == 'ES':
+                    province_code = address.zip.strip()[:2]
+                else:
+                    province_code = '99'
+
+                parties[party.id] = {
+                    'name': party.name[:38],
+                    'code': code,
+                    'country_code': country_code,
+                    'vat_code_type': vat_code_type,
+                    'province_code': province_code,
+                    }
 
             to_create = {}
-            for (party, vat_code, vat_code_type, opkey, q1, q2, q3, q4, amount,
-                    records) in result:
-                code = country_code = None
-                if vat_code_type == 'eu_vat':
-                    code, country_code = (vat_code[2:], vat_code[:2])
+            for (party, opkey, q1, q2, q3, q4, amount, records) in result:
+                p = parties[party]
+                name = p['name']
+                code = p['code']
+                country_code = p['country_code']
+                vat_code_type = p['vat_code_type']
+                province_code = p['province_code']
+
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
@@ -369,28 +395,18 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key]['records'] = [('add',
                         to_create[key]['records'][0][1] + records)]
                 else:
-                    p = parties[party]
-                    address = p.address_get(type='invoice')
-                    if not country_code:
-                        if address and address.country:
-                            country_code = address.country.code
-                    if address and address.zip and country_code == 'ES':
-                        province_code = address.zip.strip()[:2]
-                    else:
-                        province_code = '99'
-
                     to_create[key] = {
                         'amount': is_decimal(amount),
                         'cash_amount': _ZERO,
                         'party_vat': (country_code == 'ES' and code and
                             code[:9] or ''),
-                        'party_name': p.name[:38],
+                        'party_name': name,
                         'country_code': country_code,
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
                         'community_vat': (country_code != 'ES'
-                            and vat_code_type and vat_code or ''),
+                            and vat_code_type and code or ''),
                         'records': [('add', records)],
                     }
 
