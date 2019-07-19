@@ -3,7 +3,7 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta
 
-__all__ = ['TaxTemplate', 'Tax']
+__all__ = ['TaxTemplate', 'Tax', 'TaxRuleTemplate', 'TaxRule']
 
 
 class TaxTemplate:
@@ -27,6 +27,34 @@ class TaxTemplate:
 class Tax:
     __metaclass__ = PoolMeta
     __name__ = 'account.tax'
+
+    include_347 = fields.Boolean('Include 347')
+
+    @staticmethod
+    def default_include_347():
+        return False
+
+class TaxRuleTemplate:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.tax.rule.template'
+
+    include_347 = fields.Boolean('Include 347')
+
+    @staticmethod
+    def default_include_347():
+        return False
+
+    def _get_tax_rule_value(self, rule=None):
+        res = super(TaxRuleTemplate, self)._get_tax_rule_value(rule)
+
+        if not rule or rule.include_347 != self.include_347:
+            res['include_347'] = self.include_347
+        return res
+
+
+class TaxRule:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.tax.rule'
 
     include_347 = fields.Boolean('Include 347')
 
