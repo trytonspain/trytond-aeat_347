@@ -8,5 +8,101 @@ contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account.tax_view_form"/>
             <field name="name">tax_form</field>
         </record>
+
+        <record model="ir.ui.view" id="tax_rule_view_form">
+            <field name="model">account.tax.rule</field>
+            <field name="inherit" ref="account.tax_rule_view_form"/>
+            <field name="name">tax_rule_form</field>
+        </record>
+    </data>
+
+    <data depends="account_es" grouped="1">
+        <record model="account.tax.rule.template" id="account_es.fp_nacional">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="fp_nacional_wo_347">
+            <field name="name">Régimen Nacional (Sin 347)</field>
+            <field name="account" ref="account_es.pgc_0"/>
+            <field name="kind">both</field>
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_recargo">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_extra">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_intra">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_intra_serv">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf37">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf35">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf21">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf20">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf20a">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf195">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf195a">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf19">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf19a">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf18">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf15">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf9">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf7">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf2">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_irpf1">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_recc">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_reagp">
+            <field name="include_347" eval="False"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_exento">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_exento_ter_rus">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_exento_asis">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_isp_reciclaje">
+            <field name="include_347" eval="True"/>
+        </record>
+        <record model="account.tax.rule.template" id="account_es.fp_isp_obra">
+            <field name="include_347" eval="True"/>
+        </record>
     </data>
 </tryton>
