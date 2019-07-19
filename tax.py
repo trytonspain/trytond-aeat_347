@@ -43,7 +43,7 @@ class TaxRuleTemplate(metaclass=PoolMeta):
         return False
 
     def _get_tax_rule_value(self, rule=None):
-        res = super(TaxRuleTemplate, self)._get_tax_value(rule)
+        res = super(TaxRuleTemplate, self)._get_tax_rule_value(rule)
 
         if not rule or rule.include_347 != self.include_347:
             res['include_347'] = self.include_347
