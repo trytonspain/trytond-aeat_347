@@ -83,9 +83,6 @@ contains the full copyright notices and license terms. -->
         <record model="account.tax.rule.template" id="account_es.fp_irpf1">
             <field name="include_347" eval="False"/>
         </record>
-        <record model="account.tax.rule.template" id="account_es.fp_recc">
-            <field name="include_347" eval="True"/>
-        </record>
         <record model="account.tax.rule.template" id="account_es.fp_reagp">
             <field name="include_347" eval="False"/>
         </record>
