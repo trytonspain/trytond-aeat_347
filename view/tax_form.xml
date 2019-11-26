@@ -4,7 +4,7 @@ contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='general']/field[@name='credit_note_account']" position="after">
         <newline/>
-        <label name="include_347"/>
-        <field name="include_347"/>
+        <label name="operation_347"/>
+        <field name="operation_347"/>
     </xpath>
 </data>

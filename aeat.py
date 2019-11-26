@@ -21,6 +21,7 @@ __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 _ZERO = Decimal('0.0')
 
 OPERATION_KEY = [
+    ('none', 'Leave Empty'),
     ('A', 'A - Good and service adquisitions above limit (1)'),
     ('B', 'B - Good and service deliveries above limit (1)'),
     ('C', 'C - Money collection on behavlf of third parties above '
@@ -330,12 +331,10 @@ class Report(Workflow, ModelSQL, ModelView):
                     %s
                 FROM
                     aeat_347_record as r
-                LEFT JOIN party_party as p on p.id = r.party
                 WHERE
-                    r.fiscalyear = %s and
-                    (p.include_347 = true)
+                    r.fiscalyear = %s
                 GROUP BY
-                    r.party, r.operation_key, p.name
+                    r.party, r.operation_key
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
