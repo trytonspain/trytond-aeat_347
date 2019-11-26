@@ -2,10 +2,8 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='info']/field[@name='cancel_move']" position="after">
+    <xpath expr="/form/notebook/page[@id='info']/separator[@name='comment']" position="before">
         <group col="4" colspan="4" id="aeat_347">
-            <label name="include_347"/>
-            <field name="include_347"/>
             <label name="aeat347_operation_key"/>
             <field name="aeat347_operation_key"/>
         </group>
