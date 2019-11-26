@@ -22,7 +22,7 @@ msgctxt "field:aeat.347.reasign.records.end,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "field:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "Operation Key"
 msgstr "Clau operació"
 
@@ -778,37 +778,37 @@ msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "G - Compres a agències de viatge"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisicions de bens i serveis superiors al límit (1)"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "B - Good and service deliveries above limit (1)"
 msgstr "B - Entregues de bens i serveis superiors al límit (1)"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "C - Money collection on behavlf of third parties above limit (3)"
 msgstr "C - Cobraments per compte de tercers superiors al límit (3)"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "D - Adquisitions by Public Institutions (...) above limit (1)"
 msgstr ""
 "D - Adquisicions d'institucions públiques (...) superiors al límit (1)"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "E - Grants and help made by public institutions above limit (1)"
 msgstr ""
 "E - Ajudes i subvencions d'administracions públiques superiors al límit (1)"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "F - Travel Agency Sales"
 msgstr "F - Vendes a agències de viatge"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "G - Travel Agency Purchases"
 msgstr "G - Compres a agències de viatge"
 
-msgctxt "selection:aeat.347.reasign.records.start,aeat_347_operation_key:"
+msgctxt "selection:aeat.347.reasign.records.start,aeat347_operation_key:"
 msgid "Leave Empty"
 msgstr "Deixar en blanc"
 
