@@ -4,14 +4,11 @@
 from trytond.pool import Pool
 from . import aeat
 from . import invoice
-from . import party
 from . import tax
 
 
 def register():
     Pool.register(
-        party.Party,
-        party.PartyIdentifier,
         aeat.Report,
         aeat.PartyRecord,
         aeat.PropertyRecord,
@@ -23,8 +20,6 @@ def register():
         invoice.Reasign347RecordEnd,
         tax.TaxTemplate,
         tax.Tax,
-        tax.TaxRuleTemplate,
-        tax.TaxRule,
         module='aeat_347', type_='model')
     Pool.register(
         invoice.Recalculate347Record,
