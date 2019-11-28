@@ -21,7 +21,7 @@ __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 _ZERO = Decimal('0.0')
 
 OPERATION_KEY = [
-    ('none', 'Leave Empty'),
+    (None, 'Leave Empty'),
     ('A', 'A - Good and service adquisitions above limit (1)'),
     ('B', 'B - Good and service deliveries above limit (1)'),
     ('C', 'C - Money collection on behavlf of third parties above '
