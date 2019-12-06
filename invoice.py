@@ -280,7 +280,6 @@ class Reasign347RecordStart(ModelView):
 
     aeat347_operation_key = fields.Selection(OPERATION_KEY, 'Operation Key',
         required=True)
-    include_347 = fields.Boolean('Include 347')
 
     @staticmethod
     def default_aeat347_operation_key():
@@ -323,5 +322,4 @@ class Reasign347Record(Wizard):
                 values=[value], where=In(invoice.id, invoice_ids)))
 
         Invoice.create_aeat347_records(invoices)
-
         return 'done'
