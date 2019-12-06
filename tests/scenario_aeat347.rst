@@ -46,29 +46,24 @@ Create chart of accounts::
 Create tax::
 
     >>> tax = create_tax(Decimal('.10'))
-    >>> tax.include_347 = True
+    >>> tax.operation_347 = 'base_amount'
     >>> tax.save()
     >>> tax2 = create_tax(Decimal('.10'))
-    >>> tax2.include_347 = True
+    >>> tax2.operation_347 = 'base_amount'
     >>> tax2.save()
 
 Create party::
 
     >>> Party = Model.get('party.party')
     >>> party = Party(name='Party')
-    >>> party.include_347 = True
     >>> identifier = party.identifiers.new()
     >>> identifier.type = 'eu_vat'
     >>> identifier.code = 'ES00000000T'
-    >>> bool(party.include_347)
-    True
     >>> party.save()
     >>> party2 = Party(name='Party 2')
     >>> identifier = party2.identifiers.new()
     >>> identifier.type = 'eu_vat'
     >>> identifier.code = 'ES00000001R'
-    >>> bool(party2.include_347)
-    True
     >>> party2.save()
 
 Create account category::
@@ -113,8 +108,6 @@ Create out invoice over limit::
     >>> Invoice = Model.get('account.invoice')
     >>> invoice = Invoice()
     >>> invoice.party = party
-    >>> bool(invoice.include_347)
-    True
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -141,8 +134,6 @@ Create out invoice not over limit::
 
     >>> invoice = Invoice()
     >>> invoice.party = party2
-    >>> bool(invoice.include_347)
-    True
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -170,8 +161,6 @@ Create out credit note::
     >>> invoice = Invoice()
     >>> invoice.type = 'out'
     >>> invoice.party = party
-    >>> bool(invoice.include_347)
-    True
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -198,8 +187,6 @@ Create in invoice::
 
     >>> invoice = Invoice()
     >>> invoice.party = party
-    >>> bool(invoice.include_347)
-    True
     >>> invoice.type = 'in'
     >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
@@ -230,8 +217,6 @@ Create in credit note::
     >>> invoice = Invoice()
     >>> invoice.type = 'in'
     >>> invoice.party = party
-    >>> bool(invoice.include_347)
-    True
     >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
@@ -282,9 +267,6 @@ Generate 347 Report::
 Reassign 347 lines::
 
     >>> reasign = Wizard('aeat.347.reasign.records', models=[invoice])
-    >>> reasign.form.include_347 = False
     >>> reasign.execute('reasign')
     >>> invoice.reload()
-    >>> bool(invoice.include_347)
-    False
     >>> invoice.aeat347_operation_key
