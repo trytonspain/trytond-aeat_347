@@ -59,7 +59,7 @@ def remove_accents(unicode_string):
 class Report(Workflow, ModelSQL, ModelView):
     'AEAT 347 Report'
     __name__ = "aeat.347.report"
-    _rec_name = "fiscalyear_code"
+    _rec_name = "fiscalyear"
 
     company = fields.Many2One('company.company', 'Company', required=True,
         states={
@@ -219,8 +219,26 @@ class Report(Workflow, ModelSQL, ModelView):
             Transaction().context.get('company'), exception=False)
 
     def get_rec_name(self, name):
-        return '%s - %s' % (self.company.rec_name,
+        return '%s - %s' % (str(self.id),
             self.fiscalyear.name)
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        search = super(Report, cls).search_rec_name(name, clause)
+        try:
+            search_id = int(clause[2].replace('%', ''))
+        except:
+            search_id = None
+        if clause[1].startswith('!') or clause[1].startswith('not '):
+            clause_id = '!='
+        else:
+            clause_id = '='
+        if search_id:
+            search = ['OR',
+                search[0],
+                ('id', clause_id, search_id)
+                ]
+        return search
 
     def get_currency(self, name):
         return self.company.currency.id
