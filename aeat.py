@@ -256,13 +256,13 @@ class Report(Workflow, ModelSQL, ModelView):
         for name in ('party_amount', 'cash_amount', 'property_amount'):
             res[name] = dict.fromkeys([x.id for x in reports], _ZERO)
         for report in reports:
-            res['party_amount'][report.id] = sum([x.amount for x in
-                    report.parties]) or Decimal('0.0')
+            res['party_amount'][report.id] = Decimal(sum([x.amount for x in
+                    report.parties if x.amount is not None]))
             res['party_count'][report.id] = len(report.parties)
-            res['cash_amount'][report.id] = sum([x.cash_amount for x in
-                    report.parties]) or Decimal('0.0')
-            res['property_amount'][report.id] = sum([x.amount for x in
-                    report.properties]) or Decimal('0.0')
+            res['cash_amount'][report.id] = Decimal(sum([x.cash_amount for x in
+                    report.parties if x.cash_amount is not None]))
+            res['property_amount'][report.id] = Decimal(sum([x.amount for x in
+                    report.properties if x.amount is not None]))
             res['property_count'][report.id] = len(report.properties)
         for key in res.keys():
             if key not in names:
