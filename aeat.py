@@ -561,6 +561,47 @@ class PartyRecord(ModelSQL, ModelView):
     def default_company():
         return Transaction().context.get('company')
 
+    @staticmethod
+    def default_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_cash_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_first_quarter_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_second_quarter_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_third_quarter_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_fourth_quarter_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_first_quarter_property_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_second_quarter_property_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_third_quarter_property_amount():
+        return Decimal('0.0')
+
+    @staticmethod
+    def default_fourth_quarter_property_amount():
+        return Decimal('0.0')
+
+
     def get_record(self):
         record = Record(aeat347.PARTY_RECORD)
         record.party_nif = self.party_vat
