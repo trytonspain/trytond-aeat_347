@@ -94,9 +94,9 @@ class Invoice(metaclass=PoolMeta):
             table.drop_column('include_347')
         cursor.execute(*sql_table.update(
                 columns=[sql_table.aeat347_operation_key],
-                values=['none'],
+                values=[None],
                 where=(sql_table.aeat347_operation_key == '')
-                | (sql_table.aeat347_operation_key == None)))
+                | (sql_table.aeat347_operation_key == 'none')))
 
     @classmethod
     def __setup__(cls):
