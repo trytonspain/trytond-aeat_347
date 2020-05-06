@@ -270,3 +270,4 @@ Reassign 347 lines::
     >>> reasign.execute('reasign')
     >>> invoice.reload()
     >>> invoice.aeat347_operation_key
+    'A'
