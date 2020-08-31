@@ -167,7 +167,7 @@ class Invoice(metaclass=PoolMeta):
         to_create = {}
         to_update = []
         for invoice in invoices:
-            if (not invoice.move or invoice.state == 'cancel'):
+            if (not invoice.move or invoice.state == 'cancelled'):
                 continue
             if not invoice.check_347_taxes():
                 invoice.aeat347_operation_key = None
