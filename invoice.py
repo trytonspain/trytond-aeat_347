@@ -143,10 +143,11 @@ class Invoice(metaclass=PoolMeta):
     def check_347_taxes(self):
         include = False
         for tax in self.taxes:
-            if tax.tax.operation_347 == 'exclude_invoice':
-                return False
-            if tax.tax.operation_347 != 'ignore':
-                include = True
+            if tax.tax:
+                if tax.tax.operation_347 == 'exclude_invoice':
+                    return False
+                if tax.tax.operation_347 != 'ignore':
+                    include = True
         return include
 
     @fields.depends('type', 'aeat347_operation_key')
