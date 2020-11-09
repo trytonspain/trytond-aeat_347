@@ -14,13 +14,8 @@ class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
     include_347 = fields.Boolean('Include on 347', depends=['identifiers'])
 
-    @fields.depends('identifiers', 'include_347', 'customer_tax_rule',
-        'supplier_tax_rule')
+    @fields.depends('identifiers', 'include_347')
     def on_change_with_include_347(self, name=None):
-        if ((self.customer_tax_rule and not self.customer_tax_rule.include_347)
-                or (self.supplier_tax_rule and
-                    not self.supplier_tax_rule.include_347)):
-            return False
         if self.include_347:
             return True
         for identifier in self.identifiers:
