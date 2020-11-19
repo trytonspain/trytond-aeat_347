@@ -110,10 +110,6 @@ class Report(Workflow, ModelSQL, ModelView):
         'appear in a correct order: First surname, blank space, Second '
         'surname, blank space, Name')
     contact_phone = fields.Char('Phone', size=9)
-    group_by_vat = fields.Boolean('Group by VAT', states={
-            'readonly': Eval('state') == 'done',
-            }, depends=['state'], help='Registers will be grouped by party '
-            'VAT number instead of party.')
     operation_limit = fields.Numeric('Invoiced Limit (1)', digits=(16, 2),
         required=True, help='The declaration will include parties with the '
         'total of operations over this limit')
@@ -303,6 +299,7 @@ class Report(Workflow, ModelSQL, ModelView):
         pool = Pool()
         Operation = pool.get('aeat.347.report.party')
         Party = pool.get('party.party')
+        PartyIdentifier = pool.get('party.identifier')
 
         cursor = Transaction().connection.cursor()
 
@@ -318,7 +315,7 @@ class Report(Workflow, ModelSQL, ModelView):
         for report in reports:
             query = """
                 SELECT
-                    r.party,
+                    r.tax_identifier,
                     operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6
@@ -332,9 +329,11 @@ class Report(Workflow, ModelSQL, ModelView):
                 FROM
                     aeat_347_record as r
                 WHERE
-                    r.fiscalyear = %s
+                    r.fiscalyear = %s AND
+                    r.tax_identifier is not null AND
+                    r.tax_identifier = 'ESA08130502'
                 GROUP BY
-                    r.party, r.operation_key
+                    r.tax_identifier, r.operation_key
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
@@ -342,19 +341,24 @@ class Report(Workflow, ModelSQL, ModelView):
             cursor.execute(query)
             result = cursor.fetchall()
 
-            party_ids = [r[0] for r in result]
-            parties = dict((p, {}) for p in party_ids)
-            for party in Party.browse(party_ids):
+            tax_identifiers = [r[0] for r in result]
+            parties = dict((p, {}) for p in tax_identifiers)
+            for tax_identifier in PartyIdentifier.search(
+                        [('code', 'in', tax_identifiers)]):
+                party = Party.search([
+                        ('tax_identifier', '=', tax_identifier.code)
+                        ], limit=1)
+                if not party:
+                    continue
+                party, = party
                 code = country_code = vat_code_type = None
-                if party.tax_identifier:
-                    vat_code_type = party.tax_identifier.type
-                    if party.tax_identifier.type == 'eu_vat':
-                        code, country_code = (party.tax_identifier.code[2:],
-                            party.tax_identifier.code[:2])
-                    else:
-                        code, country_code = (party.tax_identifier.code,
-                            party.tax_identifier.type[:2].upper())
-
+                vat_code_type = tax_identifier.type
+                if tax_identifier.type == 'eu_vat':
+                    code, country_code = (tax_identifier.code[2:],
+                        tax_identifier.code[:2])
+                else:
+                    code, country_code = (tax_identifier,
+                        tax_identifier.type[:2].upper())
                 address = party.address_get(type='invoice')
                 if not country_code:
                     if address and address.country:
@@ -364,7 +368,7 @@ class Report(Workflow, ModelSQL, ModelView):
                 else:
                     province_code = '99'
 
-                parties[party.id] = {
+                parties[tax_identifier.code] = {
                     'name': party.name[:38],
                     'code': code,
                     'country_code': country_code,
@@ -372,9 +376,13 @@ class Report(Workflow, ModelSQL, ModelView):
                     'province_code': province_code,
                     }
 
+            if not parties:
+                return
+
             to_create = {}
-            for (party, opkey, q1, q2, q3, q4, amount, records) in result:
-                p = parties[party]
+            for (tax_identifier, opkey, q1, q2, q3, q4, amount, records
+                    ) in result:
+                p = parties[tax_identifier]
                 name = p['name']
                 code = p['code']
                 country_code = p['country_code']
@@ -384,11 +392,7 @@ class Report(Workflow, ModelSQL, ModelView):
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
-                if report.group_by_vat and code:
-                    key = '%s-%s-%s' % (report.id, code, opkey)
-                else:
-                    key = '%s-%s-%s' % (report.id, party, opkey)
-
+                key = '%s-%s-%s' % (report.id, tax_identifier, opkey)
                 if key in to_create:
                     to_create[key]['amount'] += amount
                     to_create[key]['records'] = [('add',

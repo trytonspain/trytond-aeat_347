@@ -28,8 +28,6 @@ class Record(ModelSQL, ModelView):
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
         required=True, readonly=True)
     month = fields.Integer('Month', readonly=True)
-    party = fields.Many2One('party.party', 'Party',
-        required=True, readonly=True)
     operation_key = fields.Selection(OPERATION_KEY, 'Operation key',
         required=True, readonly=True)
     amount = fields.Numeric('Operation Amount', digits=(16, 2),
@@ -37,35 +35,43 @@ class Record(ModelSQL, ModelView):
     invoice = fields.Many2One('account.invoice', 'Invoice', readonly=True)
     party_record = fields.Many2One('aeat.347.report.party', 'Party Record',
         readonly=True)
-    party_name = fields.Function(fields.Char('Party Name'), 'get_party_fields')
-    party_vat = fields.Function(fields.Char('Party VAT'), 'get_party_fields')
-    country_code = fields.Function(fields.Char('Country Code'),
-        'get_party_fields')
-    province_code = fields.Function(fields.Char('Province Code'),
-        'get_party_fields')
+    tax_identifier = fields.Char('Party Tax Identifier')
 
     @classmethod
-    def get_party_fields(cls, records, names):
-        res = {}
-        for name in ['party_name', 'party_vat', 'country_code',
-                'province_code']:
-            res[name] = dict.fromkeys([x.id for x in records], '')
-        for record in records:
-            party = record.party
-            res['party_name'][record.id] = party.name[:39]
-            res['party_vat'][record.id] = (party.tax_identifier.code[2:]
-                if party.tax_identifier else '')
-            res['country_code'][record.id] = (party.tax_identifier.code[:2] if
-                party.tax_identifier else '')
-            province_code = ''
-            address = party.address_get(type='invoice')
-            if address and address.zip:
-                province_code = address.zip.strip()[:2]
-            res['province_code'][record.id] = province_code
-        for key in list(res.keys()):
-            if key not in names:
-                del res[key]
-        return res
+    def __register__(cls, module_name):
+        cursor = Transaction().connection.cursor()
+        table = cls.__table_handler__(module_name)
+        sql_table = cls.__table__()
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        invoice = Invoice.__table__()
+        Party = pool.get('party.party')
+        party = Party.__table__()
+        Identifier = pool.get('party.identifier')
+        identifier = Identifier.__table__()
+
+        exist_party = table.column_exist('party')
+        super(Record, cls).__register__(module_name)
+        if exist_party:
+            # Don't use UPDATE FROM because SQLite nor MySQL support it.
+            value = invoice.join(identifier,
+                condition=identifier.id == invoice.tax_identifier).select(
+                    identifier.code,
+                    where=(invoice.id == sql_table.invoice) &
+                    (identifier.type == 'eu_vat'))
+            cursor.execute(*sql_table.update([sql_table.tax_identifier],
+                    [value])),
+
+            # Update empty tax_identifier with party tax identifier
+            value = party.join(identifier,
+                condition=identifier.party == party.id).select(
+                    identifier.code,
+                    where=(party.id == sql_table.party) &
+                    (identifier.type == 'eu_vat'))
+            cursor.execute(*sql_table.update([sql_table.tax_identifier],
+                    [value])),
+
+            table.drop_column('party')
 
     @classmethod
     def delete_record(cls, invoices):
@@ -197,10 +203,10 @@ class Invoice(metaclass=PoolMeta):
                     'company': invoice.company.id,
                     'fiscalyear': fiscalyear,
                     'month': invoice.invoice_date.month,
-                    'party': invoice.party.id,
                     'amount': amount,
                     'operation_key': operation_key,
                     'invoice': invoice.id,
+                    'tax_identifier': invoice.party_tax_identifier.code,
                     }
 
         Record.delete_record(invoices)
