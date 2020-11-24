@@ -109,10 +109,6 @@ class Invoice(metaclass=PoolMeta):
         super(Invoice, cls).__setup__()
         cls._check_modify_exclude += ['aeat347_operation_key']
 
-    @staticmethod
-    def default_aeat347_operation_key():
-        return None
-
     @fields.depends('type', 'aeat347_operation_key')
     def on_change_with_aeat347_operation_key(self):
         if self.aeat347_operation_key:
@@ -240,6 +236,15 @@ class Invoice(metaclass=PoolMeta):
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).cancel(invoices)
         Record.delete_record(invoices)
+
+    @classmethod
+    def create(cls, vlist):
+        vlist = [v.copy() for v in vlist]
+        for values in vlist:
+            if not values.get('aeat347_operation_key'):
+                values['aeat347_operation_key'] = cls.get_aeat347_operation_key(
+                    values.get('type'))
+        return super(Invoice, cls).create(vlist)
 
 
 class Recalculate347RecordStart(ModelView):
