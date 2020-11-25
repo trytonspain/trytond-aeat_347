@@ -7,6 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
+from sql.aggregate import Min
 ##from trytond.modules.aeat_347.aeat import OPERATION_KEY
 
 __all__ = ['Record', 'Invoice', 'Recalculate347RecordStart',
@@ -65,9 +66,10 @@ class Record(ModelSQL, ModelView):
             # Update empty tax_identifier with party tax identifier
             value = party.join(identifier,
                 condition=identifier.party == party.id).select(
-                    identifier.code,
+                    Min(identifier.code),
                     where=(party.id == sql_table.party) &
-                    (identifier.type == 'eu_vat'))
+                    (identifier.type == 'eu_vat'),
+                    group_by=party.id)
             cursor.execute(*sql_table.update([sql_table.tax_identifier],
                     [value])),
 
