@@ -204,7 +204,8 @@ class Invoice(metaclass=PoolMeta):
                     'amount': amount,
                     'operation_key': operation_key,
                     'invoice': invoice.id,
-                    'tax_identifier': invoice.party_tax_identifier.code,
+                    'tax_identifier': (invoice.party_tax_identifier
+                        and invoice.party_tax_identifier.code or None),
                     }
 
         Record.delete_record(invoices)
