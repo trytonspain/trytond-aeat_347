@@ -199,10 +199,6 @@ class Report(Workflow, ModelSQL, ModelView):
         return 'draft'
 
     @staticmethod
-    def default_group_by_vat():
-        return True
-
-    @staticmethod
     def default_company():
         return Transaction().context.get('company')
 
@@ -316,7 +312,7 @@ class Report(Workflow, ModelSQL, ModelView):
             query = """
                 SELECT
                     r.tax_identifier,
-                    operation_key,
+                    r.operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6
                         then amount else 0 end) as second,
@@ -603,7 +599,6 @@ class PartyRecord(ModelSQL, ModelView):
     @staticmethod
     def default_fourth_quarter_property_amount():
         return Decimal('0.0')
-
 
     def get_record(self):
         record = Record(aeat347.PARTY_RECORD)
