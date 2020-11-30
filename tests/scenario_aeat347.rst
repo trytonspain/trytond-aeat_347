@@ -116,10 +116,8 @@ Create out invoice over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier == 'ES00000000T'
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -142,10 +140,8 @@ Create out invoice not over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party 2'
-    >>> rec1.party_vat
-    '00000001R'
+    >>> rec1.tax_identifier == 'ES00000001R'
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -169,10 +165,8 @@ Create out credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier == 'ES00000000T'
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -198,10 +192,8 @@ Create in invoice::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier == 'ES00000000T'
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -227,10 +219,8 @@ Create in credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier == 'ES00000000T'
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -250,10 +240,10 @@ Generate 347 Report::
     >>> report.representative_vat = '22334455'
     >>> report.click('calculate')
     >>> report.reload()
-    >>> report.property_count
-    0
-    >>> report.party_count
-    1
+    >>> report.property_count == 0
+    True
+    >>> report.party_count == 1
+    True
     >>> report.party_amount == Decimal('3432.00')
     True
     >>> report.cash_amount == Decimal('0.0')
