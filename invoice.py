@@ -7,6 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from sql.operators import In
 from .aeat import OPERATION_KEY
+from sql.aggregate import Min
 ##from trytond.modules.aeat_347.aeat import OPERATION_KEY
 
 __all__ = ['Record', 'Invoice', 'Recalculate347RecordStart',
@@ -65,9 +66,10 @@ class Record(ModelSQL, ModelView):
             # Update empty tax_identifier with party tax identifier
             value = party.join(identifier,
                 condition=identifier.party == party.id).select(
-                    identifier.code,
+                    Min(identifier.code),
                     where=(party.id == sql_table.party) &
-                    (identifier.type == 'eu_vat'))
+                    (identifier.type == 'eu_vat'),
+                    group_by=party.id)
             cursor.execute(*sql_table.update([sql_table.tax_identifier],
                     [value])),
 
@@ -108,10 +110,6 @@ class Invoice(metaclass=PoolMeta):
     def __setup__(cls):
         super(Invoice, cls).__setup__()
         cls._check_modify_exclude += ['aeat347_operation_key']
-
-    @staticmethod
-    def default_aeat347_operation_key():
-        return None
 
     @fields.depends('type', 'aeat347_operation_key')
     def on_change_with_aeat347_operation_key(self):
@@ -206,7 +204,8 @@ class Invoice(metaclass=PoolMeta):
                     'amount': amount,
                     'operation_key': operation_key,
                     'invoice': invoice.id,
-                    'tax_identifier': invoice.party_tax_identifier.code,
+                    'tax_identifier': (invoice.party_tax_identifier
+                        and invoice.party_tax_identifier.code or None),
                     }
 
         Record.delete_record(invoices)
@@ -240,6 +239,15 @@ class Invoice(metaclass=PoolMeta):
         Record = pool.get('aeat.347.record')
         super(Invoice, cls).cancel(invoices)
         Record.delete_record(invoices)
+
+    @classmethod
+    def create(cls, vlist):
+        vlist = [v.copy() for v in vlist]
+        for values in vlist:
+            if not values.get('aeat347_operation_key'):
+                values['aeat347_operation_key'] = cls.get_aeat347_operation_key(
+                    values.get('type'))
+        return super(Invoice, cls).create(vlist)
 
 
 class Recalculate347RecordStart(ModelView):
