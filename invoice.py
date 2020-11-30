@@ -77,10 +77,8 @@ class Record(ModelSQL, ModelView):
 
     @classmethod
     def delete_record(cls, invoices):
-        pool = Pool()
-        Record = pool.get('aeat.347.record')
         with Transaction().set_user(0, set_context=True):
-            Record.delete(Record.search([('invoice', 'in',
+            cls.delete(cls.search([('invoice', 'in',
                             [i.id for i in invoices])]))
 
 
