@@ -32,7 +32,7 @@ contains the full copyright notices and license terms. -->
         <record model="ir.action-res.group"
             id="act_recalculate-group_aeat347">
             <field name="action" ref="act_aeat_347_recalculate"/>
-            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="group" ref="account.group_account"/>
         </record>
 
         <record model="ir.ui.view" id="aeat_347_reasign_start_view">
@@ -58,7 +58,7 @@ contains the full copyright notices and license terms. -->
         <record model="ir.action-res.group"
             id="act_reasign-group_aeat347">
             <field name="action" ref="act_aeat_347_reasign"/>
-            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="group" ref="account.group_account"/>
         </record>
 
         <record model="ir.ui.view" id="aeat_347_record_tree_view">
@@ -94,7 +94,7 @@ contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.model.access" id="access_aeat_347_record_admin">
             <field name="model" search="[('model', '=', 'aeat.347.record')]"/>
-            <field name="group" ref="group_aeat_347_admin"/>
+            <field name="group" ref="account.group_account"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

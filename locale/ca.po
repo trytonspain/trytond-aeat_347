@@ -596,10 +596,6 @@ msgctxt "model:ir.ui.menu,name:menu_aeat_347_report_property"
 msgid "AEAT 347 Property Records"
 msgstr "Registres propietat AEAT 347"
 
-msgctxt "model:res.group,name:group_aeat_347_admin"
-msgid "Aeat_347 Administration"
-msgstr "Administració AEAT 347"
-
 msgctxt "selection:account.invoice,aeat347_operation_key:"
 msgid "A - Good and service adquisitions above limit (1)"
 msgstr "A - Adquisicions de bens i serveis superiors al límit (1)"
