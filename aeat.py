@@ -330,8 +330,7 @@ class Report(Workflow, ModelSQL, ModelView):
                     aeat_347_record as r
                 WHERE
                     r.fiscalyear = %s AND
-                    r.tax_identifier is not null AND
-                    r.tax_identifier = 'ESA08130502'
+                    r.tax_identifier is not null
                 GROUP BY
                     r.tax_identifier, r.operation_key
                 HAVING
