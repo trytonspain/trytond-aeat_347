@@ -21,7 +21,8 @@ __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 _ZERO = Decimal('0.0')
 
 OPERATION_KEY = [
-    (None, 'Leave Empty'),
+    (None, ''),
+    ('empty', 'Leave Empty'),
     ('A', 'A - Good and service adquisitions above limit (1)'),
     ('B', 'B - Good and service deliveries above limit (1)'),
     ('C', 'C - Money collection on behavlf of third parties above '
@@ -234,10 +235,12 @@ class Report(Workflow, ModelSQL, ModelView):
 
     @fields.depends('company')
     def on_change_with_company_vat(self, name=None):
+        pool = Pool()
+        Party = pool.get('party.party')
+
         if self.company:
             tax_identifier = self.company.party.tax_identifier
-            if tax_identifier and tax_identifier.code.startswith('ES'):
-                return tax_identifier.code[2:]
+            return tax_identifier and tax_identifier.es_code() or None
 
     @classmethod
     def get_totals(cls, reports, names):
@@ -336,58 +339,26 @@ class Report(Workflow, ModelSQL, ModelView):
             cursor.execute(query)
             result = cursor.fetchall()
 
-            tax_identifiers = [r[0] for r in result]
-            parties = dict((p, {}) for p in tax_identifiers)
-            for tax_identifier in PartyIdentifier.search(
-                        [('code', 'in', tax_identifiers)]):
-                party = Party.search([
-                        ('tax_identifier', '=', tax_identifier.code)
-                        ], limit=1)
+            to_create = {}
+            for (tax_identifier_id, opkey, q1, q2, q3, q4, amount, records
+                    ) in result:
+                tax_identifier = PartyIdentifier(tax_identifier_id)
+                party = tax_identifier.party
                 if not party:
                     continue
-                party, = party
-                code = country_code = vat_code_type = None
-                vat_code_type = tax_identifier.type
-                if tax_identifier.type == 'eu_vat':
-                    code, country_code = (tax_identifier.code[2:],
-                        tax_identifier.code[:2])
-                else:
-                    code, country_code = (tax_identifier,
-                        tax_identifier.type[:2].upper())
+                code = tax_identifier.es_code()
+                country_code = tax_identifier.es_country()
                 address = party.address_get(type='invoice')
                 if not country_code:
                     if address and address.country:
                         country_code = address.country.code
+                province_code = 99
                 if address and address.zip and country_code == 'ES':
                     province_code = address.zip.strip()[:2]
-                else:
-                    province_code = '99'
-
-                parties[tax_identifier.code] = {
-                    'name': party.name[:38],
-                    'code': code,
-                    'country_code': country_code,
-                    'vat_code_type': vat_code_type,
-                    'province_code': province_code,
-                    }
-
-            if not parties:
-                return
-
-            to_create = {}
-            for (tax_identifier, opkey, q1, q2, q3, q4, amount, records
-                    ) in result:
-                p = parties[tax_identifier]
-                name = p['name']
-                code = p['code']
-                country_code = p['country_code']
-                vat_code_type = p['vat_code_type']
-                province_code = p['province_code']
-
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
-                key = '%s-%s-%s' % (report.id, tax_identifier, opkey)
+                key = '%s-%s-%s' % (report.id, tax_identifier_id, opkey)
                 if key in to_create:
                     to_create[key]['amount'] += amount
                     to_create[key]['records'] = [('add',
@@ -396,15 +367,14 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key] = {
                         'amount': is_decimal(amount),
                         'cash_amount': _ZERO,
-                        'party_vat': (country_code == 'ES' and code and
-                            code[:9] or ''),
-                        'party_name': name,
+                        'party_vat': code or '',
+                        'party_name': party.name[:38],
                         'country_code': country_code,
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
-                        'community_vat': (country_code != 'ES'
-                            and vat_code_type and code or ''),
+                        'community_vat': (tax_identifier.code[2:]
+                            if not code else ''),
                         'records': [('add', records)],
                     }
 
