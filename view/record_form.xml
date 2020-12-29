@@ -6,8 +6,8 @@ contains the full copyright notices and license terms. -->
     <field name="fiscalyear"/>
     <label name="month"/>
     <field name="month"/>
-    <label name="tax_identifier"/>
-    <field name="tax_identifier"/>
+    <label name="party_tax_identifier"/>
+    <field name="party_tax_identifier"/>
     <label name="invoice"/>
     <field name="invoice"/>
     <label name="operation_key"/>
