@@ -21,7 +21,8 @@ __all__ = ['Report', 'PartyRecord', 'PropertyRecord']
 _ZERO = Decimal('0.0')
 
 OPERATION_KEY = [
-    (None, 'Leave Empty'),
+    (None, ''),
+    ('empty', 'Leave Empty'),
     ('A', 'A - Good and service adquisitions above limit (1)'),
     ('B', 'B - Good and service deliveries above limit (1)'),
     ('C', 'C - Money collection on behavlf of third parties above '
@@ -244,8 +245,7 @@ class Report(Workflow, ModelSQL, ModelView):
     def on_change_with_company_vat(self, name=None):
         if self.company:
             tax_identifier = self.company.party.tax_identifier
-            if tax_identifier and tax_identifier.code.startswith('ES'):
-                return tax_identifier.code[2:]
+            return tax_identifier and tax_identifier.es_code() or None
 
     @classmethod
     def get_totals(cls, reports, names):
@@ -302,7 +302,7 @@ class Report(Workflow, ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         Operation = pool.get('aeat.347.report.party')
-        Party = pool.get('party.party')
+        PartyIdentifier = pool.get('party.identifier')
 
         cursor = Transaction().connection.cursor()
 
@@ -318,8 +318,8 @@ class Report(Workflow, ModelSQL, ModelView):
         for report in reports:
             query = """
                 SELECT
-                    r.party,
-                    operation_key,
+                    r.party_tax_identifier,
+                    r.operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6
                         then amount else 0 end) as second,
@@ -332,9 +332,10 @@ class Report(Workflow, ModelSQL, ModelView):
                 FROM
                     aeat_347_record as r
                 WHERE
-                    r.fiscalyear = %s
+                    r.fiscalyear = %s AND
+                    r.party_tax_identifier is not null
                 GROUP BY
-                    r.party, r.operation_key
+                    r.party_tax_identifier, r.operation_key
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
@@ -342,53 +343,26 @@ class Report(Workflow, ModelSQL, ModelView):
             cursor.execute(query)
             result = cursor.fetchall()
 
-            party_ids = [r[0] for r in result]
-            parties = dict((p, {}) for p in party_ids)
-            for party in Party.browse(party_ids):
-                code = country_code = vat_code_type = None
-                if party.tax_identifier:
-                    vat_code_type = party.tax_identifier.type
-                    if party.tax_identifier.type == 'eu_vat':
-                        code, country_code = (party.tax_identifier.code[2:],
-                            party.tax_identifier.code[:2])
-                    else:
-                        code, country_code = (party.tax_identifier.code,
-                            party.tax_identifier.type[:2].upper())
-
+            to_create = {}
+            for (tax_identifier_id, opkey, q1, q2, q3, q4, amount, records
+                    ) in result:
+                tax_identifier = PartyIdentifier(tax_identifier_id)
+                party = tax_identifier.party
+                if not party:
+                    continue
+                code = tax_identifier.es_code()
+                country_code = tax_identifier.es_country()
                 address = party.address_get(type='invoice')
                 if not country_code:
                     if address and address.country:
                         country_code = address.country.code
+                province_code = 99
                 if address and address.zip and country_code == 'ES':
                     province_code = address.zip.strip()[:2]
-                else:
-                    province_code = '99'
-
-                parties[party.id] = {
-                    'name': party.name[:38],
-                    'code': code,
-                    'country_code': country_code,
-                    'vat_code_type': vat_code_type,
-                    'province_code': province_code,
-                    }
-
-            to_create = {}
-            for (party, opkey, q1, q2, q3, q4, amount, records) in result:
-                p = parties[party]
-                name = p['name']
-                code = p['code']
-                country_code = p['country_code']
-                vat_code_type = p['vat_code_type']
-                province_code = p['province_code']
-
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
-                if report.group_by_vat and code:
-                    key = '%s-%s-%s' % (report.id, code, opkey)
-                else:
-                    key = '%s-%s-%s' % (report.id, party, opkey)
-
+                key = '%s-%s-%s' % (report.id, tax_identifier_id, opkey)
                 if key in to_create:
                     to_create[key]['amount'] += amount
                     to_create[key]['records'] = [('add',
@@ -397,15 +371,14 @@ class Report(Workflow, ModelSQL, ModelView):
                     to_create[key] = {
                         'amount': is_decimal(amount),
                         'cash_amount': _ZERO,
-                        'party_vat': (country_code == 'ES' and code and
-                            code[:9] or ''),
-                        'party_name': name,
+                        'party_vat': code or '',
+                        'party_name': party.name[:38],
                         'country_code': country_code,
                         'province_code': province_code,
                         'operation_key': opkey,
                         'report': report.id,
-                        'community_vat': (country_code != 'ES'
-                            and vat_code_type and code or ''),
+                        'community_vat': (tax_identifier.code[2:]
+                            if not code else ''),
                         'records': [('add', records)],
                     }
 

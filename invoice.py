@@ -37,35 +37,66 @@ class Record(ModelSQL, ModelView):
     invoice = fields.Many2One('account.invoice', 'Invoice', readonly=True)
     party_record = fields.Many2One('aeat.347.report.party', 'Party Record',
         readonly=True)
-    party_name = fields.Function(fields.Char('Party Name'), 'get_party_fields')
-    party_vat = fields.Function(fields.Char('Party VAT'), 'get_party_fields')
-    country_code = fields.Function(fields.Char('Country Code'),
-        'get_party_fields')
-    province_code = fields.Function(fields.Char('Province Code'),
-        'get_party_fields')
+    party_tax_identifier = fields.Many2One('party.identifier',
+        'Party Tax Identifier')
 
     @classmethod
-    def get_party_fields(cls, records, names):
-        res = {}
-        for name in ['party_name', 'party_vat', 'country_code',
-                'province_code']:
-            res[name] = dict.fromkeys([x.id for x in records], '')
-        for record in records:
-            party = record.party
-            res['party_name'][record.id] = party.name[:39]
-            res['party_vat'][record.id] = (party.tax_identifier.code[2:]
-                if party.tax_identifier else '')
-            res['country_code'][record.id] = (party.tax_identifier.code[:2] if
-                party.tax_identifier else '')
-            province_code = ''
-            address = party.address_get(type='invoice')
-            if address and address.zip:
-                province_code = address.zip.strip()[:2]
-            res['province_code'][record.id] = province_code
-        for key in list(res.keys()):
-            if key not in names:
-                del res[key]
-        return res
+    def __register__(cls, module_name):
+        cursor = Transaction().connection.cursor()
+        table = cls.__table_handler__(module_name)
+        sql_table = cls.__table__()
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        invoice = Invoice.__table__()
+        Party = pool.get('party.party')
+        party = Party.__table__()
+        Identifier = pool.get('party.identifier')
+        identifier = Identifier.__table__()
+
+        exist_tax_identifier = table.column_exist('tax_identifier')
+        exist_party = table.column_exist('party')
+
+        if exist_tax_identifier:
+            table.drop_column('tax_identifier')
+
+        super(Record, cls).__register__(module_name)
+
+        if exist_tax_identifier or exist_party:
+            # Don't use UPDATE FROM because SQLite nor MySQL support it.
+            value = identifier.join(invoice,
+                condition=invoice.party_tax_identifier == identifier.id).select(
+                    identifier.id,
+                    where=(identifier.type == 'eu_vat') &
+                    (invoice.id == sql_table.invoice))
+            cursor.execute(*sql_table.update([sql_table.party_tax_identifier],
+                    [value])),
+
+        if exist_tax_identifier:
+            # Update empty party_tax_identifier with party tax identifier
+            value = identifier.join(party,
+                condition=party.id == identifier.party).join(invoice,
+                    condition=invoice.party == party.id).select(
+                        Min(identifier.id),
+                        where=(identifier.type == 'eu_vat') &
+                        (invoice.id == sql_table.invoice),
+                        group_by=party.id)
+            cursor.execute(*sql_table.update([sql_table.party_tax_identifier],
+                    [value],
+                    where=sql_table.party_tax_identifier == None)),
+
+        if exist_party:
+            # Update empty party_tax_identifier with party tax identifier
+            value = party.join(identifier,
+                condition=identifier.party == party.id).select(
+                    Min(identifier.id),
+                    where=(identifier.type == 'eu_vat') &
+                    (party.id == sql_table.party),
+                    group_by=party.id)
+            cursor.execute(*sql_table.update([sql_table.party_tax_identifier],
+                    [value],
+                    where=sql_table.party_tax_identifier == None)),
+
+            table.drop_column('party')
 
     @classmethod
     def delete_record(cls, invoices):
@@ -94,8 +125,9 @@ class Invoice(metaclass=PoolMeta):
             table.drop_column('include_347')
         cursor.execute(*sql_table.update(
                 columns=[sql_table.aeat347_operation_key],
-                values=['none'],
+                values=['empty'],
                 where=(sql_table.aeat347_operation_key == '')
+                | (sql_table.aeat347_operation_key == 'none')
                 | (sql_table.aeat347_operation_key == None)))
 
     @classmethod
@@ -197,6 +229,7 @@ class Invoice(metaclass=PoolMeta):
                     'amount': amount,
                     'operation_key': operation_key,
                     'invoice': invoice.id,
+                    'party_tax_identifier': invoice.party_tax_identifier,
                     }
 
         Record.delete_record(invoices)

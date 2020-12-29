@@ -55,16 +55,21 @@ Create tax::
 Create party::
 
     >>> Party = Model.get('party.party')
-    >>> party = Party(name='Party')
-    >>> identifier = party.identifiers.new()
-    >>> identifier.type = 'eu_vat'
-    >>> identifier.code = 'ES00000000T'
-    >>> party.save()
+    >>> party1 = Party(name='Party')
+    >>> identifier1 = party1.identifiers.new()
+    >>> identifier1.type = 'eu_vat'
+    >>> identifier1.code = 'ES00000000T'
+    >>> party1.save()
     >>> party2 = Party(name='Party 2')
-    >>> identifier = party2.identifiers.new()
-    >>> identifier.type = 'eu_vat'
-    >>> identifier.code = 'ES00000001R'
+    >>> identifier2 = party2.identifiers.new()
+    >>> identifier2.type = 'eu_vat'
+    >>> identifier2.code = 'ES00000001R'
     >>> party2.save()
+    >>> party3 = Party(name='Party 3')
+    >>> identifier3 = party3.identifiers.new()
+    >>> identifier3.type = 'eu_vat'
+    >>> identifier3.code = 'FR64000063908'
+    >>> party3.save()
 
 Create account category::
 
@@ -82,7 +87,6 @@ Create product::
     >>> ProductUom = Model.get('product.uom')
     >>> unit, = ProductUom.find([('name', '=', 'Unit')])
     >>> ProductTemplate = Model.get('product.template')
-    >>> Product = Model.get('product.product')
     >>> template = ProductTemplate()
     >>> template.name = 'product'
     >>> template.default_uom = unit
@@ -107,7 +111,7 @@ Create out invoice over limit::
     >>> Record = Model.get('aeat.347.record')
     >>> Invoice = Model.get('account.invoice')
     >>> invoice = Invoice()
-    >>> invoice.party = party
+    >>> invoice.party = party1
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -119,14 +123,39 @@ Create out invoice over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier.code == identifier1.code
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
     'B'
+    >>> rec1.amount == Decimal('3520.00')
+    True
+
+Create out invoice over limit, but changing manually the operation key::
+
+    >>> Record = Model.get('aeat.347.record')
+    >>> Invoice = Model.get('account.invoice')
+    >>> invoice = Invoice()
+    >>> invoice.party = party1
+    >>> invoice.payment_term = payment_term
+    >>> line = invoice.lines.new()
+    >>> line.product = product
+    >>> line.unit_price = Decimal(40)
+    >>> line.quantity = 80
+    >>> len(line.taxes)
+    1
+    >>> line.amount == Decimal('3200.00')
+    True
+    >>> invoice.aeat347_operation_key = 'empty'
+    >>> invoice.click('post')
+    >>> rec1, = Record.find([('invoice', '=', invoice.id)])
+    >>> rec1.tax_identifier.code == identifier1.code
+    True
+    >>> rec1.month == today.month
+    True
+    >>> rec1.operation_key
+    'empty'
     >>> rec1.amount == Decimal('3520.00')
     True
 
@@ -145,10 +174,8 @@ Create out invoice not over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party 2'
-    >>> rec1.party_vat
-    '00000001R'
+    >>> rec1.tax_identifier.code == identifier2.code
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -156,11 +183,37 @@ Create out invoice not over limit::
     >>> rec1.amount == Decimal('220.00')
     True
 
+Create out invoice over limit and with foreign Tax Identifier::
+
+    >>> Record = Model.get('aeat.347.record')
+    >>> Invoice = Model.get('account.invoice')
+    >>> invoice = Invoice()
+    >>> invoice.party = party3
+    >>> invoice.payment_term = payment_term
+    >>> line = invoice.lines.new()
+    >>> line.product = product
+    >>> line.unit_price = Decimal(40)
+    >>> line.quantity = 80
+    >>> len(line.taxes)
+    1
+    >>> line.amount == Decimal('3200.00')
+    True
+    >>> invoice.click('post')
+    >>> rec1, = Record.find([('invoice', '=', invoice.id)])
+    >>> rec1.tax_identifier.code == identifier3.code
+    True
+    >>> rec1.month == today.month
+    True
+    >>> rec1.operation_key
+    'B'
+    >>> rec1.amount == Decimal('3520.00')
+    True
+
 Create out credit note::
 
     >>> invoice = Invoice()
     >>> invoice.type = 'out'
-    >>> invoice.party = party
+    >>> invoice.party = party1
     >>> invoice.payment_term = payment_term
     >>> line = invoice.lines.new()
     >>> line.product = product
@@ -172,10 +225,8 @@ Create out credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier.code == identifier1.code
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -186,7 +237,7 @@ Create out credit note::
 Create in invoice::
 
     >>> invoice = Invoice()
-    >>> invoice.party = party
+    >>> invoice.party = party1
     >>> invoice.type = 'in'
     >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
@@ -201,10 +252,8 @@ Create in invoice::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier.code == identifier1.code
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -216,7 +265,7 @@ Create in credit note::
 
     >>> invoice = Invoice()
     >>> invoice.type = 'in'
-    >>> invoice.party = party
+    >>> invoice.party = party1
     >>> invoice.aeat347_operation_key = 'A'
     >>> invoice.payment_term = payment_term
     >>> invoice.invoice_date = today
@@ -230,10 +279,8 @@ Create in credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.party_name
-    'Party'
-    >>> rec1.party_vat
-    '00000000T'
+    >>> rec1.tax_identifier.code == identifier1.code
+    True
     >>> rec1.month == today.month
     True
     >>> rec1.operation_key
@@ -253,11 +300,11 @@ Generate 347 Report::
     >>> report.representative_vat = '22334455'
     >>> report.click('calculate')
     >>> report.reload()
-    >>> report.property_count
-    0
-    >>> report.party_count
-    1
-    >>> report.party_amount == Decimal('3432.00')
+    >>> report.property_count == 0
+    True
+    >>> report.party_count == 3
+    True
+    >>> report.party_amount == Decimal('10472.00')
     True
     >>> report.cash_amount == Decimal('0.0')
     True
