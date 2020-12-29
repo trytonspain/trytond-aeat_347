@@ -4,8 +4,8 @@ contains the full copyright notices and license terms. -->
 <tree>
     <field name="fiscalyear"/>
     <field name="month"/>
-    <field name="party"/>
+    <field name="party_tax_identifier"/>
+    <field name="invoice"/>
     <field name="operation_key"/>
     <field name="amount" sum="Operation Amount"/>
-    <field name="invoice"/>
 </tree>

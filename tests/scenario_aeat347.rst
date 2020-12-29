@@ -123,7 +123,7 @@ Create out invoice over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier1.code
+    >>> rec1.party_tax_identifier.code == identifier1.code
     True
     >>> rec1.month == today.month
     True
@@ -150,7 +150,7 @@ Create out invoice over limit, but changing manually the operation key::
     >>> invoice.aeat347_operation_key = 'empty'
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier1.code
+    >>> rec1.party_tax_identifier.code == identifier1.code
     True
     >>> rec1.month == today.month
     True
@@ -174,7 +174,7 @@ Create out invoice not over limit::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier2.code
+    >>> rec1.party_tax_identifier.code == identifier2.code
     True
     >>> rec1.month == today.month
     True
@@ -200,7 +200,7 @@ Create out invoice over limit and with foreign Tax Identifier::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier3.code
+    >>> rec1.party_tax_identifier.code == identifier3.code
     True
     >>> rec1.month == today.month
     True
@@ -225,7 +225,7 @@ Create out credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier1.code
+    >>> rec1.party_tax_identifier.code == identifier1.code
     True
     >>> rec1.month == today.month
     True
@@ -252,7 +252,7 @@ Create in invoice::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier1.code
+    >>> rec1.party_tax_identifier.code == identifier1.code
     True
     >>> rec1.month == today.month
     True
@@ -279,7 +279,7 @@ Create in credit note::
     True
     >>> invoice.click('post')
     >>> rec1, = Record.find([('invoice', '=', invoice.id)])
-    >>> rec1.tax_identifier.code == identifier1.code
+    >>> rec1.party_tax_identifier.code == identifier1.code
     True
     >>> rec1.month == today.month
     True

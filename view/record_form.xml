@@ -6,14 +6,14 @@ contains the full copyright notices and license terms. -->
     <field name="fiscalyear"/>
     <label name="month"/>
     <field name="month"/>
-    <label name="party"/>
-    <field name="party"/>
-    <label name="amount"/>
-    <field name="amount"/>
-    <label name="operation_key"/>
-    <field name="operation_key" colspan="3"/>
+    <label name="party_tax_identifier"/>
+    <field name="party_tax_identifier"/>
     <label name="invoice"/>
     <field name="invoice"/>
+    <label name="operation_key"/>
+    <field name="operation_key" colspan="3"/>
+    <label name="amount"/>
+    <field name="amount"/>
     <label name="party_record"/>
     <field name="party_record"/>
 </form>
