@@ -235,9 +235,6 @@ class Report(Workflow, ModelSQL, ModelView):
 
     @fields.depends('company')
     def on_change_with_company_vat(self, name=None):
-        pool = Pool()
-        Party = pool.get('party.party')
-
         if self.company:
             tax_identifier = self.company.party.tax_identifier
             return tax_identifier and tax_identifier.es_code() or None
@@ -297,7 +294,6 @@ class Report(Workflow, ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         Operation = pool.get('aeat.347.report.party')
-        Party = pool.get('party.party')
         PartyIdentifier = pool.get('party.identifier')
 
         cursor = Transaction().connection.cursor()
@@ -314,7 +310,7 @@ class Report(Workflow, ModelSQL, ModelView):
         for report in reports:
             query = """
                 SELECT
-                    r.tax_identifier,
+                    r.party_tax_identifier,
                     r.operation_key,
                     sum(case when month <= 3 then amount else 0 end) as first,
                     sum(case when month > 3 and month <= 6
@@ -329,9 +325,9 @@ class Report(Workflow, ModelSQL, ModelView):
                     aeat_347_record as r
                 WHERE
                     r.fiscalyear = %s AND
-                    r.tax_identifier is not null
+                    r.party_tax_identifier is not null
                 GROUP BY
-                    r.tax_identifier, r.operation_key
+                    r.party_tax_identifier, r.operation_key
                 HAVING
                     sum(amount) > %s
                 """ % (cls.aggregate_function(), report.fiscalyear.id,
