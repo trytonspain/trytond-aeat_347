@@ -6,6 +6,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from sql.operators import In
+from sql.aggregate import Min
 from .aeat import OPERATION_KEY
 ##from trytond.modules.aeat_347.aeat import OPERATION_KEY
 
