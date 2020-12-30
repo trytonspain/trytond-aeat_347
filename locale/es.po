@@ -94,25 +94,9 @@ msgctxt "field:aeat.347.record,party_record:"
 msgid "Party Record"
 msgstr "Registro de tercero"
 
-msgctxt "field:aeat.347.record,party_vat:"
-msgid "Party VAT"
-msgstr "NIF del tercero"
-
-msgctxt "field:aeat.347.record,province_code:"
-msgid "Province Code"
-msgstr "Código provincia"
-
-msgctxt "field:aeat.347.record,rec_name:"
-msgid "Record Name"
-msgstr "Nombre"
-
-msgctxt "field:aeat.347.record,write_date:"
-msgid "Write Date"
-msgstr "Fecha de modificación"
-
-msgctxt "field:aeat.347.record,write_uid:"
-msgid "Write User"
-msgstr "Usuario de modificación"
+msgctxt "field:aeat.347.record,party_tax_identifier:"
+msgid "Party Tax Identifier"
+msgstr "Identificador fiscal del tercero"
 
 msgctxt "field:aeat.347.report,amount:"
 msgid "Amount"
