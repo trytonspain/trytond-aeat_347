@@ -29,8 +29,6 @@ class Record(ModelSQL, ModelView):
     fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
         required=True, readonly=True)
     month = fields.Integer('Month', readonly=True)
-    party = fields.Many2One('party.party', 'Party',
-        required=True, readonly=True)
     operation_key = fields.Selection(OPERATION_KEY, 'Operation key',
         required=True, readonly=True)
     amount = fields.Numeric('Operation Amount', digits=(16, 2),
@@ -226,7 +224,6 @@ class Invoice(metaclass=PoolMeta):
                     'company': invoice.company.id,
                     'fiscalyear': fiscalyear,
                     'month': invoice.invoice_date.month,
-                    'party': invoice.party.id,
                     'amount': amount,
                     'operation_key': operation_key,
                     'invoice': invoice.id,
