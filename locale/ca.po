@@ -46,7 +46,7 @@ msgctxt "field:aeat.347.record,party_record:"
 msgid "Party Record"
 msgstr "Registre de tercer"
 
-msgctxt "field:aeat.347.record,tax_identifier:"
+msgctxt "field:aeat.347.record,party_tax_identifier:"
 msgid "Party Tax Identifier"
 msgstr "Identificador fiscal del tercer"
 
