@@ -130,7 +130,7 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
-        cls._check_modify_exclude += ['aeat347_operation_key']
+        cls._check_modify_exclude.add('aeat347_operation_key')
 
     @fields.depends('type', 'aeat347_operation_key')
     def on_change_with_aeat347_operation_key(self):
