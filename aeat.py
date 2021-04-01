@@ -349,8 +349,8 @@ class Report(Workflow, ModelSQL, ModelView):
                     if address and address.country:
                         country_code = address.country.code
                 province_code = '99'
-                if address and address.zip and country_code == 'ES':
-                    province_code = address.zip.strip()[:2]
+                if address and address.postal_code and country_code == 'ES':
+                    province_code = address.postal_code.strip()[:2]
                 records = (records if isinstance(records, (list))
                     else records.split(','))
 
